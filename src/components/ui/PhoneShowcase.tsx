@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Pause, Wifi, Battery, Signal } from "lucide-react";
 import { useI18n } from "../../lib/i18n";
@@ -12,8 +12,8 @@ const phoneSlides: PhoneSlide[] = [
     titleAr: "جوتشا فريش تي — جدة",
     categoryEn: "Fresh Tea & Beverage",
     categoryAr: "مشروبات وتجربة طلب",
-    videoSrc: "/videos/app-demo1.mp4",
-    poster: "/assets/projects/gotcha-real.jpg",
+    videoSrc: "./videos/app-demo1.mp4",
+    poster: "./assets/projects/gotcha-real.jpg",
     alt: "Gotcha Fresh Tea Jeddah",
   },
   {
@@ -22,8 +22,8 @@ const phoneSlides: PhoneSlide[] = [
     titleAr: "مطعم الدمشقي للأطعمة العريقة",
     categoryEn: "Syrian Culinary & Menu",
     categoryAr: "أطعمة وقائمة شامية عريقة",
-    videoSrc: "/videos/app-demo2.mp4",
-    poster: "/assets/projects/damascene-real.jpg",
+    videoSrc: "./videos/app-demo2.mp4",
+    poster: "./assets/projects/damascene-real.jpg",
     alt: "Damascene Heritage Dining",
   },
   {
@@ -32,8 +32,8 @@ const phoneSlides: PhoneSlide[] = [
     titleAr: "أوينو ساريو — تجربة شاي ياباني",
     categoryEn: "Matcha & Teahouse",
     categoryAr: "ماتشا وشاي ياباني فاخر",
-    videoSrc: "/videos/app-demo3.mp4",
-    poster: "/assets/projects/ueno-saryo-real.jpg",
+    videoSrc: "./videos/app-demo3.mp4",
+    poster: "./assets/projects/ueno-saryo-real.jpg",
     alt: "Ueno Saryo Japanese Teahouse",
   },
   {
@@ -42,8 +42,8 @@ const phoneSlides: PhoneSlide[] = [
     titleAr: "لافوا — تجربة رقمية لمقهى بطابع فاخر",
     categoryEn: "Café · Digital Menu",
     categoryAr: "مقهى · قائمة رقمية",
-    videoSrc: "/videos/app-demo4.mp4",
-    poster: "/assets/projects/lavoa-real.jpg",
+    videoSrc: "./videos/app-demo4.mp4",
+    poster: "./assets/projects/lavoa-real.jpg",
     alt: "LAVOA Café & Lounge",
   },
 ];
