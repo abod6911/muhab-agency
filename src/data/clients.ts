@@ -1,0 +1,81 @@
+import { ClientPartner, Testimonial } from "../types";
+
+export const clientPartners: ClientPartner[] = [
+  {
+    id: "gotcha",
+    nameEn: "Gotcha Fresh Tea",
+    nameAr: "جوتشا فريش تي",
+    industryEn: "Specialty Beverage",
+    industryAr: "مشروبات وشاي تايواني",
+    location: "Jeddah",
+  },
+  {
+    id: "damascene",
+    nameEn: "Damascene Restaurant",
+    nameAr: "مطعم الدمشقي",
+    industryEn: "Heritage Syrian Dining",
+    industryAr: "مأكولات شامية عريقة",
+    location: "Jeddah",
+  },
+  {
+    id: "ueno-saryo",
+    nameEn: "Ueno Saryo",
+    nameAr: "أوينو ساريو",
+    industryEn: "Japanese Teahouse",
+    industryAr: "شاي ومأكولات يابانية",
+    location: "Jeddah",
+  },
+  {
+    id: "tealabs",
+    nameEn: "Tea Labs",
+    nameAr: "مختبرات الشاي",
+    industryEn: "Specialty Tea & Coffee",
+    industryAr: "مختبرات الشاي والقهوة",
+    location: "Jeddah",
+  },
+  {
+    id: "bait-al-ramen",
+    nameEn: "Bait Al Ramen",
+    nameAr: "بيت الرامن",
+    industryEn: "Japanese Cuisine",
+    industryAr: "مأكولات يابانية ورامن",
+    location: "Jeddah",
+  },
+  {
+    id: "lavoa",
+    nameEn: "LAVOA Café",
+    nameAr: "مقهى لافوا",
+    industryEn: "Specialty Café & Lounge",
+    industryAr: "مقهى ومشروبات فاخرة",
+    location: "KSA",
+  },
+];
+
+export const testimonialsData: Testimonial[] = [
+  {
+    id: "gotcha-testimonial",
+    authorEn: "Fahad Al-Harbi",
+    authorAr: "فهد الحربي",
+    roleEn: "Founder & GM",
+    roleAr: "المؤسس والمدير العام",
+    companyEn: "Gotcha Fresh Tea KSA",
+    companyAr: "جوتشا فريش تي السعودية",
+    quoteEn: "MUHAB completely transformed our online ordering experience. Mobile conversions increased significantly, and our customers love the fluid interactive menu.",
+    quoteAr: "مُهاب نقلت تجربة الطلب الرقمي لمستوى استثنائي. تصفح المنيو عبر الجوال أصبح أسرع بكثير وطلبات الواتساب المباشرة تضاعفت.",
+    projectSlug: "gotcha-fresh-tea",
+    rating: 5,
+  },
+  {
+    id: "damascene-testimonial",
+    authorEn: "Ammar Al-Dimashqi",
+    authorAr: "عمار الدمشقي",
+    roleEn: "Managing Partner",
+    roleAr: "الشريك الإداري",
+    companyEn: "Damascene Heritage",
+    companyAr: "مطعم الدمشقي للأطعمة العريقة",
+    quoteEn: "The digital menu platform reflects the true heritage and soul of our cuisine. The speed and bilingual elegance surpassed our expectations.",
+    quoteAr: "المنصة الرقمية جسدت عراقة وأصالة أطباقنا بدقة متناهية. سرعة الموقع والأناقة البصرية فاقت توقعاتنا.",
+    projectSlug: "damascene-heritage",
+    rating: 5,
+  },
+];

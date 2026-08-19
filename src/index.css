@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 153 63% 5%;
+    --foreground: 140 10% 90%;
+    --primary: 82 100% 61%;
+    --primary-hover: 82 100% 55%;
+    --accent: 161 85% 16%;
+    --surface-light: 60 14% 94%;
+    --surface-dark: 156 65% 5%;
+
+    /* Centralized Typographic Tokens */
+    --type-display-xl: clamp(2.75rem, 6.5vw, 5.5rem);
+    --type-display-lg: clamp(2.25rem, 5vw, 4rem);
+    --type-h1: clamp(2rem, 3.5vw, 3rem);
+    --type-h2: clamp(1.5rem, 2.5vw, 2.25rem);
+    --type-h3: clamp(1.25rem, 2vw, 1.75rem);
+    --type-body-lg: clamp(1.125rem, 1.5vw, 1.3rem);
+    --type-body: clamp(1rem, 1.1vw, 1.125rem);
+    --type-small: 0.875rem;
+    --type-label: 0.75rem;
+
+    /* Spacing scale */
+    --space-section-desktop: 10rem;
+    --space-section-tablet: 7.5rem;
+    --space-section-mobile: 5rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Arabic Line Heights & Shaping */
+  html[lang="ar"] body {
+    font-family: 'Cairo', system-ui, sans-serif;
+  }
+
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] .font-display {
+    font-family: 'Alexandria', system-ui, sans-serif;
+    line-height: 1.18;
+    letter-spacing: normal !important;
+  }
+
+  html[lang="en"] h1,
+  html[lang="en"] h2,
+  html[lang="en"] h3,
+  html[lang="en"] .font-display {
+    font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  body {
+    background-color: #07130F;
+    color: #F3F3ED;
+    overflow-x: hidden;
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
