@@ -120,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-2.5">
+          <div className="hidden lg:flex items-center gap-2.5">
             {/* Language Switcher Pill (ع / EN) */}
             <button
               onClick={() => {
@@ -146,8 +146,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
             </Button>
           </div>
 
-          {/* Mobile Menu Button - Instant Click Response */}
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile & Tablet Menu Button - Instant Click Response */}
+          <div className="flex lg:hidden items-center gap-2">
             <button
               onClick={() => {
                 toggleLanguage();

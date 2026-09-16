@@ -98,9 +98,9 @@ export function AppContent() {
     }
   };
 
-  // Prevent background scrolling and pause Lenis when modal or navigation drawer is active
+  // Prevent background scrolling and pause Lenis only when full modals are active
   useEffect(() => {
-    const isLocked = contactModalOpen || previewProject !== null || curvedNavOpen;
+    const isLocked = contactModalOpen || previewProject !== null;
     const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
 
     if (isLocked) {
@@ -115,7 +115,7 @@ export function AppContent() {
       document.body.style.overflow = '';
       lenis?.start();
     };
-  }, [contactModalOpen, previewProject, curvedNavOpen]);
+  }, [contactModalOpen, previewProject]);
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e] ambient-glow-bg">

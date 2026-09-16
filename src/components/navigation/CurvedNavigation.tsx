@@ -214,18 +214,18 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
 
   return (
     <>
-      {/* Floating Magnetic Menu Button Trigger (Appears when scrolled or when drawer is open, suppressed during intro/modals) */}
+      {/* Floating Magnetic Menu Button Trigger (Only when drawer is closed and page is scrolled) */}
       <AnimatePresence>
-        {!isIntroActive && !isModalOpen && (showMagnetic || isOpen) && (
+        {!isIntroActive && !isModalOpen && !isOpen && showMagnetic && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
             transition={{ duration: 0.25 }}
-            className={`fixed top-5 end-6 z-[130] pointer-events-auto ${isOpen ? 'hidden md:block' : 'hidden lg:block'}`}
+            className="fixed top-5 end-6 z-[130] pointer-events-auto hidden lg:block"
           >
             <MagneticButton
-              isOpen={isOpen}
+              isOpen={false}
               onClick={handleToggle}
               isRTL={isRTL}
             />
@@ -298,7 +298,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                   {/* Status Indicator */}
                   <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[10px] font-mono font-bold text-[#a6ff2e]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
-                    <span>{language === 'ar' ? 'متاح' : 'ONLINE'}</span>
+                    <span>{language === 'ar' ? 'متاح للمشاريع' : 'AVAILABLE'}</span>
                   </div>
 
                   {/* Language Switcher - ALWAYS VISIBLE ON ALL SCREENS */}
@@ -308,21 +308,22 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                       try { audioSynth.playHoverBlip(); } catch {}
                       toggleLanguage();
                     }}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/20 active:scale-95 transition-all cursor-pointer shadow-sm touch-manipulation min-h-[36px]"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/20 active:scale-95 transition-all cursor-pointer shadow-sm touch-manipulation min-h-[36px]"
                     aria-label="Switch Language"
                   >
                     <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
                     <span>{language === 'ar' ? 'English' : 'العربية'}</span>
                   </button>
 
-                  {/* Accessible High-Contrast Close Button */}
+                  {/* Dedicated Close Button */}
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm touch-manipulation"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-95 shadow-sm touch-manipulation font-bold text-xs min-h-[36px]"
                     aria-label="Close navigation menu"
                   >
-                    <X className="w-4 h-4 text-[#a6ff2e]" />
+                    <X className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                    <span>{language === 'ar' ? 'إغلاق' : 'Close'}</span>
                   </button>
                 </div>
               </div>

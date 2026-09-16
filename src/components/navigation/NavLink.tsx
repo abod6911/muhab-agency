@@ -49,6 +49,9 @@ export const NavLink: React.FC<NavLinkProps> = ({
   };
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     try {
       audioSynth.playHarmonicSuccess();
     } catch {}
@@ -65,50 +68,54 @@ export const NavLink: React.FC<NavLinkProps> = ({
     }
 
     if (href.startsWith('#')) {
-      e.preventDefault();
-
       // Trigger drawer close
       onClick();
 
-      const targetEl = document.querySelector(href) as HTMLElement | null;
+      const targetId = href.replace(/^#/, '');
+      const targetEl = (document.getElementById(targetId) || document.querySelector(href)) as HTMLElement | null;
+
       if (targetEl) {
         const headerOffset = 75;
-        const targetTop = targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-        const clampedTop = Math.max(0, targetTop);
+        const targetTop = Math.max(0, targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset);
 
-        // Direct native browser scroll
+        // 1. Lenis smooth scroll if available
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          try {
+            lenis.scrollTo(targetEl, {
+              offset: -headerOffset,
+              duration: 0.85,
+              force: true,
+            });
+          } catch {
+            try {
+              lenis.scrollTo(targetTop, { duration: 0.85, force: true });
+            } catch {}
+          }
+        }
+
+        // 2. Direct native browser scroll
         window.scrollTo({
-          top: clampedTop,
+          top: targetTop,
           behavior: 'smooth',
         });
 
-        // Lenis programmatic scroll with force flag to override any paused state
-        if (lenis && typeof lenis.scrollTo === 'function') {
-          try {
-            lenis.scrollTo(clampedTop, {
-              duration: 0.8,
-              force: true,
-              immediate: false,
-            });
-          } catch {}
-        }
-
-        // Secondary fallback to guarantee arrival on mobile WebKit
+        // 3. Fallback verification and scrollIntoView
         setTimeout(() => {
           document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
           const currentPos = window.pageYOffset;
-          if (Math.abs(currentPos - clampedTop) > 120) {
-            window.scrollTo({
-              top: clampedTop,
-              behavior: 'smooth',
-            });
+          if (Math.abs(currentPos - targetTop) > 100) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, 120);
 
         try {
           window.history.pushState(null, '', href);
         } catch {}
-      } else if (href === '#hero') {
+      } else if (href === '#hero' || href === '#top') {
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          try { lenis.scrollTo(0, { duration: 0.8, force: true }); } catch {}
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
