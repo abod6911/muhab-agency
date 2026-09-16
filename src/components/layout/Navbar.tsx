@@ -4,9 +4,7 @@ import { Button } from '../common/Button';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
 import { 
   Menu, 
-  Globe, 
-  Sun,
-  Moon
+  Globe
 } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
 
@@ -18,8 +16,6 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => {
   const { language, toggleLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLightMode, setIsLightMode] = useState(false);
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,11 +24,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleTheme = () => {
-    setIsLightMode(!isLightMode);
-    document.documentElement.classList.toggle('light');
-  };
 
   const navLinks = [
     { href: '#portfolio', label: language === 'ar' ? 'مشاريعنا' : 'Projects' },
@@ -131,18 +122,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
             >
               <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
               <span className="tracking-wider">{language === 'ar' ? 'ع / EN' : 'AR / EN'}</span>
-            </button>
-
-            {/* Dark / Light Toggle */}
-            <button
-              onClick={() => {
-                try { audioSynth.playHoverBlip(); } catch {}
-                toggleTheme();
-              }}
-              className="p-2 rounded-full text-slate-300 hover:text-[#a6ff2e] bg-[#12261e] hover:bg-[#18352a] border border-[#234939] transition-all duration-200 cursor-pointer active:scale-95"
-              title="Toggle Theme"
-            >
-              {isLightMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
 
             {/* High-visibility Primary CTA Button */}
