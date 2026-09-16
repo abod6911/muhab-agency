@@ -1,133 +1,265 @@
-﻿import React, { useState, useEffect } from "react";
-import Lenis from "lenis";
-import { I18nProvider, useI18n } from "./lib/i18n";
-import { Header } from "./components/layout/Header";
-import { FullNavigation } from "./components/layout/FullNavigation";
-import { Hero } from "./components/home/Hero";
-import { Manifesto } from "./components/home/Manifesto";
-import { SelectedWork } from "./components/home/SelectedWork";
-import { ProductsSection } from "./components/home/ProductsSection";
-import { ClientsTrust } from "./components/home/ClientsTrust";
-import { Services } from "./components/home/Services";
-import { ReputationShowcase } from "./components/home/ReputationShowcase";
-import { Process } from "./components/home/Process";
-import { AboutMuhab } from "./components/home/AboutMuhab";
-import { ContactSection } from "./components/home/ContactSection";
-import { FinalCTA } from "./components/home/FinalCTA";
-import { Footer } from "./components/layout/Footer";
+import { useState, useEffect } from 'react';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import Lenis from 'lenis';
+import { ArrowUp } from 'lucide-react';
+import { LanguageProvider } from './context/LanguageContext';
 
-function MainContent() {
-  const { isAr } = useI18n();
-  const [isNavOpen, setIsNavOpen] = useState(false);
+import { Navbar } from './components/layout/Navbar';
+import { CurvedNavigation } from './components/navigation';
+import { HeroSection } from './components/hero/HeroSection';
+import { TrustRibbon } from './components/trust/TrustRibbon';
+import { EcosystemSection } from './components/ecosystem/EcosystemSection';
+import { PortfolioSection } from './components/portfolio/PortfolioSection';
+import { ServicesSection } from './components/services/ServicesSection';
+import { MetricsSection } from './components/metrics/MetricsSection';
+import { ConsultationBanner } from './components/contact/ConsultationBanner';
+import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar } from './components/common';
+import { AgencyLandingPage } from './components/agency';
+import { Footer } from './components/layout/Footer';
+import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
+import { ContactModal } from './components/contact/ContactModal';
+import { projects } from './data/portfolioData';
+import type { Project } from './types';
 
-  useEffect(() => {
-    // Disable JS smooth scroll on touch devices & small screens for 120Hz native hardware speed
-    const isTouch = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024;
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (isTouch || prefersReducedMotion) {
-      return;
+export function AppContent() {
+  const [activeView] = useState<'classic' | 'agency'>(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('view=agency')) {
+      return 'agency';
     }
+    return 'classic';
+  });
+  const [introExiting, setIntroExiting] = useState(false);
+  const [introFinished, setIntroFinished] = useState(false);
+  const [curvedNavOpen, setCurvedNavOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [preselectedService, setPreselectedService] = useState('');
+  const [previewProject, setPreviewProject] = useState<Project | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
+  // Global scroll tracking for top neon beam
+  const { scrollYProgress, scrollY } = useScroll();
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 350, damping: 30 });
+
+  // Initialize Global Lenis 120 FPS Inertial Smooth Scroll
+  useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.6,
     });
 
+    (window as unknown as { __lenis: Lenis }).__lenis = lenis;
+
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
+    rafId = requestAnimationFrame(raf);
 
-    requestAnimationFrame(raf);
+    const unsub = scrollY.on('change', (latest) => {
+      setShowBackToTop(latest > 900);
+    });
 
     return () => {
+      cancelAnimationFrame(rafId);
+      unsub();
       lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
-  }, []);
+  }, [scrollY]);
 
-  const handleOpenContact = () => {
-    const el = document.getElementById("contact");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+  const scrollToTop = () => {
+    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
+  const handleOpenContact = (serviceTitle?: string) => {
+    if (serviceTitle) {
+      setPreselectedService(serviceTitle);
+    }
+    setContactModalOpen(true);
+  };
+
+  const handleSelectProjectId = (id: string) => {
+    const found = projects.find((p) => p.id === id);
+    if (found) {
+      setPreviewProject(found);
+    }
+  };
+
+  // Prevent background scrolling and pause Lenis when modal or navigation drawer is active
+  useEffect(() => {
+    const isLocked = contactModalOpen || previewProject !== null || curvedNavOpen;
+    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+
+    if (isLocked) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+      document.documentElement.style.overflow = 'hidden';
+      lenis?.stop();
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      lenis?.start();
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      document.documentElement.style.overflow = '';
+      lenis?.start();
+    };
+  }, [contactModalOpen, previewProject, curvedNavOpen]);
+
   return (
-    <div className={`min-h-screen bg-[#07130F] text-[#FCFCFA] selection:bg-[#B9FF38] selection:text-[#07130F] ${isAr ? "font-arabic" : "font-sans"}`}>
-      {/* Skip to Content for Accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 z-[99999] px-4 py-2 bg-[#B9FF38] text-[#07130F] font-bold rounded-lg"
-      >
-        {isAr ? "الانتقال للمحتوى الرئيسي" : "Skip to main content"}
-      </a>
-
-      {/* Clean Editorial Navigation */}
-      <Header onOpenContact={handleOpenContact} onOpenNav={() => setIsNavOpen(true)} />
-
-      {/* Fullscreen Mobile / Desktop Drawer Navigation */}
-      <FullNavigation
-        isOpen={isNavOpen}
-        onClose={() => setIsNavOpen(false)}
-        onOpenContact={() => {
-          setIsNavOpen(false);
-          handleOpenContact();
-        }}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e] ambient-glow-bg">
+      {/* 120 FPS Global Neon Scroll Progress Indicator */}
+      <motion.div
+        className="fixed top-0 inset-x-0 z-[70] h-[2.5px] bg-gradient-to-r from-emerald-500 via-[#a6ff2e] to-emerald-400 origin-left rtl:origin-right shadow-[0_0_12px_#a6ff2e,0_0_20px_rgba(166,255,46,0.6)] pointer-events-none"
+        style={{ scaleX: smoothProgress }}
       />
 
-      {/* Main Page Flow */}
-      <main id="main-content" className="relative z-10">
-        {/* 01 Hero with realistic phone & real video demo */}
-        <Hero onOpenContact={handleOpenContact} />
+      {/* Floating Back-to-Top Quick Glide Capsule */}
+      <AnimatePresence>
+        {showBackToTop && !contactModalOpen && !previewProject && !curvedNavOpen && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={scrollToTop}
+            className="fixed bottom-24 end-4 lg:bottom-6 lg:end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/35 hover:border-[#a6ff2e] text-[#a6ff2e] shadow-[0_10px_30px_rgba(0,0,0,0.6),0_0_20px_rgba(166,255,46,0.25)] backdrop-blur-xl transition-all cursor-pointer group"
+            aria-label="Scroll to top"
+          >
+            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-        {/* 02 Manifesto Typographic Statement */}
-        <Manifesto />
 
-        {/* 03 Selected Work (Warm Off-White Editorial Spreads) */}
-        <SelectedWork />
+      {/* Mobile High-Converting Floating Quick Action Bar */}
+      <AnimatePresence>
+        {(introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
+          <MobileQuickActionBar onOpenContact={() => handleOpenContact()} />
+        )}
+      </AnimatePresence>
 
-        {/* 04 MUHAB Products / Our Companies (Taqyeemi & Wasel) */}
-        <ProductsSection />
+      {/* Luxury Cinematic Awwwards Entry Splash Screen */}
+      <IntroSplashScreen 
+        onStartExit={() => setIntroExiting(true)} 
+        onComplete={() => setIntroFinished(true)}
+      />
 
-        {/* 05 Clients & Trust */}
-        <ClientsTrust />
+      {/* Sticky Global Navigation */}
+      <Navbar 
+        onOpenContact={() => handleOpenContact()} 
+        onOpenMenu={() => setCurvedNavOpen(true)}
+      />
 
-        {/* 06 Capabilities & Services (Numbered 1px Rule Rows) */}
-        <Services onOpenContact={handleOpenContact} />
+      {/* Modern Curved SVG Path Wipe Navigation Drawer */}
+      <CurvedNavigation
+        isOpen={curvedNavOpen}
+        onClose={() => setCurvedNavOpen(false)}
+        onOpen={() => setCurvedNavOpen(true)}
+        onToggle={() => setCurvedNavOpen((prev) => !prev)}
+        onOpenContact={() => handleOpenContact()}
+        isIntroActive={!introFinished}
+        isModalOpen={contactModalOpen || previewProject !== null}
+      />
 
-        {/* 07 Reputation Solutions & Smart Hardware */}
-        <ReputationShowcase onOpenContact={handleOpenContact} />
+      {activeView === 'agency' ? (
+        <AgencyLandingPage onOpenContact={() => handleOpenContact()} />
+      ) : (
+        <>
+          {/* Main Content Sections with Seamless Cinematic Camera Zoom Landing (120 FPS GPU Hardware-Accelerated) */}
+          <motion.main 
+            animate={{
+              scale: introExiting ? 1 : 0.97,
+              opacity: introExiting ? 1 : 0.4,
+              y: introExiting ? 0 : 16,
+            }}
+            style={{ willChange: 'transform, opacity' }}
+            transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden"
+          >
+            {/* Split Hero Section with iPhone 16 Pro Mockup Showcase */}
+            <HeroSection
+              onOpenContact={() => handleOpenContact()}
+              onSelectProject={handleSelectProjectId}
+            />
 
-        {/* 08 5-Stage Disciplined Delivery Process */}
-        <Process />
+            {/* 4-Card Trust & Core Differentiators Ribbon */}
+            <TrustRibbon />
 
-        {/* 09 About MUHAB (Saudi Roots & Jeddah Studio) */}
-        <AboutMuhab />
+            {/* Digital Ecosystem & SaaS Products ("لا نبني مجرد مواقع، بل نبتكر منتجات متكاملة") */}
+            <EcosystemSection
+              onOrderProduct={(productName) => handleOpenContact(productName)}
+            />
 
-        {/* 10 Contact & Direct WhatsApp Inquiry */}
-        <ContactSection />
+            {/* Filterable Portfolio & Live Showcases Grid */}
+            <PortfolioSection
+              onPreviewProject={(project) => setPreviewProject(project)}
+              onRequestSimilar={(title) => handleOpenContact(title)}
+            />
 
-        {/* 11 Final Closing CTA */}
-        <FinalCTA onOpenContact={handleOpenContact} />
-      </main>
+            {/* 6-Card Services Grid Matrix */}
+            <ServicesSection
+              onRequestService={(serviceTitle) => handleOpenContact(serviceTitle)}
+            />
 
-      {/* Editorial Footer */}
-      <Footer />
+            {/* Metrics, Proof & Engineering Comparison Section */}
+            <MetricsSection />
+
+            {/* Awwwards Physics-Driven Interactive Social Showcase */}
+            <section id="social-showcase" className="relative py-8 bg-[#020a06] px-4 sm:px-6 lg:px-8">
+              <SocialPhysicsShowcase />
+            </section>
+
+            {/* Pre-Footer High-Converting Consultation Banner with Interactive Particle Wave Background */}
+            <ConsultationBanner onOpenContact={() => handleOpenContact()} />
+          </motion.main>
+
+          {/* Comprehensive Modern 4-Column Luxury Footer */}
+          <Footer onOpenContact={() => handleOpenContact()} />
+        </>
+      )}
+
+      {/* Live Interactive Project Device Modal */}
+      <LivePreviewModal
+        project={previewProject}
+        onClose={() => setPreviewProject(null)}
+        onRequestSimilar={(title) => handleOpenContact(title)}
+      />
+
+      {/* Instant WhatsApp Project Inquiry Modal */}
+      <ContactModal
+        isOpen={contactModalOpen}
+        onClose={() => {
+          setContactModalOpen(false);
+          setPreselectedService('');
+        }}
+        preselectedService={preselectedService}
+      />
     </div>
   );
 }
 
-export function App() {
+export default function App() {
   return (
-    <I18nProvider>
-      <MainContent />
-    </I18nProvider>
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 
-export default App;

@@ -1,0 +1,495 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import { useLanguage } from '../../context/LanguageContext';
+import { Curve } from './Curve';
+import { NavLink } from './NavLink';
+import { MagneticButton } from './MagneticButton';
+import { Button } from '../common/Button';
+import { Badge } from '../common/Badge';
+import { MuhabEmblemImage } from '../common/MuhabLogo';
+import { audioSynth } from '../../utils/audioSynth';
+import { 
+  MapPin, 
+  ArrowUpRight, 
+  Globe,
+  Clock,
+  MessageSquare,
+  ShieldCheck,
+  Zap
+} from 'lucide-react';
+
+
+interface CurvedNavigationProps {
+  isOpen?: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
+  onToggle?: () => void;
+  onOpenContact?: () => void;
+  isIntroActive?: boolean;
+  isModalOpen?: boolean;
+}
+
+export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
+  isOpen: controlledIsOpen,
+  onOpen: controlledOnOpen,
+  onClose: controlledOnClose,
+  onToggle: controlledOnToggle,
+  onOpenContact,
+  isIntroActive = false,
+  isModalOpen = false,
+}) => {
+  const { language, isRTL, toggleLanguage, t } = useLanguage();
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [saudiTime, setSaudiTime] = useState('');
+
+  // Allow controlled or uncontrolled operation
+  const isControlled = controlledIsOpen !== undefined;
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  // Real-time Riyadh Clock (GMT+3)
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', {
+        timeZone: 'Asia/Riyadh',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+      setSaudiTime(timeStr);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleToggle = () => {
+    if (controlledOnToggle) {
+      controlledOnToggle();
+    } else if (isControlled) {
+      if (isOpen) {
+        controlledOnClose?.();
+      } else {
+        controlledOnOpen?.();
+      }
+    } else {
+      setInternalIsOpen((prev) => !prev);
+    }
+  };
+
+  const handleClose = () => {
+    try {
+      audioSynth.playHoverBlip();
+    } catch {}
+    if (isControlled) {
+      controlledOnClose?.();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
+
+  // Play harmonic chime when opening
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        audioSynth.playHarmonicSuccess();
+      } catch {}
+    }
+  }, [isOpen]);
+
+  const [showMagnetic, setShowMagnetic] = useState(false);
+
+  // Show magnetic button on scroll or when drawer is open
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowMagnetic(window.scrollY > 120);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Lock body scroll when menu is active
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
+  // Handle ESC key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  const navItems = [
+    {
+      label: language === 'ar' ? 'الرئيسية' : 'Home',
+      sublabel: language === 'ar' ? 'البداية ورؤية الاستوديو' : 'The Studio Vision',
+      href: '#hero',
+    },
+    {
+      label: language === 'ar' ? 'مشاريعنا' : 'Selected Works',
+      sublabel: language === 'ar' ? 'أحدث النماذج الرقمية الحية' : 'Curated Live Showcases',
+      href: '#portfolio',
+    },
+    {
+      label: language === 'ar' ? 'منظومتنا الرقمية' : 'Digital Ecosystem',
+      sublabel: language === 'ar' ? 'تقييمي، بوينت باس، فودس' : 'Taqyeemi, PointPass, Foodus',
+      href: '#ecosystem',
+    },
+    {
+      label: language === 'ar' ? 'خدماتنا' : 'Our Services',
+      sublabel: language === 'ar' ? 'تصميم، تطوير، بوابات دفع، SEO' : 'Bespoke UI, Next.js, SEO',
+      href: '#services',
+    },
+    {
+      label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics & Proof',
+      sublabel: language === 'ar' ? 'أرقام حقيقية للسوق السعودي' : 'Sub-Second Performance',
+      href: '#metrics',
+    },
+  ];
+
+  const socials = [
+    { name: 'LinkedIn', href: 'https://linkedin.com' },
+    { name: 'X', href: 'https://x.com' },
+    { name: 'Instagram', href: 'https://instagram.com' },
+    { name: 'GitHub', href: 'https://github.com' },
+  ];
+
+  // 120 FPS Silk Bezier Curtain Wipe Variants
+  const drawerVariants: Variants = {
+    initial: {
+      x: isRTL ? '-100%' : '100%',
+    },
+    enter: {
+      x: '0%',
+      transition: {
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1], // Cinematic Awwwards cubic-bezier
+      },
+    },
+    exit: {
+      x: isRTL ? '-100%' : '100%',
+      transition: {
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
+
+  // Staggered list container variants
+  const navListVariants: Variants = {
+    initial: {
+      transition: {
+        staggerChildren: 0.04,
+        staggerDirection: -1,
+      },
+    },
+    enter: {
+      transition: {
+        staggerChildren: 0.07,
+        delayChildren: 0.15,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: 0.04,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  // Sub-content fade in
+  const subContentVariants: Variants = {
+    initial: { opacity: 0, y: 15 },
+    enter: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.35,
+        duration: 0.55,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 15,
+      transition: { duration: 0.25 },
+    },
+  };
+
+  return (
+    <>
+      {/* Floating Magnetic Menu Button Trigger (Appears when scrolled or when drawer is open, suppressed during intro/modals) */}
+      <AnimatePresence>
+        {!isIntroActive && !isModalOpen && (showMagnetic || isOpen) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className={`fixed top-5 end-6 z-[130] pointer-events-auto ${isOpen ? 'block' : 'hidden lg:block'}`}
+          >
+            <MagneticButton
+              isOpen={isOpen}
+              onClick={handleToggle}
+              isRTL={isRTL}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* AnimatePresence for Backdrop & Curved Drawer */}
+      <AnimatePresence mode="wait">
+        {isOpen && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
+            className="fixed inset-0 z-[120]"
+          >
+            {/* Deep Ambient Obsidian Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45 }}
+              onClick={handleClose}
+              className="fixed inset-0 bg-[#010805]/85 backdrop-blur-xl"
+            />
+
+            {/* Curved SVG Morphing Drawer */}
+            <motion.aside
+              variants={drawerVariants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className={`fixed top-0 h-screen w-full sm:w-[540px] md:w-[680px] lg:w-[780px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-[0_0_90px_rgba(0,0,0,0.9)] z-[125] flex flex-col justify-between p-6 sm:p-8 md:p-10 overflow-y-auto border-[#1b4d3b] ${
+                isRTL
+                  ? 'left-0 border-r border-[#1b4d3b]/60 shadow-[25px_0_70px_rgba(166,255,46,0.14)]'
+                  : 'right-0 border-l border-[#1b4d3b]/60 shadow-[-25px_0_70px_rgba(166,255,46,0.14)]'
+              }`}
+            >
+              {/* Top Luminous Neon Beam */}
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_20px_#a6ff2e]" />
+
+              {/* Dynamic SVG Curve attached to the drawer leading edge */}
+              <Curve isRTL={isRTL} />
+
+              {/* Drawer Top Header Area with clearance for fixed close button */}
+              <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-4 shrink-0 pe-20 sm:pe-28">
+                {/* Official Logo Brand */}
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_20px_rgba(166,255,46,0.3)] shrink-0">
+                    <div className="w-full h-full bg-[#020a06] rounded-[10px] flex items-center justify-center p-1 overflow-hidden">
+                      <MuhabEmblemImage size={24} />
+                    </div>
+                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#a6ff2e] rounded-full ring-2 ring-[#020a06] animate-pulse" />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <span className="font-black text-white text-sm sm:text-lg tracking-wider leading-tight flex items-center gap-1.5">
+                      MUHAB <span className="text-[#a6ff2e] font-semibold text-[10px] tracking-widest px-1.5 py-0.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/30">STUDIO</span>
+                    </span>
+                    <span className="text-[10px] text-[#a6ff2e]/90 font-medium tracking-wider truncate max-w-[140px] sm:max-w-none">
+                      {language === 'ar' ? 'صُنّاع المواقع السعودية' : 'Saudi Webmakers'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Header Controls: Live status & Language switcher (desktop only, mobile moved to footer) */}
+                <div className="hidden sm:flex items-center gap-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[11px] font-mono font-bold text-[#a6ff2e] shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                    <span>{language === 'ar' ? 'متاح للمشاريع' : 'ONLINE'}</span>
+                  </div>
+
+                  {/* Language quick switcher in drawer */}
+                  <button
+                    onClick={() => {
+                      try { audioSynth.playHoverBlip(); } catch {}
+                      toggleLanguage();
+                    }}
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                  >
+                    <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                    <span>{language === 'ar' ? 'English' : 'العربية'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Content Area: Split Navigation & Executive Showcase on Desktop */}
+              <div className="my-auto py-3 sm:py-6 grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-6 items-center">
+                {/* Main Nav Links (Staggered Entrance) */}
+                <motion.nav
+                  variants={navListVariants}
+                  initial="initial"
+                  animate="enter"
+                  exit="exit"
+                  className="md:col-span-7 flex flex-col gap-1 sm:gap-2"
+                >
+                  {navItems.map((item, idx) => (
+                    <NavLink
+                      key={item.href}
+                      index={idx}
+                      label={item.label}
+                      sublabel={item.sublabel}
+                      href={item.href}
+                      isRTL={isRTL}
+                      onClick={handleClose}
+                    />
+                  ))}
+                </motion.nav>
+
+                {/* Executive VIP Showcase Panel (Desktop / Tablet) */}
+                <motion.div
+                  variants={subContentVariants}
+                  initial="initial"
+                  animate="enter"
+                  exit="exit"
+                  className="hidden md:flex md:col-span-5 flex-col gap-4 border-s border-[#1b4d3b]/40 ps-6"
+                >
+                  {/* Real-time Saudi Telemetry */}
+                  <div className="p-4 rounded-2xl bg-[#0a2318]/50 border border-emerald-500/20 backdrop-blur-md shadow-inner space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-mono text-[#a6ff2e]">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" />
+                        <span>{language === 'ar' ? 'توقيت الرياض (KSA)' : 'Riyadh Time'}</span>
+                      </span>
+                      <span className="font-bold tracking-wider">{saudiTime || '11:00:00 AM'}</span>
+                    </div>
+
+                    <div className="text-xs text-slate-300 flex items-center gap-1.5 pt-1 border-t border-emerald-500/15">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>{language === 'ar' ? 'فريق التطوير متاح للاستشارات' : 'Senior engineers available'}</span>
+                    </div>
+                  </div>
+
+                  {/* Direct VIP WhatsApp Consultation Card */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0c2a1e] to-[#05170f] border border-[#a6ff2e]/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)] space-y-3 relative overflow-hidden group">
+                    <div className="absolute top-0 end-0 w-24 h-24 bg-[#a6ff2e]/10 rounded-full blur-2xl pointer-events-none" />
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-lg bg-[#a6ff2e]/15 border border-[#a6ff2e]/30 flex items-center justify-center text-[#a6ff2e]">
+                        <MessageSquare className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs font-bold text-white">
+                        {language === 'ar' ? 'استشارة واتساب مباشرة' : 'VIP WhatsApp Direct'}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      {language === 'ar'
+                        ? 'تواصل فوري خلال 5 دقائق لمناقشة فكرة مشروعك وحساب التكلفة بدقة.'
+                        : 'Connect in 5 minutes with our lead architect to discuss your project.'}
+                    </p>
+
+                    <a
+                      href="https://wa.me/966565114955?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A7%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88%20%D9%85%D9%87%D8%A7%D8%A8%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D8%A9%20%D9%85%D8%A8%D8%A7%D8%B4%D8%B1%D8%A9%20%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%D9%8A"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        try { audioSynth.playHarmonicSuccess(); } catch {}
+                      }}
+                      className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#a6ff2e] to-[#84cc16] text-[#020a06] text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(166,255,46,0.3)] hover:shadow-[0_0_25px_rgba(166,255,46,0.5)] transition-all cursor-pointer"
+                    >
+                      <span>{language === 'ar' ? 'تواصل مع المهندس الآن' : 'Chat With Lead Architect'}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+
+                  {/* Proof Trust Seals */}
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-slate-300">
+                    <div className="flex items-center gap-1.5 p-2 rounded-xl bg-[#0a2318]/40 border border-emerald-500/15">
+                      <Zap className="w-3 h-3 text-[#a6ff2e]" />
+                      <span>100/100 Speed</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 p-2 rounded-xl bg-[#0a2318]/40 border border-emerald-500/15">
+                      <ShieldCheck className="w-3 h-3 text-[#a6ff2e]" />
+                      <span>Cloudflare DDoS</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Drawer Sub-Content Footer */}
+              <motion.div
+                variants={subContentVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                className="pt-4 border-t border-[#1b4d3b]/40 flex flex-col gap-4 shrink-0"
+              >
+                {/* Location Badge & CTA */}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="mint" pulse icon={<MapPin className="w-3.5 h-3.5 text-[#a6ff2e]" />}>
+                      {t('locationPill')}
+                    </Badge>
+
+                    {/* Mobile language switcher inside drawer footer */}
+                    <button
+                      onClick={() => {
+                        try { audioSynth.playHoverBlip(); } catch {}
+                        toggleLanguage();
+                      }}
+                      className="sm:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 transition-all active:scale-95"
+                    >
+                      <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                      <span>{language === 'ar' ? 'English' : 'العربية'}</span>
+                    </button>
+                  </div>
+
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      handleClose();
+                      if (onOpenContact) onOpenContact();
+                    }}
+                    icon={<ArrowUpRight className={`w-4 h-4 ${isRTL ? 'rotate-[-90deg]' : ''}`} />}
+                    className="font-black shadow-[0_0_20px_rgba(166,255,46,0.3)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)]"
+                  >
+                    {t('ctaStartProject')}
+                  </Button>
+                </div>
+
+                {/* Social Links Row */}
+                <div className="flex items-center justify-between text-xs text-slate-400">
+                  <span className="font-semibold text-slate-400">
+                    {language === 'ar' ? 'تابع استوديو مهاب' : 'Follow MUHAB'}
+                  </span>
+
+                  <div className="flex items-center gap-4">
+                    {socials.map((s, idx) => (
+                      <a
+                        key={idx}
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-[#a6ff2e] transition-colors font-medium hover:underline"
+                      >
+                        {s.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+

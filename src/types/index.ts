@@ -1,97 +1,111 @@
-export type Language = "en" | "ar";
+export type Language = 'ar' | 'en';
 
-export interface PhoneSlide {
-  id: string;
-  titleEn: string;
-  titleAr: string;
-  categoryEn: string;
-  categoryAr: string;
-  videoSrc: string;
-  poster: string;
-  alt: string;
+export interface ProjectDevicePreview {
+  badgeAr: string;
+  badgeEn: string;
+  heroTitleAr: string;
+  heroTitleEn: string;
+  rating: string;
+  reviewCount: string;
+  priceTagAr: string;
+  priceTagEn: string;
+  ctaTextAr: string;
+  ctaTextEn: string;
+  primaryMetricAr: string;
+  primaryMetricEn: string;
+  accentBg: string;
+  highlightTagAr: string;
+  highlightTagEn: string;
+  subItemsAr: string[];
+  subItemsEn: string[];
 }
 
 export interface Project {
   id: string;
   slug: string;
-  number: string;
-  titleEn: string;
   titleAr: string;
-  clientEn: string;
-  clientAr: string;
-  categoryEn: string;
-  categoryAr: string;
-  year: string;
-  liveUrl?: string;
+  titleEn: string;
+  category: 'ecommerce' | 'fnb' | 'tea' | 'all';
+  categoryLabelAr: string;
+  categoryLabelEn: string;
+  descAr: string;
+  descEn: string;
+  fullDescAr: string;
+  fullDescEn: string;
+  metricsAr: string;
+  metricsEn: string;
+  tags: string[];
+  accentColor: string;
+  gradientBg: string;
   image: string;
-  mobileImage?: string;
-  videoSrc?: string;
-  descEn: string;
-  descAr: string;
-  scopeEn: string[];
-  scopeAr: string[];
-  impactEn: string;
-  impactAr: string;
+  liveUrl?: string;
+  devicePreview: ProjectDevicePreview;
+  highlightPointsAr: string[];
+  highlightPointsEn: string[];
 }
 
-export interface CompanyProduct {
+export interface EcosystemProduct {
   id: string;
-  number: string;
-  name: string;
-  categoryEn: string;
-  categoryAr: string;
-  descEn: string;
-  descAr: string;
-  statusEn: string;
-  statusAr: string;
-  isLive: boolean;
-  link?: string;
-  featuresEn: string[];
-  featuresAr: string[];
-  image?: string;
-}
-
-export interface ServiceRow {
-  number: string;
-  id: string;
-  titleEn: string;
-  titleAr: string;
-  categoryEn: string;
-  categoryAr: string;
-  descEn: string;
-  descAr: string;
-  capabilityEn: string;
-  capabilityAr: string;
-}
-
-export interface ClientPartner {
-  id: string;
-  nameEn: string;
+  slug: string;
   nameAr: string;
-  industryEn: string;
-  industryAr: string;
-  location: string;
-  logo?: string;
-}
-
-export interface Testimonial {
-  id: string;
-  authorEn: string;
-  authorAr: string;
-  roleEn: string;
-  roleAr: string;
-  companyEn: string;
-  companyAr: string;
-  quoteEn: string;
-  quoteAr: string;
-  projectSlug: string;
-  rating: number;
-}
-
-export interface ProcessStep {
-  step: string;
-  titleEn: string;
-  titleAr: string;
-  descEn: string;
+  nameEn: string;
+  taglineAr: string;
+  taglineEn: string;
+  badgeAr: string;
+  badgeEn: string;
   descAr: string;
+  descEn: string;
+  featuresAr: string[];
+  featuresEn: string[];
+  highlightMetricAr: string;
+  highlightMetricEn: string;
+  icon: string;
+  accent: 'mint' | 'gold' | 'emerald';
+  ctaAr: string;
+  ctaEn: string;
+  mockupType: 'nfc' | 'wallet' | 'pos';
 }
+
+export interface ServiceItem {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  descAr: string;
+  descEn: string;
+  deliverablesAr: string[];
+  deliverablesEn: string[];
+  icon: string;
+  tagAr: string;
+  tagEn: string;
+  accent: string;
+}
+
+export interface TrustPill {
+  id: string;
+  icon: string;
+  titleAr: string;
+  titleEn: string;
+  subtitleAr: string;
+  subtitleEn: string;
+  image?: string;
+  badgeAr?: string;
+  badgeEn?: string;
+}
+
+export interface MetricItem {
+  value: string;
+  labelAr: string;
+  labelEn: string;
+  subAr: string;
+  subEn: string;
+  glow: string;
+}
+
+export interface InquiryData {
+  clientName: string;
+  phone: string;
+  serviceType: string;
+  budgetRange: string;
+  projectBrief: string;
+}
+

@@ -1,4 +1,12 @@
-﻿# Node / Dependencies
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 node_modules
 dist
 dist-ssr
@@ -15,5 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Test screenshots / temporary assets
-test_screenshots_*
+.vercel
+*.png
+!public/**/*.png
+!public/**/*.jpg
+test-results/
+test_screenshots/
