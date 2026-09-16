@@ -6,6 +6,7 @@ import {
   generateOrderId,
   sendOrderToEmail,
   buildWhatsAppUrl,
+  buildEmailMailtoUrl,
   COMPANY_EMAIL,
   OFFICIAL_DOMAIN,
   type OrderPayload,
@@ -18,7 +19,6 @@ import {
   User, 
   Mail,
   Layers, 
-  Coins, 
   FileText,
   CheckCircle2,
   ChevronDown,
@@ -27,7 +27,9 @@ import {
   Zap,
   Check,
   Copy,
-  Loader2
+  Loader2,
+  Send,
+  ExternalLink
 } from 'lucide-react';
 
 interface ContactModalProps {
@@ -48,10 +50,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     phone: '',
     email: '',
     service: preselectedService || 'تصميم وبرمجة موقع مخصص فاخر',
-    budget: '25,000 - 50,000 ر.س',
     brief: '',
   });
 
+  const [sendMethod, setSendMethod] = useState<'email' | 'whatsapp'>('email');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdOrder, setCreatedOrder] = useState<OrderPayload | null>(null);
@@ -119,9 +121,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const processOrder = async (targetMethod: 'email' | 'whatsapp') => {
     if (isSubmitting) return;
+
+    // Validate email if submitting via email channel
+    if (targetMethod === 'email' && !formData.email.trim()) {
+      audioSynth.playTelemetryTick();
+      const emailInput = document.getElementById('contact-email-input');
+      emailInput?.focus();
+      return;
+    }
 
     setIsSubmitting(true);
     audioSynth.playTelemetryTick();
@@ -135,10 +144,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       phone: formData.phone.trim(),
       email: formData.email.trim(),
       service: formData.service,
-      budget: formData.budget,
       brief: formData.brief.trim(),
       tags: selectedTags,
       sourceDomain: OFFICIAL_DOMAIN,
+      sendMethod: targetMethod,
     };
 
     // 2. Dispatch complete details directly to muhabagency@gmail.com
@@ -147,6 +156,25 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     audioSynth.playHarmonicSuccess();
     setCreatedOrder(payload);
     setIsSubmitting(false);
+
+    // 3. If WhatsApp method, launch WhatsApp directly
+    if (targetMethod === 'whatsapp') {
+      const whatsappUrl = buildWhatsAppUrl(payload, language === 'ar' ? 'ar' : 'en');
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || ('ontouchstart' in window);
+      if (isMobile) {
+        window.location.href = whatsappUrl;
+      } else {
+        const win = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        if (!win) {
+          window.location.href = whatsappUrl;
+        }
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await processOrder(sendMethod);
   };
 
   const handleCopyOrderId = () => {
@@ -174,11 +202,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     }
   };
 
-  const budgetOptions = [
-    t('budget1'),
-    t('budget2'),
-    t('budget3'),
-  ];
+  const handleOpenMailApp = () => {
+    if (!createdOrder) return;
+    audioSynth.playHarmonicSuccess();
+    const mailtoUrl = buildEmailMailtoUrl(createdOrder, language === 'ar' ? 'ar' : 'en');
+    window.location.href = mailtoUrl;
+  };
 
   const serviceOptions = language === 'ar' ? [
     'تصميم وبرمجة موقع مخصص فاخر',
@@ -357,36 +386,46 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
               </div>
 
-              {/* Action Buttons: WhatsApp VIP follow-up & Dismiss */}
+              {/* Dual Action Options on Success */}
               <div className="w-full space-y-2 pt-1">
+                {/* Mail App Direct Confirmation */}
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={handleOpenWhatsApp}
+                  onClick={handleOpenMailApp}
                   className="w-full group py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.4)] hover:shadow-[0_0_35px_rgba(166,255,46,0.65)] transition-all cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#020a06]" />
+                    <Mail className="w-4 h-4 text-[#020a06]" />
                     <span>
-                      {language === 'ar' ? 'متابعة فورية مع المهندس عبر الواتساب' : 'Fast WhatsApp Direct Connect'}
+                      {language === 'ar' ? 'فتح تطبيق البريد مباشرة للتأكيد والإرسال' : 'Open Mail App to Verify & Send'}
                     </span>
                   </div>
                   <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
-                    <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <ExternalLink className="w-3 h-3 text-[#020a06] group-hover:scale-110 transition-transform" />
                   </div>
                 </motion.button>
 
-                <p className="text-[10px] text-slate-400">
-                  {language === 'ar' 
-                    ? '💡 يفتح الواتساب مع رسالة تحتوي رقم الطلب المعتمد لسرعة الرد والمباشرة'
-                    : '💡 Launches WhatsApp with your verified Order ID prefilled for fast service'}
-                </p>
+                {/* WhatsApp VIP Follow-up */}
+                <button
+                  type="button"
+                  onClick={handleOpenWhatsApp}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-emerald-500/20 text-emerald-300 hover:text-[#a6ff2e] text-xs font-bold border border-emerald-500/25 hover:border-[#a6ff2e]/40 flex items-center justify-between transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-emerald-400" />
+                    <span>
+                      {language === 'ar' ? 'أو متابعة فورية مع المهندس عبر الواتساب' : 'Or Direct Follow-up via WhatsApp'}
+                    </span>
+                  </div>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
 
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+                  className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
                 >
                   {language === 'ar' ? 'إغلاق والعودة للموقع' : 'Close and Return'}
                 </button>
@@ -479,64 +518,105 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   </div>
                 </div>
 
-                {/* Email field (Optional) */}
+                {/* Email field (Highlighted) */}
                 <div className="group/field">
                   <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                         <Mail className="w-2 h-2 text-[#a6ff2e]" />
                       </div>
-                      <span>{language === 'ar' ? 'البريد الإلكتروني' : 'Email Address'}</span>
+                      <span>{language === 'ar' ? 'البريد الإلكتروني للعميل' : 'Client Email'}</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-medium">
-                      {language === 'ar' ? 'اختياري - لاستلام نسخة' : 'Optional'}
+                    <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded ${sendMethod === 'email' ? 'bg-[#a6ff2e]/20 text-[#a6ff2e] border border-[#a6ff2e]/40' : 'text-slate-400'}`}>
+                      {sendMethod === 'email' ? (language === 'ar' ? 'مطلوب للتواصل ✉️' : 'Required') : (language === 'ar' ? 'اختياري' : 'Optional')}
                     </span>
                   </label>
                   <input
+                    id="contact-email-input"
                     type="email"
+                    required={sendMethod === 'email'}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="name@company.com"
                     style={{ fontSize: '16px' }}
-                    className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all shadow-inner"
+                    className={`w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
+                      sendMethod === 'email' 
+                        ? 'border-[#a6ff2e]/40 focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30' 
+                        : 'border-emerald-500/25 hover:border-emerald-500/45 focus:border-[#a6ff2e]'
+                    }`}
                   />
                 </div>
               </div>
 
-              {/* Budget Range Selection */}
+              {/* Preferred Sending & Contact Channel Selector */}
               <div>
-                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
+                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1.5 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-3.5 h-3.5 rounded bg-amber-400/10 border border-amber-400/25 flex items-center justify-center">
-                      <Coins className="w-2 h-2 text-amber-400" />
+                    <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
+                      <Send className="w-2 h-2 text-[#a6ff2e]" />
                     </div>
-                    <span>{t('formBudget')}</span>
+                    <span>{language === 'ar' ? 'طريقة إرسال الطلب والتواصل المفضلة' : 'Preferred Submission Method'}</span>
                   </div>
-                  <span className="text-[10px] text-emerald-400/80 font-medium">
-                    {language === 'ar' ? 'اختر النطاق الملائم' : 'Select Tier'}
+                  <span className="text-[10px] text-[#a6ff2e] font-medium">
+                    {language === 'ar' ? 'إرسال فوري ومباشر' : 'Instant Dispatch'}
                   </span>
                 </label>
-                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                  {budgetOptions.map((budget, i) => (
-                    <motion.button
-                      type="button"
-                      key={i}
-                      whileHover={{ y: -1, scale: 1.01 }}
-                      whileTap={{ scale: 0.97 }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                      onClick={() => {
-                        audioSynth.playTelemetryTick();
-                        setFormData({ ...formData, budget });
-                      }}
-                      className={`h-9 sm:h-10 px-1.5 rounded-xl text-[10px] sm:text-xs font-bold border transition-all cursor-pointer relative overflow-hidden text-center flex items-center justify-center ${
-                        formData.budget === budget
-                          ? 'bg-gradient-to-r from-[#a6ff2e] to-[#bbfd5c] text-[#020a06] font-black border-[#a6ff2e] shadow-[0_0_15px_rgba(166,255,46,0.3)]'
-                          : 'bg-[#0a2318]/60 text-slate-300 border-emerald-500/20 hover:border-emerald-500/50 hover:text-white hover:bg-[#0d2e20]/80'
-                      }`}
-                    >
-                      <span className="leading-tight line-clamp-1">{budget}</span>
-                    </motion.button>
-                  ))}
+                <div className="grid grid-cols-2 gap-2">
+                  {/* Email Option */}
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      audioSynth.playTelemetryTick();
+                      setSendMethod('email');
+                    }}
+                    className={`h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
+                      sendMethod === 'email'
+                        ? 'bg-gradient-to-r from-[#a6ff2e]/25 via-[#a6ff2e]/10 to-transparent border-[#a6ff2e] text-[#a6ff2e] shadow-[0_0_15px_rgba(166,255,46,0.25)] ring-1 ring-[#a6ff2e]/30'
+                        : 'bg-[#0a2318]/60 text-slate-300 border-emerald-500/20 hover:border-emerald-500/40 hover:text-white'
+                    }`}
+                  >
+                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'email' ? 'bg-[#a6ff2e] text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
+                      <Mail className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-start leading-tight min-w-0">
+                      <div className="text-[11px] sm:text-xs font-black truncate">
+                        {language === 'ar' ? 'عبر البريد الإلكتروني' : 'Via Official Email'}
+                      </div>
+                      <div className="text-[9px] text-slate-400 font-mono truncate">
+                        muhabagency@gmail.com
+                      </div>
+                    </div>
+                  </motion.button>
+
+                  {/* WhatsApp Option */}
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      audioSynth.playTelemetryTick();
+                      setSendMethod('whatsapp');
+                    }}
+                    className={`h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
+                      sendMethod === 'whatsapp'
+                        ? 'bg-gradient-to-r from-emerald-500/25 via-emerald-500/10 to-transparent border-emerald-400 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.25)] ring-1 ring-emerald-400/30'
+                        : 'bg-[#0a2318]/60 text-slate-300 border-emerald-500/20 hover:border-emerald-500/40 hover:text-white'
+                    }`}
+                  >
+                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'whatsapp' ? 'bg-emerald-400 text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
+                      <MessageSquare className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="text-start leading-tight min-w-0">
+                      <div className="text-[11px] sm:text-xs font-black truncate">
+                        {language === 'ar' ? 'عبر الواتساب المباشر' : 'Via Direct WhatsApp'}
+                      </div>
+                      <div className="text-[9px] text-slate-400 font-mono truncate">
+                        +966 56 511 4955
+                      </div>
+                    </div>
+                  </motion.button>
                 </div>
               </div>
 
@@ -594,35 +674,91 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
               </div>
 
-              {/* Submit Button & Trust Reassurance */}
-              <div className="pt-1">
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
-                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                  className="w-full group relative overflow-hidden py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
-                >
-                  {isSubmitting ? (
-                    <div className="w-full flex items-center justify-center gap-2 py-0.5">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#020a06]" />
-                      <span>{language === 'ar' ? 'جاري توثيق وإرسال طلبك للبريد...' : 'Dispatching your order...'}</span>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4 text-[#020a06]" />
-                        <span>{language === 'ar' ? 'إرسال وتوثيق الطلب رسمياً' : 'Submit & Dispatch Order'}</span>
-                      </div>
-                      <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
-                        <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </div>
-                    </>
-                  )}
-                </motion.button>
+              {/* Submit Buttons & Trust Reassurance */}
+              <div className="pt-1 space-y-2">
+                {sendMethod === 'email' ? (
+                  <>
+                    {/* Primary Button: Email */}
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
+                      whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
+                    >
+                      {isSubmitting ? (
+                        <div className="w-full flex items-center justify-center gap-2 py-0.5">
+                          <Loader2 className="w-4 h-4 animate-spin text-[#020a06]" />
+                          <span>{language === 'ar' ? 'جاري إرسال طلبك فوراً إلى بريد الشركة...' : 'Sending to muhabagency@gmail.com...'}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-[#020a06]" />
+                            <span>{language === 'ar' ? 'إرسال الطلب فوراً إلى إيميل الشركة' : 'Send Order to Agency Email'}</span>
+                          </div>
+                          <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
+                            <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </div>
+                        </>
+                      )}
+                    </motion.button>
+
+                    {/* Alternate Direct Action: WhatsApp */}
+                    <button
+                      type="button"
+                      onClick={() => processOrder('whatsapp')}
+                      disabled={isSubmitting}
+                      className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-emerald-500/15 text-emerald-300 hover:text-[#a6ff2e] text-[11px] sm:text-xs font-bold border border-emerald-500/20 hover:border-[#a6ff2e]/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{language === 'ar' ? 'أو الإرسال والاستشارة مباشرة عبر الواتساب' : 'Or Send & Consult via WhatsApp'}</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {/* Primary Button: WhatsApp */}
+                    <motion.button
+                      type="button"
+                      onClick={() => processOrder('whatsapp')}
+                      disabled={isSubmitting}
+                      whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
+                      whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
+                    >
+                      {isSubmitting ? (
+                        <div className="w-full flex items-center justify-center gap-2 py-0.5">
+                          <Loader2 className="w-4 h-4 animate-spin text-[#020a06]" />
+                          <span>{language === 'ar' ? 'جاري توثيق وفتح المحادثة...' : 'Connecting to WhatsApp...'}</span>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <MessageSquare className="w-4 h-4 text-[#020a06]" />
+                            <span>{language === 'ar' ? 'إرسال واستشارة فورية عبر الواتساب' : 'Send & Chat Instantly on WhatsApp'}</span>
+                          </div>
+                          <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
+                            <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                          </div>
+                        </>
+                      )}
+                    </motion.button>
+
+                    {/* Alternate Direct Action: Email */}
+                    <button
+                      type="button"
+                      onClick={() => processOrder('email')}
+                      disabled={isSubmitting}
+                      className="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-emerald-500/15 text-emerald-300 hover:text-[#a6ff2e] text-[11px] sm:text-xs font-bold border border-emerald-500/20 hover:border-[#a6ff2e]/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                      <span>{language === 'ar' ? 'أو إرسال الطلب فوراً إلى بريد الشركة' : 'Or Send to Agency Email'}</span>
+                    </button>
+                  </>
+                )}
 
                 {/* Trust Badges */}
-                <div className="flex items-center justify-center gap-2 text-[9.5px] font-medium text-slate-400 mt-2 text-center flex-wrap">
+                <div className="flex items-center justify-center gap-2 text-[9px] sm:text-[9.5px] font-medium text-slate-400 pt-0.5 text-center flex-wrap">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3 h-3 text-[#a6ff2e]" />
                     <span>إرسال مباشر إلى muhabagency@gmail.com</span>
@@ -635,7 +771,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <Zap className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>رد سريع خلال دقائق</span>
+                    <span>رد خلال دقائق معدودة</span>
                   </span>
                 </div>
               </div>
