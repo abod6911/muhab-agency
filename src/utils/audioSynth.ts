@@ -76,7 +76,7 @@ class AudioSynthEngine {
   }
 
   public playHarmonicSuccess() {
-    if (this.isMuted) return;
+    if (this.isMuted || this.isTouchDevice()) return;
     try {
       this.initCtx();
       if (!this.ctx) return;

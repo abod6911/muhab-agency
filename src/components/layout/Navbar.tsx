@@ -37,14 +37,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
     try {
       audioSynth.playHoverBlip();
     } catch {}
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts: any) => void } }).__lenis;
-    if (lenis) {
-      lenis.scrollTo(href, { offset: -80, duration: 1.2 });
-    } else {
-      const el = document.querySelector(href);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+
+    const targetEl = document.querySelector(href) as HTMLElement | null;
+    if (targetEl) {
+      const headerOffset = 75;
+      const targetTop = Math.max(0, targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset);
+
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+
+      const lenis = (window as unknown as { __lenis?: any }).__lenis;
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        try {
+          lenis.scrollTo(targetTop, { duration: 0.8, force: true });
+        } catch {}
       }
+
+      try {
+        window.history.pushState(null, '', href);
+      } catch {}
     }
   };
 

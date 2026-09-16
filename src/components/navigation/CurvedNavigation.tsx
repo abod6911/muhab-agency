@@ -4,7 +4,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { Curve } from './Curve';
 import { NavLink } from './NavLink';
 import { MagneticButton } from './MagneticButton';
-import { Button } from '../common/Button';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
 import { audioSynth } from '../../utils/audioSynth';
 import { 
@@ -137,6 +136,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       sublabel: language === 'ar' ? 'أرقام حقيقية للسوق السعودي' : 'Sub-Second Performance',
       href: '#metrics',
     },
+    {
+      label: language === 'ar' ? 'تواصل معنا' : 'Contact & Booking',
+      sublabel: language === 'ar' ? 'استشارة فورية وحساب التكلفة' : 'Direct Inquiry & Proposal',
+      href: '#contact',
+    },
   ];
 
   const socials = [
@@ -161,7 +165,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     exit: {
       x: isRTL ? '-100%' : '100%',
       transition: {
-        duration: 0.2,
+        duration: 0.18,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -183,7 +187,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     },
     exit: {
       transition: {
-        staggerChildren: 0.02,
+        staggerChildren: 0.01,
         staggerDirection: -1,
       },
     },
@@ -203,8 +207,8 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     },
     exit: {
       opacity: 0,
-      y: 15,
-      transition: { duration: 0.25 },
+      y: 10,
+      transition: { duration: 0.15 },
     },
   };
 
@@ -254,7 +258,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               initial="initial"
               animate="enter"
               exit="exit"
-              className={`fixed top-0 h-screen w-full sm:w-[480px] md:w-[580px] lg:w-[680px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-2xl z-[125] flex flex-col justify-between p-4 sm:p-6 md:p-8 overflow-y-auto overscroll-contain touch-pan-y border-[#1b4d3b] ${
+              className={`fixed top-0 h-[100dvh] max-h-[100dvh] w-full sm:w-[480px] md:w-[580px] lg:w-[680px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-2xl z-[125] flex flex-col justify-between p-4 sm:p-6 md:p-8 overflow-y-auto overscroll-contain touch-pan-y border-[#1b4d3b] ${
                 isRTL
                   ? 'left-0 border-r border-[#1b4d3b]/60'
                   : 'right-0 border-l border-[#1b4d3b]/60'
@@ -291,30 +295,31 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
 
                 {/* Header Controls & Explicit Close Button */}
                 <div className="flex items-center gap-2">
-                  {/* Desktop Controls: Live status & Language switcher */}
-                  <div className="hidden sm:flex items-center gap-2">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[10px] font-mono font-bold text-[#a6ff2e]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
-                      <span>{language === 'ar' ? 'متاح' : 'ONLINE'}</span>
-                    </div>
-
-                    {/* Language quick switcher in drawer */}
-                    <button
-                      onClick={() => {
-                        toggleLanguage();
-                      }}
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
-                    >
-                      <Globe className="w-3 h-3 text-[#a6ff2e]" />
-                      <span>{language === 'ar' ? 'English' : 'العربية'}</span>
-                    </button>
+                  {/* Status Indicator */}
+                  <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[10px] font-mono font-bold text-[#a6ff2e]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                    <span>{language === 'ar' ? 'متاح' : 'ONLINE'}</span>
                   </div>
+
+                  {/* Language Switcher - ALWAYS VISIBLE ON ALL SCREENS */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      try { audioSynth.playHoverBlip(); } catch {}
+                      toggleLanguage();
+                    }}
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/20 active:scale-95 transition-all cursor-pointer shadow-sm touch-manipulation min-h-[36px]"
+                    aria-label="Switch Language"
+                  >
+                    <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                    <span>{language === 'ar' ? 'English' : 'العربية'}</span>
+                  </button>
 
                   {/* Accessible High-Contrast Close Button */}
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm touch-manipulation"
                     aria-label="Close navigation menu"
                   >
                     <X className="w-4 h-4 text-[#a6ff2e]" />
@@ -424,38 +429,38 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                 exit="exit"
                 className="pt-3 border-t border-[#1b4d3b]/40 flex flex-col gap-3 shrink-0"
               >
-                {/* Location Badge & CTA */}
-                <div className="flex flex-wrap items-center justify-between gap-2.5">
-                  <div className="flex items-center gap-2">
+                {/* Location Badge, WhatsApp & Primary CTA */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center justify-between sm:justify-start gap-2">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0a2318] border border-emerald-500/25 text-[10px] text-[#a6ff2e] font-medium">
                       <MapPin className="w-3 h-3 text-[#a6ff2e]" />
                       <span>{t('locationPill')}</span>
                     </span>
 
-                    {/* Mobile language switcher inside drawer footer */}
-                    <button
-                      onClick={() => {
-                        toggleLanguage();
-                      }}
-                      className="sm:hidden flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 transition-all active:scale-95"
+                    {/* Mobile WhatsApp Quick Action */}
+                    <a
+                      href="https://wa.me/966565114955?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A7%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88%20%D9%85%D9%87%D8%A7%D8%A8%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D8%A9%20%D9%85%D8%A8%D8%A7%D8%B4%D8%B1%D8%A9%20%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9%D9%8A"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="md:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#25D366]/15 border border-[#25D366]/40 text-[#25D366] active:scale-95 transition-all touch-manipulation"
                     >
-                      <Globe className="w-3 h-3 text-[#a6ff2e]" />
-                      <span>{language === 'ar' ? 'English' : 'العربية'}</span>
-                    </button>
+                      <MessageSquare className="w-3 h-3 text-[#25D366]" />
+                      <span>واتساب</span>
+                    </a>
                   </div>
 
-                  <Button
-                    variant="primary"
-                    size="sm"
+                  {/* Direct Contact Button */}
+                  <button
+                    type="button"
                     onClick={() => {
                       handleClose();
                       if (onOpenContact) onOpenContact();
                     }}
-                    icon={<ArrowUpRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-[-90deg]' : ''}`} />}
-                    className="font-bold text-xs py-2 px-4 shadow-[0_0_15px_rgba(166,255,46,0.25)]"
+                    className="w-full sm:w-auto py-2.5 px-5 rounded-full bg-[#a6ff2e] hover:bg-[#b6ff4d] text-[#09110d] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(166,255,46,0.35)] active:scale-95 transition-all cursor-pointer touch-manipulation min-h-[40px]"
                   >
-                    {t('ctaStartProject')}
-                  </Button>
+                    <span>{t('ctaStartProject')}</span>
+                    <ArrowUpRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-[-90deg]' : ''}`} />
+                  </button>
                 </div>
 
                 {/* Social Links Row */}

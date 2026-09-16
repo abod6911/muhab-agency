@@ -39,10 +39,10 @@ export const NavLink: React.FC<NavLinkProps> = ({
       },
     },
     exit: {
-      y: '70%',
+      y: '40%',
       opacity: 0,
       transition: {
-        duration: 0.35,
+        duration: 0.15,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -53,27 +53,66 @@ export const NavLink: React.FC<NavLinkProps> = ({
       audioSynth.playHarmonicSuccess();
     } catch {}
 
-    // 1. Close menu drawer immediately
-    onClick();
+    // Unlock body scroll immediately so the page can scroll
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
 
-    // 2. Smoothly scroll to target section without freezing
+    const lenis = (window as unknown as { __lenis?: any }).__lenis;
+    if (lenis && typeof lenis.start === 'function') {
+      try {
+        lenis.start();
+      } catch {}
+    }
+
     if (href.startsWith('#')) {
       e.preventDefault();
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
 
-      setTimeout(() => {
-        const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts: any) => void; start: () => void } }).__lenis;
-        if (lenis) {
-          lenis.start();
-          lenis.scrollTo(href, { offset: -70, duration: 1.0 });
-        } else {
-          const el = document.querySelector(href);
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          }
+      // Trigger drawer close
+      onClick();
+
+      const targetEl = document.querySelector(href) as HTMLElement | null;
+      if (targetEl) {
+        const headerOffset = 75;
+        const targetTop = targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+        const clampedTop = Math.max(0, targetTop);
+
+        // Direct native browser scroll
+        window.scrollTo({
+          top: clampedTop,
+          behavior: 'smooth',
+        });
+
+        // Lenis programmatic scroll with force flag to override any paused state
+        if (lenis && typeof lenis.scrollTo === 'function') {
+          try {
+            lenis.scrollTo(clampedTop, {
+              duration: 0.8,
+              force: true,
+              immediate: false,
+            });
+          } catch {}
         }
-      }, 120);
+
+        // Secondary fallback to guarantee arrival on mobile WebKit
+        setTimeout(() => {
+          document.body.style.overflow = '';
+          const currentPos = window.pageYOffset;
+          if (Math.abs(currentPos - clampedTop) > 120) {
+            window.scrollTo({
+              top: clampedTop,
+              behavior: 'smooth',
+            });
+          }
+        }, 120);
+
+        try {
+          window.history.pushState(null, '', href);
+        } catch {}
+      } else if (href === '#hero') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      onClick();
     }
   };
 
@@ -84,13 +123,15 @@ export const NavLink: React.FC<NavLinkProps> = ({
   };
 
   return (
-    <div className="overflow-hidden py-1">
+    <div className="overflow-hidden py-0.5">
       <motion.div variants={linkItemVariants}>
         <a
           href={href}
+          role="button"
+          tabIndex={0}
           onClick={handleClick}
           onMouseEnter={handleMouseEnter}
-          className="group relative flex items-center justify-between p-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-transparent hover:border-[#a6ff2e]/35 transition-all duration-200 select-none block bg-white/[0.02] hover:bg-[#072418]/60 cursor-pointer"
+          className="group relative flex items-center justify-between p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl border border-white/5 hover:border-[#a6ff2e]/40 active:border-[#a6ff2e]/60 transition-all duration-200 select-none block bg-white/[0.03] hover:bg-[#072418]/80 active:bg-[#a6ff2e]/10 cursor-pointer touch-manipulation min-h-[50px]"
         >
           {/* Ambient Glow Background on Hover */}
           <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#a6ff2e]/10 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />

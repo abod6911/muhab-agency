@@ -41,8 +41,8 @@ export const Curve: React.FC<CurveProps> = ({ isRTL = false }) => {
         ? [targetPathRTL, curvedPathRTL, initialPathRTL]
         : [targetPathLTR, curvedPathLTR, initialPathLTR],
       transition: {
-        duration: 0.8,
-        times: [0, 0.45, 1],
+        duration: 0.22,
+        times: [0, 0.5, 1],
         ease: [0.76, 0, 0.24, 1],
       },
     },
