@@ -504,7 +504,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       style={{ fontSize: '16px' }}
-                      className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
+                      className="w-full ps-3 pe-8 py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
                     >
                       {serviceOptions.map((opt, i) => (
                         <option key={i} value={opt} className="bg-[#03150d] text-white py-2">
@@ -527,7 +527,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       </div>
                       <span>{language === 'ar' ? 'البريد الإلكتروني للعميل' : 'Client Email'}</span>
                     </div>
-                    <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded ${sendMethod === 'email' ? 'bg-[#a6ff2e]/20 text-[#a6ff2e] border border-[#a6ff2e]/40' : 'text-slate-400'}`}>
+                    <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap ${sendMethod === 'email' ? 'bg-[#a6ff2e]/20 text-[#a6ff2e] border border-[#a6ff2e]/40' : 'text-slate-400'}`}>
                       {sendMethod === 'email' ? (language === 'ar' ? 'مطلوب للتواصل ✉️' : 'Required') : (language === 'ar' ? 'اختياري' : 'Optional')}
                     </span>
                   </label>
@@ -761,17 +761,17 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 <div className="flex items-center justify-center gap-2 text-[9px] sm:text-[9.5px] font-medium text-slate-400 pt-0.5 text-center flex-wrap">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>إرسال مباشر إلى muhabagency@gmail.com</span>
+                    <span>{language === 'ar' ? 'إرسال مباشر إلى muhabagency@gmail.com' : 'Direct to muhabagency@gmail.com'}</span>
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>MUHAB.org موثق</span>
+                    <span>{language === 'ar' ? 'MUHAB.org موثق' : 'MUHAB.org Verified'}</span>
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <Zap className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>رد خلال دقائق معدودة</span>
+                    <span>{language === 'ar' ? 'رد خلال دقائق معدودة' : 'Reply in minutes'}</span>
                   </span>
                 </div>
               </div>
