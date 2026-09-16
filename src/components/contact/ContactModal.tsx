@@ -2,12 +2,21 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import { audioSynth } from '../../utils/audioSynth';
+import {
+  generateOrderId,
+  sendOrderToEmail,
+  buildWhatsAppUrl,
+  COMPANY_EMAIL,
+  OFFICIAL_DOMAIN,
+  type OrderPayload,
+} from '../../services/orderService';
 import { 
   X, 
   MessageSquare, 
   Sparkles, 
   Phone, 
   User, 
+  Mail,
   Layers, 
   Coins, 
   FileText,
@@ -16,7 +25,9 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Zap,
-  Check
+  Check,
+  Copy,
+  Loader2
 } from 'lucide-react';
 
 interface ContactModalProps {
@@ -35,13 +46,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    email: '',
     service: preselectedService || 'تصميم وبرمجة موقع مخصص فاخر',
     budget: '25,000 - 50,000 ر.س',
     brief: '',
   });
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createdOrder, setCreatedOrder] = useState<OrderPayload | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // Update service when prop changes
   React.useEffect(() => {
@@ -55,12 +69,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         audioSynth.playHoverBlip();
-        onClose();
+        handleCloseModal();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   // Lock body scroll when modal is active
   React.useEffect(() => {
@@ -75,6 +89,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       lenis?.start();
     };
   }, [isOpen]);
+
+  const handleCloseModal = () => {
+    onClose();
+    // Delay resetting state so animations exit gracefully
+    setTimeout(() => {
+      setCreatedOrder(null);
+      setIsSubmitting(false);
+      setCopied(false);
+    }, 400);
+  };
 
   const toggleTag = (tag: string) => {
     audioSynth.playTelemetryTick();
@@ -95,45 +119,50 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    audioSynth.playTelemetryTick();
+
+    // 1. Generate unique corporate Order ID (e.g. MH-26-8492)
+    const orderId = generateOrderId();
+
+    const payload: OrderPayload = {
+      orderId,
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      email: formData.email.trim(),
+      service: formData.service,
+      budget: formData.budget,
+      brief: formData.brief.trim(),
+      tags: selectedTags,
+      sourceDomain: OFFICIAL_DOMAIN,
+    };
+
+    // 2. Dispatch complete details directly to muhabagency@gmail.com
+    await sendOrderToEmail(payload);
+
     audioSynth.playHarmonicSuccess();
+    setCreatedOrder(payload);
+    setIsSubmitting(false);
+  };
 
-    // Prepare WhatsApp Message URL
-    const agencyNumber = '966565114955'; // Official Muhab Studio WhatsApp
+  const handleCopyOrderId = () => {
+    if (!createdOrder) return;
+    audioSynth.playHoverBlip();
+    navigator.clipboard.writeText(createdOrder.orderId);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
+
+  const handleOpenWhatsApp = () => {
+    if (!createdOrder) return;
+    audioSynth.playHarmonicSuccess();
+    const whatsappUrl = buildWhatsAppUrl(createdOrder, language === 'ar' ? 'ar' : 'en');
     
-    // Clean and normalize phone number for the message
-    let cleanPhone = formData.phone.trim();
-    if (cleanPhone.startsWith('0')) {
-      cleanPhone = cleanPhone.slice(1);
-    }
-    if (cleanPhone.startsWith('+966')) {
-      cleanPhone = cleanPhone.slice(4).trim();
-    } else if (cleanPhone.startsWith('966')) {
-      cleanPhone = cleanPhone.slice(3).trim();
-    }
-    const displayPhone = cleanPhone ? `+966 ${cleanPhone}` : (formData.phone || 'غير محدد');
-
-    const message = language === 'ar'
-      ? `مرحباً استوديو مهاب 👋
-أود استشارة وبدء مشروع رقمي جديد معكم:
-• الاسم / المنشأة: ${formData.name || 'غير محدد'}
-• رقم التواصل: ${displayPhone}
-• الخدمة المطلوبة: ${formData.service}
-• الميزانية التقريبية: ${formData.budget}
-• تفاصيل المشروع: ${formData.brief || 'أرغب في مناقشة التفاصيل خلال الاتصال'}`
-      : `Hello MUHAB Studio 👋
-I would like to start a new digital project consultation:
-• Name / Brand: ${formData.name || 'N/A'}
-• Phone: ${displayPhone}
-• Service Required: ${formData.service}
-• Budget Estimate: ${formData.budget}
-• Brief: ${formData.brief || 'Let\'s discuss on call'}`;
-
-    // Standard high-reliability WhatsApp endpoint
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${agencyNumber}&text=${encodeURIComponent(message)}`;
-    
-    // On mobile devices, assigning window.location.href directly launches the native WhatsApp app without popup blocker issues
+    // Direct mobile app invocation or safe desktop open
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || ('ontouchstart' in window);
     if (isMobile) {
       window.location.href = whatsappUrl;
@@ -143,12 +172,6 @@ I would like to start a new digital project consultation:
         window.location.href = whatsappUrl;
       }
     }
-
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onClose();
-    }, 2500);
   };
 
   const budgetOptions = [
@@ -216,7 +239,7 @@ I would like to start a new digital project consultation:
             exit={{ opacity: 0, scale: 0.94, y: 14 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            className="relative w-full max-w-lg bg-gradient-to-b from-[#09281b]/98 via-[#04170f]/98 to-[#010905] border border-emerald-500/35 hover:border-[#a6ff2e]/45 rounded-2xl sm:rounded-3xl shadow-[0_20px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(166,255,46,0.12)] z-10 p-3.5 sm:p-5.5 my-auto max-h-[90vh] overflow-y-auto transition-colors duration-300 [&::-webkit-scrollbar]:hidden"
+            className="relative w-full max-w-lg bg-gradient-to-b from-[#09281b]/98 via-[#04170f]/98 to-[#010905] border border-emerald-500/35 hover:border-[#a6ff2e]/45 rounded-2xl sm:rounded-3xl shadow-[0_20px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(166,255,46,0.12)] z-10 px-4 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-5 my-auto max-h-[92vh] overflow-y-auto transition-colors duration-300 [&::-webkit-scrollbar]:hidden"
           >
             {/* Top Luminous Beam */}
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e]" />
@@ -233,47 +256,141 @@ I would like to start a new digital project consultation:
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               onClick={() => {
                 audioSynth.playHoverBlip();
-                onClose();
+                handleCloseModal();
               }}
-              className="absolute top-3.5 sm:top-4 rtl:left-3.5 rtl:sm:left-5 rtl:right-auto ltr:right-3.5 ltr:sm:right-5 ltr:left-auto w-8 h-8 rounded-full bg-white/5 hover:bg-[#a6ff2e]/20 text-slate-400 hover:text-[#a6ff2e] border border-white/10 hover:border-[#a6ff2e]/50 flex items-center justify-center transition-colors cursor-pointer z-20 shadow-[0_3px_12px_rgba(0,0,0,0.4)]"
+              className="absolute top-3 sm:top-4 rtl:left-3 rtl:sm:left-4 rtl:right-auto ltr:right-3 ltr:sm:right-4 ltr:left-auto w-7.5 h-7.5 rounded-full bg-white/5 hover:bg-[#a6ff2e]/20 text-slate-400 hover:text-[#a6ff2e] border border-white/10 hover:border-[#a6ff2e]/50 flex items-center justify-center transition-colors cursor-pointer z-20 shadow-[0_3px_12px_rgba(0,0,0,0.4)]"
               aria-label="Close modal"
             >
               <X className="w-3.5 h-3.5" />
             </motion.button>
 
-          {/* Modal Header */}
-          <div className="mb-3 relative z-10 pe-10 rtl:pe-0 rtl:ps-0">
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-[0_0_10px_rgba(166,255,46,0.12)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
-                <Sparkles className="w-2.5 h-2.5 text-[#a6ff2e]" />
-                <span>{language === 'ar' ? 'استشارة VIP مباشرة • متاح الآن' : 'VIP DIRECT LINE • ONLINE'}</span>
-              </span>
-            </div>
-
-            <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
-              {t('contactModalTitle')}
-            </h3>
-            <p className="text-[11.5px] sm:text-xs text-slate-300 mt-0.5 leading-relaxed">
-              {t('contactModalSubtitle')}
-            </p>
-          </div>
-
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="py-10 flex flex-col items-center justify-center text-center space-y-3 relative z-10"
-            >
-              <div className="w-14 h-14 rounded-full bg-[#a6ff2e]/20 border border-[#a6ff2e] flex items-center justify-center text-[#a6ff2e] shadow-[0_0_25px_rgba(166,255,46,0.4)]">
-                <CheckCircle2 className="w-7 h-7" />
+          {/* Modal Header (Only shown when form is open) */}
+          {!createdOrder && (
+            <div className="mb-3 relative z-10 pe-8 rtl:pe-0 rtl:ps-0">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-[0_0_10px_rgba(166,255,46,0.12)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                  <Sparkles className="w-2.5 h-2.5 text-[#a6ff2e]" />
+                  <span>{language === 'ar' ? 'استشارة VIP مباشرة • متاح الآن' : 'VIP DIRECT LINE • ONLINE'}</span>
+                </span>
               </div>
-              <h4 className="text-base sm:text-lg font-bold text-white">
-                {language === 'ar' ? 'تم توجيه طلبك للواتساب بنجاح!' : 'Redirected to WhatsApp!'}
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-300">
-                {language === 'ar' ? 'سيتواصل معك مهندسنا التقني فوراً عبر الدردشة.' : 'Our lead engineer is connecting with you now.'}
+
+              <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
+                {t('contactModalTitle')}
+              </h3>
+              <p className="text-[11.5px] sm:text-xs text-slate-300 mt-0.5 leading-relaxed">
+                {t('contactModalSubtitle')}
               </p>
+            </div>
+          )}
+
+          {createdOrder ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="py-1 sm:py-2 flex flex-col items-center justify-center text-center space-y-2.5 relative z-10"
+            >
+              {/* Glowing Success Ring */}
+              <div className="relative">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#a6ff2e]/15 border-2 border-[#a6ff2e] flex items-center justify-center text-[#a6ff2e] shadow-[0_0_30px_rgba(166,255,46,0.45)]">
+                  <CheckCircle2 className="w-6 h-6 sm:w-7 sm:h-7" />
+                </div>
+                <div className="absolute -inset-1 bg-[#a6ff2e]/20 rounded-full blur-md -z-10 animate-pulse" />
+              </div>
+
+              {/* Title & Email Dispatch Notification */}
+              <div>
+                <h4 className="text-base sm:text-lg font-black text-white">
+                  {language === 'ar' ? 'تم توثيق وإرسال طلبك بنجاح!' : 'Order Verified & Sent!'}
+                </h4>
+                <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5 max-w-sm mx-auto leading-relaxed">
+                  {language === 'ar' 
+                    ? 'تم إرسال كافة تفاصيل ومواصفات طلبك رسمياً إلى بريد الشركة:'
+                    : 'All order specifications sent officially to the agency email:'}
+                </p>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] font-mono text-[11px] sm:text-xs font-bold mt-1 shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                  <Mail className="w-3 h-3" />
+                  <span>{COMPANY_EMAIL}</span>
+                </div>
+              </div>
+
+              {/* VIP Order Reference ID Card */}
+              <div className="w-full bg-[#051810]/95 border border-emerald-500/35 rounded-2xl p-2.5 sm:p-3 shadow-inner text-center relative overflow-hidden">
+                <div className="text-[10px] sm:text-[11px] font-bold text-slate-400 mb-0.5 flex items-center justify-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                  <span>{language === 'ar' ? 'رقم الطلب المرجعي الرسمي (احفظ هذا الرقم):' : 'Official Order Reference ID:'}</span>
+                </div>
+
+                <div className="flex items-center justify-center gap-2.5 my-1">
+                  <span className="text-lg sm:text-xl font-black font-mono text-[#a6ff2e] tracking-widest drop-shadow-[0_0_12px_rgba(166,255,46,0.6)]">
+                    {createdOrder.orderId}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={handleCopyOrderId}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#a6ff2e]/15 hover:bg-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold border border-[#a6ff2e]/40 transition-all cursor-pointer select-none active:scale-95"
+                    title="نسخ رقم الطلب"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-2.5 h-2.5 text-[#a6ff2e]" />
+                        <span>{language === 'ar' ? 'تم النسخ!' : 'Copied!'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-2.5 h-2.5" />
+                        <span>{language === 'ar' ? 'نسخ الرقم' : 'Copy ID'}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Brief Summary Pill */}
+                <div className="mt-1.5 pt-1.5 border-t border-emerald-500/20 flex items-center justify-center gap-1.5 text-[9.5px] sm:text-[10px] text-slate-300 flex-wrap font-medium">
+                  <span>🏢 {createdOrder.name}</span>
+                  <span>•</span>
+                  <span>🛠️ {createdOrder.service}</span>
+                  <span>•</span>
+                  <span>🌐 {OFFICIAL_DOMAIN}</span>
+                </div>
+              </div>
+
+              {/* Action Buttons: WhatsApp VIP follow-up & Dismiss */}
+              <div className="w-full space-y-2 pt-1">
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleOpenWhatsApp}
+                  className="w-full group py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.4)] hover:shadow-[0_0_35px_rgba(166,255,46,0.65)] transition-all cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4 text-[#020a06]" />
+                    <span>
+                      {language === 'ar' ? 'متابعة فورية مع المهندس عبر الواتساب' : 'Fast WhatsApp Direct Connect'}
+                    </span>
+                  </div>
+                  <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
+                    <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </motion.button>
+
+                <p className="text-[10px] text-slate-400">
+                  {language === 'ar' 
+                    ? '💡 يفتح الواتساب مع رسالة تحتوي رقم الطلب المعتمد لسرعة الرد والمباشرة'
+                    : '💡 Launches WhatsApp with your verified Order ID prefilled for fast service'}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="w-full py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-semibold border border-white/10 transition-colors cursor-pointer"
+                >
+                  {language === 'ar' ? 'إغلاق والعودة للموقع' : 'Close and Return'}
+                </button>
+              </div>
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-2.5 relative z-10">
@@ -333,30 +450,56 @@ I would like to start a new digital project consultation:
                 </div>
               </div>
 
-              {/* Service Select */}
-              <div className="group/field">
-                <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center gap-1.5">
-                  <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
-                    <Layers className="w-2 h-2 text-[#a6ff2e]" />
+              {/* Service Select & Optional Email in 2 columns */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {/* Service Select */}
+                <div className="group/field">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center gap-1.5">
+                    <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
+                      <Layers className="w-2 h-2 text-[#a6ff2e]" />
+                    </div>
+                    <span>{t('formService')}</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.service}
+                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                      style={{ fontSize: '16px' }}
+                      className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
+                    >
+                      {serviceOptions.map((opt, i) => (
+                        <option key={i} value={opt} className="bg-[#03150d] text-white py-2">
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-400">
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </div>
                   </div>
-                  <span>{t('formService')}</span>
-                </label>
-                <div className="relative">
-                  <select
-                    value={formData.service}
-                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                </div>
+
+                {/* Email field (Optional) */}
+                <div className="group/field">
+                  <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
+                        <Mail className="w-2 h-2 text-[#a6ff2e]" />
+                      </div>
+                      <span>{language === 'ar' ? 'البريد الإلكتروني' : 'Email Address'}</span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      {language === 'ar' ? 'اختياري - لاستلام نسخة' : 'Optional'}
+                    </span>
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="name@company.com"
                     style={{ fontSize: '16px' }}
-                    className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
-                  >
-                    {serviceOptions.map((opt, i) => (
-                      <option key={i} value={opt} className="bg-[#03150d] text-white py-2">
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none text-emerald-400">
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </div>
+                    className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all shadow-inner"
+                  />
                 </div>
               </div>
 
@@ -455,32 +598,45 @@ I would like to start a new digital project consultation:
               <div className="pt-1">
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full group relative overflow-hidden py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full group relative overflow-hidden py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
                 >
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#020a06]" />
-                    <span>{t('btnSubmitWhatsApp')}</span>
-                  </div>
-                  <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
-                    <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
+                  {isSubmitting ? (
+                    <div className="w-full flex items-center justify-center gap-2 py-0.5">
+                      <Loader2 className="w-4 h-4 animate-spin text-[#020a06]" />
+                      <span>{language === 'ar' ? 'جاري توثيق وإرسال طلبك للبريد...' : 'Dispatching your order...'}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-[#020a06]" />
+                        <span>{language === 'ar' ? 'إرسال وتوثيق الطلب رسمياً' : 'Submit & Dispatch Order'}</span>
+                      </div>
+                      <div className="w-5 h-5 rounded-md bg-[#020a06]/15 flex items-center justify-center">
+                        <ArrowUpRight className="w-3 h-3 text-[#020a06] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
+                    </>
+                  )}
                 </motion.button>
 
                 {/* Trust Badges */}
                 <div className="flex items-center justify-center gap-2 text-[9.5px] font-medium text-slate-400 mt-2 text-center flex-wrap">
                   <span className="flex items-center gap-1">
+                    <Mail className="w-3 h-3 text-[#a6ff2e]" />
+                    <span>إرسال مباشر إلى muhabagency@gmail.com</span>
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>{language === 'ar' ? 'خصوصية مشفرة' : '100% Encrypted'}</span>
+                    <span>MUHAB.org موثق</span>
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <Zap className="w-3 h-3 text-[#a6ff2e]" />
-                    <span>{language === 'ar' ? 'رد خلال دقائق' : 'Fast Reply'}</span>
+                    <span>رد سريع خلال دقائق</span>
                   </span>
-                  <span>•</span>
-                  <span>{language === 'ar' ? '🇸🇦 استوديو سعودي معتمد' : '🇸🇦 Saudi Verified'}</span>
                 </div>
               </div>
             </form>
