@@ -5,7 +5,6 @@ import { Curve } from './Curve';
 import { NavLink } from './NavLink';
 import { MagneticButton } from './MagneticButton';
 import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
 import { audioSynth } from '../../utils/audioSynth';
 import { 
@@ -90,15 +89,6 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     }
   };
 
-  // Play harmonic chime when opening
-  useEffect(() => {
-    if (isOpen) {
-      try {
-        audioSynth.playHarmonicSuccess();
-      } catch {}
-    }
-  }, [isOpen]);
-
   const [showMagnetic, setShowMagnetic] = useState(false);
 
   // Show magnetic button on scroll or when drawer is open
@@ -109,17 +99,6 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Lock body scroll when menu is active
-  useEffect(() => {
-    if (isOpen) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [isOpen]);
 
   // Handle ESC key to close
   useEffect(() => {
@@ -167,7 +146,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     { name: 'GitHub', href: 'https://github.com' },
   ];
 
-  // 120 FPS Silk Bezier Curtain Wipe Variants
+  // Snappy 0.28s Bezier Curtain Wipe Variants (Zero lag, instantaneous response)
   const drawerVariants: Variants = {
     initial: {
       x: isRTL ? '-100%' : '100%',
@@ -175,14 +154,14 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     enter: {
       x: '0%',
       transition: {
-        duration: 0.65,
-        ease: [0.16, 1, 0.3, 1], // Cinematic Awwwards cubic-bezier
+        duration: 0.28,
+        ease: [0.16, 1, 0.3, 1],
       },
     },
     exit: {
       x: isRTL ? '-100%' : '100%',
       transition: {
-        duration: 0.5,
+        duration: 0.2,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -192,19 +171,19 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
   const navListVariants: Variants = {
     initial: {
       transition: {
-        staggerChildren: 0.04,
+        staggerChildren: 0.02,
         staggerDirection: -1,
       },
     },
     enter: {
       transition: {
-        staggerChildren: 0.07,
-        delayChildren: 0.15,
+        staggerChildren: 0.03,
+        delayChildren: 0.04,
       },
     },
     exit: {
       transition: {
-        staggerChildren: 0.04,
+        staggerChildren: 0.02,
         staggerDirection: -1,
       },
     },
@@ -250,8 +229,8 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
         )}
       </AnimatePresence>
 
-      {/* AnimatePresence for Backdrop & Curved Drawer */}
-      <AnimatePresence mode="wait">
+      {/* AnimatePresence for Backdrop & Curved Drawer (Instant fast rendering) */}
+      <AnimatePresence>
         {isOpen && (
           <div
             role="dialog"
@@ -259,14 +238,14 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
             aria-label="Navigation Menu"
             className="fixed inset-0 z-[120]"
           >
-            {/* Deep Ambient Obsidian Backdrop */}
+            {/* Deep Ambient Obsidian Backdrop (Optimized blur for zero frame drops) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.45 }}
+              transition={{ duration: 0.2 }}
               onClick={handleClose}
-              className="fixed inset-0 bg-[#010805]/85 backdrop-blur-xl"
+              className="fixed inset-0 bg-[#010805]/85 backdrop-blur-sm"
             />
 
             {/* Curved SVG Morphing Drawer */}
@@ -275,14 +254,14 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               initial="initial"
               animate="enter"
               exit="exit"
-              className={`fixed top-0 h-screen w-full sm:w-[540px] md:w-[680px] lg:w-[780px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-[0_0_90px_rgba(0,0,0,0.9)] z-[125] flex flex-col justify-between p-5 sm:p-8 md:p-10 overflow-y-auto overscroll-contain touch-pan-y border-[#1b4d3b] ${
+              className={`fixed top-0 h-screen w-full sm:w-[480px] md:w-[580px] lg:w-[680px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-2xl z-[125] flex flex-col justify-between p-4 sm:p-6 md:p-8 overflow-y-auto overscroll-contain touch-pan-y border-[#1b4d3b] ${
                 isRTL
-                  ? 'left-0 border-r border-[#1b4d3b]/60 shadow-[25px_0_70px_rgba(166,255,46,0.14)]'
-                  : 'right-0 border-l border-[#1b4d3b]/60 shadow-[-25px_0_70px_rgba(166,255,46,0.14)]'
+                  ? 'left-0 border-r border-[#1b4d3b]/60'
+                  : 'right-0 border-l border-[#1b4d3b]/60'
               }`}
             >
               {/* Top Luminous Neon Beam */}
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_20px_#a6ff2e]" />
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e]" />
 
               {/* Dynamic SVG Curve attached to the drawer leading edge (Desktop / Tablet only) */}
               <div className="hidden md:block pointer-events-none">
@@ -290,21 +269,21 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               </div>
 
               {/* Drawer Top Header Area with Dedicated Close Button */}
-              <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-4 shrink-0 gap-3">
+              <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-3 shrink-0 gap-3">
                 {/* Official Logo Brand */}
-                <div className="flex items-center gap-2.5 sm:gap-3">
-                  <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_20px_rgba(166,255,46,0.3)] shrink-0">
-                    <div className="w-full h-full bg-[#020a06] rounded-[10px] flex items-center justify-center p-1 overflow-hidden">
-                      <MuhabEmblemImage size={24} />
+                <div className="flex items-center gap-2 sm:gap-2.5">
+                  <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_15px_rgba(166,255,46,0.25)] shrink-0">
+                    <div className="w-full h-full bg-[#020a06] rounded-[7px] flex items-center justify-center p-0.5 overflow-hidden">
+                      <MuhabEmblemImage size={20} />
                     </div>
-                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#a6ff2e] rounded-full ring-2 ring-[#020a06] animate-pulse" />
+                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#a6ff2e] rounded-full ring-2 ring-[#020a06] animate-pulse" />
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="font-black text-white text-sm sm:text-lg tracking-wider leading-tight flex items-center gap-1.5">
-                      MUHAB <span className="text-[#a6ff2e] font-semibold text-[10px] tracking-widest px-1.5 py-0.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/30">STUDIO</span>
+                    <span className="font-black text-white text-xs sm:text-base tracking-wider leading-tight flex items-center gap-1">
+                      MUHAB <span className="text-[#a6ff2e] font-semibold text-[9px] tracking-widest px-1 py-0.2 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/30">STUDIO</span>
                     </span>
-                    <span className="text-[10px] text-[#a6ff2e]/90 font-medium tracking-wider truncate max-w-[140px] sm:max-w-none">
+                    <span className="text-[9px] sm:text-[10px] text-[#a6ff2e]/90 font-medium tracking-wider truncate max-w-[130px] sm:max-w-none">
                       {language === 'ar' ? 'صُنّاع المواقع السعودية' : 'Saudi Webmakers'}
                     </span>
                   </div>
@@ -314,20 +293,19 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                 <div className="flex items-center gap-2">
                   {/* Desktop Controls: Live status & Language switcher */}
                   <div className="hidden sm:flex items-center gap-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[11px] font-mono font-bold text-[#a6ff2e] shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[10px] font-mono font-bold text-[#a6ff2e]">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
-                      <span>{language === 'ar' ? 'متاح للمشاريع' : 'ONLINE'}</span>
+                      <span>{language === 'ar' ? 'متاح' : 'ONLINE'}</span>
                     </div>
 
                     {/* Language quick switcher in drawer */}
                     <button
                       onClick={() => {
-                        try { audioSynth.playHoverBlip(); } catch {}
                         toggleLanguage();
                       }}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                     >
-                      <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                      <Globe className="w-3 h-3 text-[#a6ff2e]" />
                       <span>{language === 'ar' ? 'English' : 'العربية'}</span>
                     </button>
                   </div>
@@ -336,10 +314,10 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm"
                     aria-label="Close navigation menu"
                   >
-                    <X className="w-5 h-5 text-[#a6ff2e]" />
+                    <X className="w-4 h-4 text-[#a6ff2e]" />
                   </button>
                 </div>
               </div>
@@ -444,24 +422,24 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                 initial="initial"
                 animate="enter"
                 exit="exit"
-                className="pt-4 border-t border-[#1b4d3b]/40 flex flex-col gap-4 shrink-0"
+                className="pt-3 border-t border-[#1b4d3b]/40 flex flex-col gap-3 shrink-0"
               >
                 {/* Location Badge & CTA */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2">
-                    <Badge variant="mint" pulse icon={<MapPin className="w-3.5 h-3.5 text-[#a6ff2e]" />}>
-                      {t('locationPill')}
-                    </Badge>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0a2318] border border-emerald-500/25 text-[10px] text-[#a6ff2e] font-medium">
+                      <MapPin className="w-3 h-3 text-[#a6ff2e]" />
+                      <span>{t('locationPill')}</span>
+                    </span>
 
                     {/* Mobile language switcher inside drawer footer */}
                     <button
                       onClick={() => {
-                        try { audioSynth.playHoverBlip(); } catch {}
                         toggleLanguage();
                       }}
-                      className="sm:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 transition-all active:scale-95"
+                      className="sm:hidden flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 transition-all active:scale-95"
                     >
-                      <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                      <Globe className="w-3 h-3 text-[#a6ff2e]" />
                       <span>{language === 'ar' ? 'English' : 'العربية'}</span>
                     </button>
                   </div>
@@ -473,27 +451,27 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                       handleClose();
                       if (onOpenContact) onOpenContact();
                     }}
-                    icon={<ArrowUpRight className={`w-4 h-4 ${isRTL ? 'rotate-[-90deg]' : ''}`} />}
-                    className="font-black shadow-[0_0_20px_rgba(166,255,46,0.3)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)]"
+                    icon={<ArrowUpRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-[-90deg]' : ''}`} />}
+                    className="font-bold text-xs py-2 px-4 shadow-[0_0_15px_rgba(166,255,46,0.25)]"
                   >
                     {t('ctaStartProject')}
                   </Button>
                 </div>
 
                 {/* Social Links Row */}
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="font-semibold text-slate-400">
+                <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="font-medium text-slate-400">
                     {language === 'ar' ? 'تابع استوديو مهاب' : 'Follow MUHAB'}
                   </span>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     {socials.map((s, idx) => (
                       <a
                         key={idx}
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-[#a6ff2e] transition-colors font-medium hover:underline"
+                        className="hover:text-[#a6ff2e] transition-colors font-medium hover:underline text-[11px]"
                       >
                         {s.name}
                       </a>

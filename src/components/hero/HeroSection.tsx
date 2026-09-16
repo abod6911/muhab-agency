@@ -162,32 +162,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
             </div>
           </motion.div>
 
-          {/* Main H1 Headline (Balanced 3-Line Authority Structure) */}
-          <h1 className="text-[28px] xs:text-[32px] sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] font-black text-white tracking-tight leading-[1.24] sm:leading-[1.18] mb-5 sm:mb-6 drop-shadow-2xl">
+          {/* Main H1 Headline (Comfortable, Elegant Hierarchy) */}
+          <h1 className="text-[22px] xs:text-[25px] sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[46px] font-black text-white tracking-tight leading-[1.3] sm:leading-[1.2] mb-4 sm:mb-5 drop-shadow-xl">
             {language === 'ar' ? (
               <>
-                <span className="block text-white drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
+                <span className="block text-white">
                   نصمم أفضل المواقع
                 </span>
-                <span className="block text-slate-100/95 drop-shadow-[0_2px_15px_rgba(0,0,0,0.6)] whitespace-normal xl:whitespace-nowrap">
+                <span className="block text-slate-100/95 whitespace-normal xl:whitespace-nowrap">
                   والأنظمة الرقمية المخصصة
                 </span>
-                <div className="relative inline-block mt-1">
+                <div className="relative inline-block mt-0.5">
                   {/* Ambient glowing aura behind "في السعودية" */}
-                  <div className="absolute -inset-x-6 -inset-y-3 bg-gradient-to-r from-emerald-500/20 via-[#a6ff2e]/25 to-teal-400/15 blur-2xl rounded-full pointer-events-none -z-10" />
-                  <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-[#a6ff2e] to-teal-200 drop-shadow-[0_0_40px_rgba(166,255,46,0.45)]">
+                  <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-emerald-500/15 via-[#a6ff2e]/20 to-teal-400/10 blur-xl rounded-full pointer-events-none -z-10" />
+                  <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-[#a6ff2e] to-teal-200 drop-shadow-[0_0_25px_rgba(166,255,46,0.35)]">
                     في السعودية
                   </span>
                 </div>
               </>
             ) : (
               <>
-                <span className="block text-white drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
+                <span className="block text-white">
                   Bespoke Digital Systems &{' '}
                 </span>
-                <div className="relative inline-block mt-1">
-                  <div className="absolute -inset-x-6 -inset-y-3 bg-gradient-to-r from-emerald-500/20 via-[#a6ff2e]/25 to-teal-400/15 blur-2xl rounded-full pointer-events-none -z-10" />
-                  <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-[#a6ff2e] to-teal-200 drop-shadow-[0_0_40px_rgba(166,255,46,0.45)]">
+                <div className="relative inline-block mt-0.5">
+                  <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-emerald-500/15 via-[#a6ff2e]/20 to-teal-400/10 blur-xl rounded-full pointer-events-none -z-10" />
+                  <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-[#a6ff2e] to-teal-200 drop-shadow-[0_0_25px_rgba(166,255,46,0.35)]">
                     High-Velocity Architecture
                   </span>
                 </div>
@@ -196,7 +196,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
           </h1>
 
           {/* Supporting Description */}
-          <p className="text-sm sm:text-base text-slate-300 font-normal leading-[1.8] mb-6 max-w-xl">
+          <p className="text-xs sm:text-sm text-slate-300/90 font-normal leading-[1.8] mb-5 max-w-lg">
             {language === 'ar' ? (
               <>
                 استوديو هندسة البرمجيات والواجهات الفاخرة في جدة – نبني منصات ومواقع فائقة الأداء ونطور أنظمة رقمية ذكية لتنمية أعمالك وتوسيع حضورك التجاري.
@@ -209,9 +209,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
           </p>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-6 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 mb-5 w-full sm:w-auto">
             <motion.div
-              whileHover={{ scale: 1.03, y: -2 }}
+              whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               className="w-full sm:w-auto"
@@ -219,33 +219,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
               <button
                 id="hero-cta-contact"
                 onClick={onOpenContact}
-                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] text-[#05140d] font-black text-sm sm:text-base shadow-[0_0_35px_rgba(166,255,46,0.4)] hover:shadow-[0_0_55px_rgba(166,255,46,0.7)] border border-[#c4ff68] transition-all duration-300 cursor-pointer overflow-hidden select-none"
+                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] text-[#05140d] font-bold text-xs sm:text-sm shadow-[0_0_25px_rgba(166,255,46,0.3)] hover:shadow-[0_0_40px_rgba(166,255,46,0.5)] border border-[#c4ff68] transition-all duration-300 cursor-pointer overflow-hidden select-none"
               >
                 {/* Liquid shimmer sweep */}
                 <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none transform -skew-x-12" />
 
-                <span className="relative z-10 font-black tracking-wide">
+                <span className="relative z-10 font-bold tracking-wide">
                   {t('heroCtaPrimary')}
                 </span>
 
-                <ArrowUpRight className="w-5 h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform duration-300 relative z-10" />
+                <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform duration-300 relative z-10" />
               </button>
             </motion.div>
 
             <motion.div
-              whileHover={{ scale: 1.03, y: -2 }}
+              whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               className="w-full sm:w-auto"
             >
               <a href="#ecosystem" className="block w-full sm:w-auto">
                 <button
-                  className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-100 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl"
+                  className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3.5 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-200 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl shadow-sm"
                 >
-                  <div className="p-1 rounded-full bg-[#051a11] text-[#a6ff2e] group-hover:scale-110 transition-transform duration-300">
-                    <Layers className="w-4 h-4 text-[#a6ff2e]" />
+                  <div className="p-1 rounded-full bg-[#051a11] text-[#a6ff2e]">
+                    <Layers className="w-3.5 h-3.5 text-[#a6ff2e]" />
                   </div>
-                  <span className="font-bold text-sm sm:text-base">
+                  <span className="font-semibold text-xs sm:text-sm">
                     {language === 'ar' ? 'استكشف شركاتنا والحلول' : t('heroCtaSecondary')}
                   </span>
                 </button>
@@ -253,81 +253,73 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
             </motion.div>
           </div>
 
-          {/* Executive Social Proof & Trust Strip (High-Conversion CRO) */}
-          <div className="relative group w-full max-w-xl mb-6">
-            {/* Ambient backdrop glow */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/20 via-[#a6ff2e]/10 to-emerald-500/20 rounded-2xl blur-lg opacity-40 group-hover:opacity-75 transition-opacity duration-500 pointer-events-none" />
-            
-            <div className="relative flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-2.5 gap-x-3 sm:gap-x-4 py-2.5 sm:py-3 px-4 sm:px-5 rounded-2xl bg-[#051a11]/90 border border-emerald-500/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] text-xs">
+          {/* Executive Social Proof & Trust Strip (Comfortable, Compact) */}
+          <div className="relative group w-full max-w-lg mb-5">
+            <div className="relative flex flex-wrap sm:flex-nowrap items-center justify-between gap-y-2 gap-x-3 py-2 px-3.5 rounded-xl bg-[#051a11]/90 border border-emerald-500/25 backdrop-blur-xl text-xs">
               {/* 1. Rating */}
-              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <div className="flex text-amber-400 gap-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]" />
+                    <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-black text-white font-mono text-sm">4.9/5</span>
-                  <span className="text-slate-400 text-[10px] sm:text-[11px]">
+                  <span className="font-bold text-white font-mono text-xs">4.9/5</span>
+                  <span className="text-slate-400 text-[10px]">
                     {language === 'ar' ? '(+35 مشروع)' : '(35+ Projects)'}
                   </span>
                 </div>
               </div>
 
-              <div className="hidden sm:block w-[1px] h-5 bg-gradient-to-b from-transparent via-emerald-500/40 to-transparent shrink-0" />
+              <div className="hidden sm:block w-[1px] h-4 bg-emerald-500/30 shrink-0" />
 
               {/* 2. Lighthouse */}
-              <div className="flex items-center gap-1.5 text-slate-200 shrink-0">
-                <div className="p-1 rounded-md bg-emerald-950/80 border border-emerald-500/30">
-                  <Zap className="w-3 h-3 text-[#a6ff2e] animate-pulse" />
+              <div className="flex items-center gap-1 text-slate-200 shrink-0">
+                <div className="p-0.5 rounded bg-emerald-950/80 border border-emerald-500/30">
+                  <Zap className="w-2.5 h-2.5 text-[#a6ff2e]" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#a6ff2e] font-mono font-black text-xs leading-none">100/100</span>
-                  <span className="text-slate-400 text-[9px] uppercase tracking-wider font-mono">Lighthouse</span>
+                  <span className="text-[#a6ff2e] font-mono font-bold text-[11px] leading-none">100/100</span>
+                  <span className="text-slate-400 text-[8px] uppercase tracking-wider font-mono">Speed</span>
                 </div>
               </div>
 
-              <div className="hidden sm:block w-[1px] h-5 bg-gradient-to-b from-transparent via-emerald-500/40 to-transparent shrink-0" />
+              <div className="hidden sm:block w-[1px] h-4 bg-emerald-500/30 shrink-0" />
 
               {/* 3. Verified Security */}
-              <div className="flex items-center gap-1.5 text-slate-200 shrink-0">
-                <div className="p-1 rounded-md bg-emerald-950/80 border border-emerald-500/30">
-                  <ShieldCheck className="w-3 h-3 text-[#a6ff2e]" />
-                </div>
-                <span className="text-[11px] font-semibold text-slate-200 whitespace-nowrap">
-                  {language === 'ar' ? 'Apple Pay ومدى معتمد' : 'Apple Pay & Mada'}
+              <div className="flex items-center gap-1 text-slate-200 shrink-0">
+                <ShieldCheck className="w-3 h-3 text-[#a6ff2e]" />
+                <span className="text-[10px] text-slate-300 font-medium">
+                  {language === 'ar' ? 'Apple Pay ومدى معتمد' : 'Verified Gateways'}
                 </span>
               </div>
             </div>
           </div>
 
           {/* Interactive Feature Micro-Pills */}
-          <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+          <div className="w-full max-w-xl grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
             {trustHighlights.map((item, idx) => {
               return (
-                <motion.div
+                <div
                   key={idx}
-                  whileHover={{ y: -3, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-gradient-to-b from-[#061e14]/90 to-[#020c07]/95 hover:from-[#092b1d] hover:to-[#04150d] border border-emerald-500/25 hover:border-[#a6ff2e]/50 backdrop-blur-md transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.18)] cursor-default overflow-hidden"
+                  className="group relative flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#061e14]/90 border border-emerald-500/20 backdrop-blur-md transition-all duration-200 cursor-default overflow-hidden"
                 >
-                  <div className="relative w-9 h-9 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover:border-[#a6ff2e] shadow-[0_4px_12px_rgba(0,0,0,0.7)] shrink-0 overflow-hidden flex items-center justify-center">
+                  <div className="relative w-7 h-7 rounded-lg p-0.5 bg-[#143d2a] border border-emerald-500/30 shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
                       src={item.image} 
-                      alt={item.label}
-                      className="w-full h-full object-cover rounded-[9px] group-hover:scale-120 transition-transform duration-300 select-none pointer-events-none"
+                      alt={item.label} 
+                      className="w-full h-full object-cover rounded-[5px] select-none pointer-events-none"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/12 to-transparent pointer-events-none rounded-[9px]" />
                   </div>
                   <div className="flex flex-col min-w-0 justify-center">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-200 group-hover:text-white transition-colors leading-snug">
+                    <span className="text-[10.5px] font-bold text-slate-200 group-hover:text-white transition-colors leading-tight">
                       {item.label}
                     </span>
-                    <span className="text-[9.5px] text-emerald-400 font-mono mt-0.5">
+                    <span className="text-[9px] text-emerald-400/90 font-mono mt-0.5">
                       {item.detail}
                     </span>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>

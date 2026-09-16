@@ -17,8 +17,13 @@ class AudioSynthEngine {
     }
   }
 
+  private isTouchDevice(): boolean {
+    if (typeof window === 'undefined') return false;
+    return 'ontouchstart' in window || (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0);
+  }
+
   public playTelemetryTick() {
-    if (this.isMuted) return;
+    if (this.isMuted || this.isTouchDevice()) return;
     try {
       this.initCtx();
       if (!this.ctx) return;
@@ -104,7 +109,7 @@ class AudioSynthEngine {
   }
 
   public playHoverBlip() {
-    if (this.isMuted) return;
+    if (this.isMuted || this.isTouchDevice()) return;
     try {
       this.initCtx();
       if (!this.ctx) return;

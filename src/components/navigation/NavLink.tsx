@@ -90,32 +90,32 @@ export const NavLink: React.FC<NavLinkProps> = ({
           href={href}
           onClick={handleClick}
           onMouseEnter={handleMouseEnter}
-          className="group relative flex items-center justify-between p-2 sm:px-4 sm:py-3 rounded-2xl border border-transparent hover:border-[#a6ff2e]/35 transition-all duration-300 select-none block bg-white/[0.02] hover:bg-[#072418]/60 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5),0_0_20px_rgba(166,255,46,0.12)] cursor-pointer"
+          className="group relative flex items-center justify-between p-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-transparent hover:border-[#a6ff2e]/35 transition-all duration-200 select-none block bg-white/[0.02] hover:bg-[#072418]/60 cursor-pointer"
         >
           {/* Ambient Glow Background on Hover */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#a6ff2e]/10 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none -z-0" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#a6ff2e]/10 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none -z-0" />
 
           {/* Leading Section: Index Badge + Typography */}
-          <div className="flex items-center gap-2.5 sm:gap-4 z-10">
+          <div className="flex items-center gap-2 sm:gap-3 z-10">
             {/* Cyber Architectural Index Capsule */}
-            <div className="flex items-center justify-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[#a6ff2e] text-[10px] sm:text-xs font-mono font-bold tracking-wider shrink-0 shadow-[0_0_12px_rgba(166,255,46,0.15)] group-hover:bg-[#a6ff2e] group-hover:text-[#020a06] transition-all duration-300">
+            <div className="flex items-center justify-center px-1.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[#a6ff2e] text-[9px] sm:text-[10px] font-mono font-bold tracking-wider shrink-0 shadow-[0_0_10px_rgba(166,255,46,0.12)] group-hover:bg-[#a6ff2e] group-hover:text-[#020a06] transition-all duration-200">
               //{formattedIndex}
             </div>
 
             {/* Label and Sublabel Stack */}
             <div className="flex flex-col">
               <span
-                className={`text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white transition-all duration-300 flex items-center gap-2 group-hover:text-[#a6ff2e] ${
-                  isRTL ? 'group-hover:-translate-x-1.5' : 'group-hover:translate-x-1.5'
+                className={`text-base sm:text-lg md:text-xl font-bold tracking-tight text-white transition-all duration-200 flex items-center gap-1.5 group-hover:text-[#a6ff2e] ${
+                  isRTL ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'
                 } ${isActive ? 'text-[#a6ff2e]' : ''}`}
               >
                 {label}
                 {/* Active / Hover neon pulse dot */}
-                <span className="w-2 h-2 rounded-full bg-[#a6ff2e] opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-[0_0_10px_#a6ff2e]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-[0_0_8px_#a6ff2e]" />
               </span>
 
               {sublabel && (
-                <span className="text-[11px] sm:text-xs text-slate-400 group-hover:text-slate-200 transition-colors mt-0.5 font-medium">
+                <span className="text-[10px] sm:text-[11px] text-slate-400 group-hover:text-slate-200 transition-colors mt-0.5 font-medium">
                   {sublabel}
                 </span>
               )}
@@ -123,9 +123,9 @@ export const NavLink: React.FC<NavLinkProps> = ({
           </div>
 
           {/* Trailing Directional Arrow Indicator */}
-          <div className="w-8 h-8 rounded-xl bg-white/5 group-hover:bg-[#a6ff2e] text-slate-400 group-hover:text-[#020a06] border border-white/10 group-hover:border-[#a6ff2e] flex items-center justify-center transition-all duration-300 shrink-0 z-10 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-white/5 group-hover:bg-[#a6ff2e] text-slate-400 group-hover:text-[#020a06] border border-white/10 group-hover:border-[#a6ff2e] flex items-center justify-center transition-all duration-200 shrink-0 z-10 shadow-sm">
             <ArrowUpRight
-              className={`w-4 h-4 transition-transform duration-300 ${
+              className={`w-3.5 h-3.5 transition-transform duration-200 ${
                 isRTL ? 'group-hover:-translate-x-0.5' : 'group-hover:translate-x-0.5'
               } group-hover:-translate-y-0.5`}
             />
