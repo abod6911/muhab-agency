@@ -95,8 +95,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a6ff2e] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]" />
           </span>
-          <span className="font-bold text-[#a6ff2e] truncate max-w-[210px] sm:max-w-none">
-            {language === 'ar' ? 'الحالة التقنية // متصل • سرعة < 0.8 ثانية' : 'SYS.STATUS // ONLINE • LATENCY 12ms'}
+          <span className="font-bold text-[#a6ff2e]">
+            <span className="inline sm:hidden">{language === 'ar' ? 'متصل // سرعة < 0.8 ثانية' : 'ONLINE // 12ms'}</span>
+            <span className="hidden sm:inline">{language === 'ar' ? 'الحالة التقنية // متصل • سرعة < 0.8 ثانية' : 'SYS.STATUS // ONLINE • LATENCY 12ms'}</span>
           </span>
         </div>
 
@@ -195,18 +196,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
           </h1>
 
           {/* Supporting Description */}
-          <p className="text-sm sm:text-base text-slate-300 font-normal leading-[1.8] mb-7 max-w-xl">
+          <p className="text-sm sm:text-base text-slate-300 font-normal leading-[1.8] mb-6 max-w-xl">
             {language === 'ar' ? (
               <>
-                استوديو هندسة البرمجيات والواجهات الفاخرة في جدة – نبني منصات ومواقع فائقة الأداء ونبتكر{' '}
-                <a 
-                  href="#ecosystem" 
-                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-[#072418]/90 hover:bg-[#0c3523] border border-emerald-500/35 hover:border-[#a6ff2e]/60 text-[#a6ff2e] font-bold text-xs sm:text-sm shadow-sm transition-all duration-300 group/link align-middle"
-                >
-                  <span>شركاتنا وحلولنا الذكية</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 rtl:group-hover/link:-translate-x-0.5 transition-transform" />
-                </a>{' '}
-                لتنمية أعمالك وتوسيع حضورك التجاري.
+                استوديو هندسة البرمجيات والواجهات الفاخرة في جدة – نبني منصات ومواقع فائقة الأداء ونطور أنظمة رقمية ذكية لتنمية أعمالك وتوسيع حضورك التجاري.
               </>
             ) : (
               <>
@@ -226,7 +219,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
               <button
                 id="hero-cta-contact"
                 onClick={onOpenContact}
-                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] text-[#05140d] font-black text-sm sm:text-base shadow-[0_0_35px_rgba(166,255,46,0.4)] hover:shadow-[0_0_55px_rgba(166,255,46,0.7)] border border-[#c4ff68] transition-all duration-300 cursor-pointer overflow-hidden select-none"
+                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] text-[#05140d] font-black text-sm sm:text-base shadow-[0_0_35px_rgba(166,255,46,0.4)] hover:shadow-[0_0_55px_rgba(166,255,46,0.7)] border border-[#c4ff68] transition-all duration-300 cursor-pointer overflow-hidden select-none"
               >
                 {/* Liquid shimmer sweep */}
                 <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none transform -skew-x-12" />
@@ -247,7 +240,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
             >
               <a href="#ecosystem" className="block w-full sm:w-auto">
                 <button
-                  className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-100 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl"
+                  className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-100 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl"
                 >
                   <div className="p-1 rounded-full bg-[#051a11] text-[#a6ff2e] group-hover:scale-110 transition-transform duration-300">
                     <Layers className="w-4 h-4 text-[#a6ff2e]" />

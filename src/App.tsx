@@ -35,6 +35,7 @@ export function AppContent() {
   const [preselectedService, setPreselectedService] = useState('');
   const [previewProject, setPreviewProject] = useState<Project | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [showQuickActionBar, setShowQuickActionBar] = useState(false);
 
   // Global scroll tracking for top neon beam
   const { scrollYProgress, scrollY } = useScroll();
@@ -63,6 +64,7 @@ export function AppContent() {
 
     const unsub = scrollY.on('change', (latest) => {
       setShowBackToTop(latest > 900);
+      setShowQuickActionBar(latest > 350);
     });
 
     return () => {
@@ -103,20 +105,14 @@ export function AppContent() {
 
     if (isLocked) {
       document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
-      document.documentElement.style.overflow = 'hidden';
       lenis?.stop();
     } else {
       document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-      document.documentElement.style.overflow = '';
       lenis?.start();
     }
 
     return () => {
       document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-      document.documentElement.style.overflow = '';
       lenis?.start();
     };
   }, [contactModalOpen, previewProject, curvedNavOpen]);
@@ -148,9 +144,9 @@ export function AppContent() {
       </AnimatePresence>
 
 
-      {/* Mobile High-Converting Floating Quick Action Bar */}
+      {/* Mobile High-Converting Floating Quick Action Bar (Revealed after scrolling past Hero) */}
       <AnimatePresence>
-        {(introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
+        {showQuickActionBar && (introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
           <MobileQuickActionBar onOpenContact={() => handleOpenContact()} />
         )}
       </AnimatePresence>

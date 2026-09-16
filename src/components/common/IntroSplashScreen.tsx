@@ -114,10 +114,11 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
         setIsReady(true);
         audioSynth.playHarmonicSuccess();
 
-        // Auto transition after 2.4 seconds if user doesn't click the enter button
+        // Auto transition after 1.2s on mobile, 2.4s on desktop if user doesn't click the enter button
+        const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 768;
         const autoExitTimeout = setTimeout(() => {
           handleExit();
-        }, 2400);
+        }, isMobileScreen ? 1200 : 2400);
 
         return () => clearTimeout(autoExitTimeout);
       }

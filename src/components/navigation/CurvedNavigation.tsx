@@ -15,7 +15,8 @@ import {
   Clock,
   MessageSquare,
   ShieldCheck,
-  Zap
+  Zap,
+  X
 } from 'lucide-react';
 
 
@@ -238,7 +239,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -10 }}
             transition={{ duration: 0.25 }}
-            className={`fixed top-5 end-6 z-[130] pointer-events-auto ${isOpen ? 'block' : 'hidden lg:block'}`}
+            className={`fixed top-5 end-6 z-[130] pointer-events-auto ${isOpen ? 'hidden md:block' : 'hidden lg:block'}`}
           >
             <MagneticButton
               isOpen={isOpen}
@@ -274,7 +275,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               initial="initial"
               animate="enter"
               exit="exit"
-              className={`fixed top-0 h-screen w-full sm:w-[540px] md:w-[680px] lg:w-[780px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-[0_0_90px_rgba(0,0,0,0.9)] z-[125] flex flex-col justify-between p-6 sm:p-8 md:p-10 overflow-y-auto border-[#1b4d3b] ${
+              className={`fixed top-0 h-screen w-full sm:w-[540px] md:w-[680px] lg:w-[780px] bg-gradient-to-b from-[#072418]/98 via-[#041a12]/98 to-[#010a05] text-white shadow-[0_0_90px_rgba(0,0,0,0.9)] z-[125] flex flex-col justify-between p-5 sm:p-8 md:p-10 overflow-y-auto overscroll-contain touch-pan-y border-[#1b4d3b] ${
                 isRTL
                   ? 'left-0 border-r border-[#1b4d3b]/60 shadow-[25px_0_70px_rgba(166,255,46,0.14)]'
                   : 'right-0 border-l border-[#1b4d3b]/60 shadow-[-25px_0_70px_rgba(166,255,46,0.14)]'
@@ -283,11 +284,13 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               {/* Top Luminous Neon Beam */}
               <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_20px_#a6ff2e]" />
 
-              {/* Dynamic SVG Curve attached to the drawer leading edge */}
-              <Curve isRTL={isRTL} />
+              {/* Dynamic SVG Curve attached to the drawer leading edge (Desktop / Tablet only) */}
+              <div className="hidden md:block pointer-events-none">
+                <Curve isRTL={isRTL} />
+              </div>
 
-              {/* Drawer Top Header Area with clearance for fixed close button */}
-              <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-4 shrink-0 pe-20 sm:pe-28">
+              {/* Drawer Top Header Area with Dedicated Close Button */}
+              <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-4 shrink-0 gap-3">
                 {/* Official Logo Brand */}
                 <div className="flex items-center gap-2.5 sm:gap-3">
                   <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_20px_rgba(166,255,46,0.3)] shrink-0">
@@ -307,23 +310,36 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                   </div>
                 </div>
 
-                {/* Header Controls: Live status & Language switcher (desktop only, mobile moved to footer) */}
-                <div className="hidden sm:flex items-center gap-2">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[11px] font-mono font-bold text-[#a6ff2e] shadow-[0_0_12px_rgba(166,255,46,0.15)]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
-                    <span>{language === 'ar' ? 'متاح للمشاريع' : 'ONLINE'}</span>
+                {/* Header Controls & Explicit Close Button */}
+                <div className="flex items-center gap-2">
+                  {/* Desktop Controls: Live status & Language switcher */}
+                  <div className="hidden sm:flex items-center gap-2">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[11px] font-mono font-bold text-[#a6ff2e] shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                      <span>{language === 'ar' ? 'متاح للمشاريع' : 'ONLINE'}</span>
+                    </div>
+
+                    {/* Language quick switcher in drawer */}
+                    <button
+                      onClick={() => {
+                        try { audioSynth.playHoverBlip(); } catch {}
+                        toggleLanguage();
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    >
+                      <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
+                      <span>{language === 'ar' ? 'English' : 'العربية'}</span>
+                    </button>
                   </div>
 
-                  {/* Language quick switcher in drawer */}
+                  {/* Accessible High-Contrast Close Button */}
                   <button
-                    onClick={() => {
-                      try { audioSynth.playHoverBlip(); } catch {}
-                      toggleLanguage();
-                    }}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#12261e] border border-[#234939] text-[#a6ff2e] hover:bg-[#a6ff2e]/15 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    type="button"
+                    onClick={handleClose}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#12261e] hover:bg-[#a6ff2e]/20 text-slate-200 hover:text-[#a6ff2e] flex items-center justify-center border border-[#234939] hover:border-[#a6ff2e]/50 transition-all cursor-pointer shrink-0 active:scale-90 shadow-sm"
+                    aria-label="Close navigation menu"
                   >
-                    <Globe className="w-3.5 h-3.5 text-[#a6ff2e]" />
-                    <span>{language === 'ar' ? 'English' : 'العربية'}</span>
+                    <X className="w-5 h-5 text-[#a6ff2e]" />
                   </button>
                 </div>
               </div>

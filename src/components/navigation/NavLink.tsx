@@ -53,19 +53,28 @@ export const NavLink: React.FC<NavLinkProps> = ({
       audioSynth.playHarmonicSuccess();
     } catch {}
 
+    // 1. Close menu drawer immediately
+    onClick();
+
+    // 2. Smoothly scroll to target section without freezing
     if (href.startsWith('#')) {
       e.preventDefault();
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts: any) => void } }).__lenis;
-      if (lenis) {
-        lenis.scrollTo(href, { offset: -80, duration: 1.2 });
-      } else {
-        const el = document.querySelector(href);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+
+      setTimeout(() => {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (target: string, opts: any) => void; start: () => void } }).__lenis;
+        if (lenis) {
+          lenis.start();
+          lenis.scrollTo(href, { offset: -70, duration: 1.0 });
+        } else {
+          const el = document.querySelector(href);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
         }
-      }
+      }, 120);
     }
-    onClick();
   };
 
   const handleMouseEnter = () => {
