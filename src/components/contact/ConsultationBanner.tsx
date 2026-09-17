@@ -10,8 +10,10 @@ import {
   Flame 
 } from 'lucide-react';
 import { ParticleWaveCanvas } from '../common/ParticleWaveCanvas';
+import { AnimatedPathText } from '../common/AnimatedPathText';
 import { audioSynth } from '../../utils/audioSynth';
 import { getAssetUrl } from '../../utils/assets';
+
 
 interface ConsultationBannerProps {
   onOpenContact: () => void;
@@ -256,15 +258,31 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020d07]/90 via-transparent to-white/10 pointer-events-none rounded-[14px]" />
                   
+                  {/* High-Tech Animated Text Along Path Perimeter */}
+                  <AnimatedPathText
+                    path="M 20,10 L 180,10 A 10,10 0 0,1 190,20 L 190,180 A 10,10 0 0,1 180,190 L 20,190 A 10,10 0 0,1 10,180 L 10,20 A 10,10 0 0,1 20,10"
+                    viewBox="-4 -4 208 208"
+                    svgClassName="absolute inset-0 w-full h-full pointer-events-none z-20"
+                    showPath={true}
+                    pathClassName="stroke-[#a6ff2e]/25 stroke-[1px] stroke-dasharray-[3_3]"
+                    text={language === 'ar'
+                      ? '✦ استوديو مهاب ✦ بطاقة الأولوية 2026 ✦ كود مخصص فائق السرعة ✦ استشارة معمارية مجانية ✦ ضمان TIER-1 ✦ '
+                      : '✦ MUHAB STUDIO ✦ VIP ACCESS 2026 ✦ TIER-1 SLA ✦ BESPOKE ARCHITECTURE ✦ PRIORITY INTAKE ✦ '
+                    }
+                    textClassName="text-[7.2px] font-mono font-bold fill-[#a6ff2e] tracking-wider uppercase drop-shadow-[0_0_8px_rgba(166,255,46,0.8)]"
+                    duration={18}
+                    textAnchor="start"
+                  />
+
                   {/* Live Authenticated HUD Tag in card corner */}
-                  <div className="absolute top-3 start-3 px-2.5 py-1 rounded-full bg-[#020a06]/85 backdrop-blur-md border border-[#a6ff2e]/40 flex items-center gap-1.5 shadow-lg">
+                  <div className="absolute top-3 start-3 px-2.5 py-1 rounded-full bg-[#020a06]/85 backdrop-blur-md border border-[#a6ff2e]/40 flex items-center gap-1.5 shadow-lg z-30">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse" />
                     <span className="text-[10px] font-mono font-bold text-[#a6ff2e] tracking-wider">
                       VIP ACCESS // 2026
                     </span>
                   </div>
 
-                  <div className="absolute bottom-3 inset-x-3 flex items-center justify-between text-[11px] font-mono text-emerald-300/90 bg-[#020a06]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-500/25">
+                  <div className="absolute bottom-3 inset-x-3 flex items-center justify-between text-[11px] font-mono text-emerald-300/90 bg-[#020a06]/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-emerald-500/25 z-30">
                     <span>JEDDAH // RIYADH</span>
                     <span className="text-[#a6ff2e] font-bold">TIER-1 SLA</span>
                   </div>

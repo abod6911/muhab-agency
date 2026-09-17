@@ -15,4 +15,6 @@ export * from './GooeyNav';
 export * from './MagicBento';
 export * from './ScrollReveal';
 export * from './CurvedLoop';
+export * from './AnimatedPathText';
+
 
