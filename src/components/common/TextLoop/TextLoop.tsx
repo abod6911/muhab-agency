@@ -1,5 +1,4 @@
-import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+import React, { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useCallback } from 'react';
 import './TextLoop.css';
 
 const VIEW_W = 1200;
@@ -92,10 +91,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   const rootRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const measureRef = useRef<SVGTextElement>(null);
-  const headRef = useRef<SVGTextPathElement>(null);
-  const tailRef = useRef<SVGTextPathElement>(null);
-
-  const [metrics, setMetrics] = useState({ length: 0, reps: 1, unitWidth: 0 });
+  const textPathRef = useRef<SVGTextPathElement>(null);
 
   const rawId = useId();
   const pathId = `text-loop-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
@@ -120,92 +116,171 @@ export const TextLoop: React.FC<TextLoopProps> = ({
     [fontSize, fontWeight, letterSpacing, isArabic]
   );
 
-  useLayoutEffect(() => {
-    const pathEl = pathRef.current;
-    const measureEl = measureRef.current;
-    if (!pathEl || !measureEl) return undefined;
+  const [spacing, setSpacing] = useState(0);
+  const spacingRef = useRef(0);
 
-    let cancelled = false;
-
-    const measure = () => {
-      if (cancelled) return;
-      let length = 0;
-      let unitWidth = 0;
+  const updateSpacing = useCallback(() => {
+    let len = 0;
+    if (measureRef.current && typeof measureRef.current.getComputedTextLength === 'function') {
       try {
-        length = pathEl.getTotalLength();
-        unitWidth = measureEl.getComputedTextLength();
-      } catch {
-        return;
-      }
-      if (!length) return;
-
-      const reps = unitWidth > 0 ? Math.max(2, Math.ceil(length / unitWidth) + 1) : 3;
-      setMetrics(prev => (prev.length === length && prev.reps === reps && prev.unitWidth === unitWidth ? prev : { length, reps, unitWidth }));
-    };
-
-    measure();
-    if (typeof document !== 'undefined' && 'fonts' in document) {
-      document.fonts.ready.then(measure).catch(() => {});
+        len = measureRef.current.getComputedTextLength();
+      } catch {}
     }
+    if (!len || len < 20) {
+      len = Math.max(unit.length * fontSize * 0.7, 300);
+    }
+    setSpacing(len);
+    spacingRef.current = len;
+  }, [unit, fontSize]);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [d, unit, fontSize, fontWeight, letterSpacing]);
+  useLayoutEffect(() => {
+    updateSpacing();
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(updateSpacing).catch(() => {});
+    }
+  }, [updateSpacing]);
+
+  const textLength = spacing || Math.max(unit.length * fontSize * 0.7, 300);
+  const totalText = useMemo(() => {
+    const count = Math.max(8, Math.ceil(4000 / textLength) + 4);
+    return Array(count).fill(unit).join('');
+  }, [unit, textLength]);
+
+  const calcBaseSpeed = useCallback(() => {
+    const dir = direction === 'reverse' ? -1 : 1;
+    return dir * Math.max(1.2, speed / 55);
+  }, [direction, speed]);
+
+  const baseSpeedRef = useRef(calcBaseSpeed());
+  const velocityRef = useRef(calcBaseSpeed());
+  const offsetRef = useRef(-textLength);
+  const isDraggingRef = useRef(false);
+  const lastXRef = useRef(0);
+  const isHoveredRef = useRef(false);
+  const [cursorStyle, setCursorStyle] = useState<'grab' | 'grabbing'>('grab');
 
   useEffect(() => {
-    const { length, unitWidth, reps } = metrics;
-    const head = headRef.current;
-    const tail = tailRef.current;
-    if (!head || !tail || !length) return undefined;
-
-    // The cycle distance is the exact integer multiple of repeated unit width
-    const cycle = unitWidth > 0 ? unitWidth * reps : length;
-
-    const apply = (offset: number) => {
-      const partner = offset >= 0 ? offset - cycle : offset + cycle;
-      head.setAttribute('startOffset', String(offset));
-      tail.setAttribute('startOffset', String(partner));
-    };
-
-    apply(0);
-
-    const prefersReduced =
-      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced || speed <= 0) return undefined;
-
-    const state = { offset: 0 };
-    const tween = gsap.to(state, {
-      offset: direction === 'reverse' ? -cycle : cycle,
-      duration: cycle / speed,
-      ease: 'none',
-      repeat: -1,
-      onUpdate: () => apply(state.offset)
-    });
-
-    const root = rootRef.current;
-    const pause = () => tween.pause();
-    const resume = () => tween.resume();
-
-    if (pauseOnHover && root) {
-      root.addEventListener('mouseenter', pause);
-      root.addEventListener('mouseleave', resume);
+    baseSpeedRef.current = calcBaseSpeed();
+    if (!isDraggingRef.current) {
+      velocityRef.current = calcBaseSpeed();
     }
+  }, [calcBaseSpeed]);
 
-    return () => {
-      tween.kill();
-      if (pauseOnHover && root) {
-        root.removeEventListener('mouseenter', pause);
-        root.removeEventListener('mouseleave', resume);
+  // Continuous 120 FPS hardware-accelerated RAF animation loop matching CurvedLoopSection
+  useEffect(() => {
+    let frameId = 0;
+    let isPageVisible = typeof document !== 'undefined' ? !document.hidden : true;
+
+    const step = () => {
+      const textPath = textPathRef.current;
+      if (textPath) {
+        if (!isDraggingRef.current) {
+          const targetSpeed = (pauseOnHover && isHoveredRef.current) ? 0 : baseSpeedRef.current;
+          // Smooth inertia decay back to cruising speed (signature CurvedLoop physics)
+          velocityRef.current += (targetSpeed - velocityRef.current) * 0.04;
+          offsetRef.current += velocityRef.current;
+        }
+
+        const wrapPoint = spacingRef.current || textLength;
+        if (wrapPoint > 0) {
+          while (offsetRef.current <= -wrapPoint) {
+            offsetRef.current += wrapPoint;
+          }
+          while (offsetRef.current > 0) {
+            offsetRef.current -= wrapPoint;
+          }
+        }
+
+        textPath.setAttribute('startOffset', `${offsetRef.current}px`);
+      }
+
+      if (isPageVisible) {
+        frameId = requestAnimationFrame(step);
+      } else {
+        frameId = 0;
       }
     };
-  }, [metrics, speed, direction, pauseOnHover]);
 
-  const loopText = unit.repeat(metrics.reps);
-  const fitLength = metrics.length || undefined;
+    const start = () => {
+      if (!frameId && isPageVisible) {
+        frameId = requestAnimationFrame(step);
+      }
+    };
+
+    const stop = () => {
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+        frameId = 0;
+      }
+    };
+
+    const handleVisibility = () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible) start();
+      else stop();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    start();
+
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, [pauseOnHover, textLength]);
+
+  // Pointer drag interactions (touch & mouse) - Matching CurvedLoopSection
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = true;
+    lastXRef.current = e.clientX;
+    velocityRef.current = 0;
+    setCursorStyle('grabbing');
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+  }, []);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || !textPathRef.current) return;
+    const deltaX = e.clientX - lastXRef.current;
+    lastXRef.current = e.clientX;
+
+    offsetRef.current += deltaX;
+    velocityRef.current = deltaX * 0.85;
+
+    const wrapPoint = spacingRef.current || textLength;
+    if (wrapPoint > 0) {
+      while (offsetRef.current <= -wrapPoint) {
+        offsetRef.current += wrapPoint;
+      }
+      while (offsetRef.current > 0) {
+        offsetRef.current -= wrapPoint;
+      }
+    }
+
+    textPathRef.current.setAttribute('startOffset', `${offsetRef.current}px`);
+  }, [textLength]);
+
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    isDraggingRef.current = false;
+    setCursorStyle('grab');
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+  }, []);
 
   return (
-    <div ref={rootRef} className={`text-loop ${className}`.trim()} style={style}>
+    <div 
+      ref={rootRef} 
+      className={`text-loop ${className}`.trim()} 
+      style={{ ...style, cursor: cursorStyle, touchAction: 'pan-y' }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onMouseEnter={() => { if (pauseOnHover) isHoveredRef.current = true; }}
+      onMouseLeave={() => { if (pauseOnHover) isHoveredRef.current = false; }}
+    >
       <svg
         className="text-loop-svg"
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
@@ -234,25 +309,9 @@ export const TextLoop: React.FC<TextLoopProps> = ({
           fill={color}
           dominantBaseline="central"
           aria-hidden="true"
-          textLength={isArabic ? undefined : fitLength}
-          lengthAdjust={isArabic ? undefined : 'spacing'}
         >
-          <textPath ref={headRef} href={`#${pathId}`} startOffset={0}>
-            {loopText}
-          </textPath>
-        </text>
-
-        <text
-          className="text-loop-text"
-          style={textStyle}
-          fill={color}
-          dominantBaseline="central"
-          aria-hidden="true"
-          textLength={isArabic ? undefined : fitLength}
-          lengthAdjust={isArabic ? undefined : 'spacing'}
-        >
-          <textPath ref={tailRef} href={`#${pathId}`} startOffset={0}>
-            {loopText}
+          <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0px">
+            {totalText}
           </textPath>
         </text>
       </svg>

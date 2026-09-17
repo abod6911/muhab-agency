@@ -31,9 +31,30 @@ test.describe('React Bits TextLoop Component Integration', () => {
     const realErrors = consoleErrors.filter(e => !e.includes('AudioContext'));
     expect(realErrors.length).toBe(0);
 
+    // Verify continuous motion
+    const initialOffset = await textPath.getAttribute('startOffset');
+    await page.waitForTimeout(1200);
+    const updatedOffset = await textPath.getAttribute('startOffset');
+    console.log(`[TextLoop Test] Initial startOffset: ${initialOffset}, After 1.2s: ${updatedOffset}`);
+    expect(parseFloat(updatedOffset || '0')).not.toBe(parseFloat(initialOffset || '0'));
+
+    // Verify pointer drag interactivity
+    const waveBox = await waveSection.boundingBox();
+    if (waveBox) {
+      const startX = waveBox.x + waveBox.width / 2;
+      const startY = waveBox.y + waveBox.height / 2;
+      await page.mouse.move(startX, startY);
+      await page.mouse.down();
+      await page.mouse.move(startX + 180, startY, { steps: 5 });
+      const draggedOffset = await textPath.getAttribute('startOffset');
+      await page.mouse.up();
+      console.log(`[TextLoop Test] Dragged startOffset: ${draggedOffset}`);
+      expect(parseFloat(draggedOffset || '0')).not.toBe(parseFloat(updatedOffset || '0'));
+    }
+
     // Capture desktop screenshot of the sleek single ribbon
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(600);
     await waveSection.screenshot({ path: 'tests/screenshots/text-loop-wave-desktop.png' });
     await waveSection.screenshot({ path: 'C:/Users/abodv/.gemini/antigravity/brain/8f70ae58-764e-47e6-a5a2-09361985db0d/text-loop-wave-desktop.png' });
   });
