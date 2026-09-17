@@ -161,16 +161,16 @@ export const CurvedLoopSection: React.FC = () => {
     <section 
       id="kinetic-ribbon"
       ref={containerRef}
-      className="relative w-full py-10 sm:py-14 md:py-20 bg-gradient-to-b from-[#020a06] via-[#04160d] to-[#020a06] overflow-hidden border-y border-emerald-500/15 select-none"
+      className="relative w-full py-5 sm:py-7 md:py-8 bg-gradient-to-b from-[#020a06] via-[#04160d] to-[#020a06] overflow-hidden border-y border-emerald-500/15 select-none"
       aria-label="Kinetic Studio Vision Ribbon"
     >
       {/* Ambient background glow orbs */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       {/* Micro-Header Guidance Pill */}
-      <div className="flex items-center justify-center mb-5 sm:mb-8 px-4">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[#051a11]/90 border border-emerald-500/30 backdrop-blur-md text-[11px] sm:text-xs font-medium text-emerald-300 shadow-sm whitespace-nowrap">
+      <div className="flex items-center justify-center mb-3 sm:mb-4 px-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#051a11]/90 border border-emerald-500/30 backdrop-blur-md text-[10px] sm:text-xs font-medium text-emerald-300 shadow-sm whitespace-nowrap">
           <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e] shrink-0" />
           <span className="font-semibold tracking-wide">
             {language === 'ar' ? 'شريط الرؤية الحركي التفاعلي' : 'Interactive Kinetic Vision Ribbon'}
@@ -187,7 +187,7 @@ export const CurvedLoopSection: React.FC = () => {
 
       {/* Kinetic Angled Ribbon Wrapper */}
       <div 
-        className="relative w-full overflow-hidden py-3 sm:py-5 -rotate-1 sm:-rotate-1.5 scale-105 origin-center border-y border-emerald-500/20 bg-[#020e08]/85 backdrop-blur-sm shadow-[0_0_35px_rgba(166,255,46,0.06)]"
+        className="relative w-full overflow-hidden py-3 sm:py-4 -rotate-1 sm:-rotate-1.5 scale-105 origin-center border-y border-emerald-500/20 bg-[#020e08]/85 backdrop-blur-sm shadow-[0_0_35px_rgba(166,255,46,0.06)]"
         style={{ cursor: cursorStyle, touchAction: 'pan-y' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -222,7 +222,7 @@ export const CurvedLoopSection: React.FC = () => {
       </div>
 
       {/* Value Proposition Subtitle Bar (Clean Arabic Phrasing without BiDi Inversion) */}
-      <div className="relative z-10 text-center mt-5 sm:mt-8 px-4">
+      <div className="relative z-10 text-center mt-3 sm:mt-4 px-4">
         <p className="text-xs sm:text-sm md:text-base text-emerald-300/90 font-medium tracking-wide">
           {language === 'ar'
             ? 'هندسة برمجية فاخرة • استجابة لحظية في أقل من 0.8 ثانية • كود مخصص بدون قوالب جاهزة'
@@ -231,8 +231,8 @@ export const CurvedLoopSection: React.FC = () => {
       </div>
 
       {/* Top and Bottom Subtle Linear Edge Masks */}
-      <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#020a06] to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-[#020a06] to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-[#020a06] to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-[#020a06] to-transparent pointer-events-none" />
     </section>
   );
 };

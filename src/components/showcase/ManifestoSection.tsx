@@ -21,7 +21,7 @@ export const ManifestoSection: React.FC<ManifestoSectionProps> = ({ onOpenContac
   return (
     <section 
       id="manifesto" 
-      className="relative py-28 sm:py-36 bg-[#010805] overflow-hidden border-y border-emerald-500/15 scroll-mt-24"
+      className="relative py-14 sm:py-18 md:py-22 bg-[#010805] overflow-hidden border-y border-emerald-500/15 scroll-mt-24"
     >
       {/* Ambient background glow & radial gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(166,255,46,0.05)_0%,transparent_75%)] pointer-events-none" />

@@ -59,7 +59,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
   };
 
   return (
-    <section id="consultation" className="relative py-20 sm:py-32 scroll-mt-24 bg-[#020704] overflow-hidden">
+    <section id="consultation" className="relative py-12 sm:py-16 md:py-20 scroll-mt-24 bg-[#020704] overflow-hidden">
       {/* Interactive Particle Wave Physics Background */}
       <ParticleWaveCanvas 
         className="absolute inset-0 w-full h-full pointer-events-auto opacity-50 z-0" 

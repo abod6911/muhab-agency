@@ -3,10 +3,10 @@ import { gsap } from 'gsap';
 import './TextLoop.css';
 
 const VIEW_W = 1200;
-const VIEW_H = 520;
+const VIEW_H = 150;
 const CX = VIEW_W / 2;
 const CY = VIEW_H / 2;
-const EDGE_PAD = 6;
+const EDGE_PAD = 8;
 
 export interface TextLoopProps {
   text?: string;
@@ -31,16 +31,16 @@ export interface TextLoopProps {
 
 const buildPath = (shape: string, curviness: number, ribbonWidth: number): string => {
   const c = Math.max(0, curviness);
-  const room = Math.max(20, CY - Math.max(0, ribbonWidth) / 2 - EDGE_PAD);
+  const room = Math.max(12, CY - Math.max(0, ribbonWidth) / 2 - EDGE_PAD);
 
   switch (shape) {
     case 'circle': {
-      const r = Math.min(90 + c * 0.95, room);
+      const r = Math.min(60 + c * 0.5, room);
       return `M ${CX - r} ${CY} A ${r} ${r} 0 1 1 ${CX + r} ${CY} A ${r} ${r} 0 1 1 ${CX - r} ${CY} Z`;
     }
     case 'infinity': {
       const r = 150 + c * 1.4;
-      const h = Math.min(60 + c * 0.95, room);
+      const h = Math.min(40 + c * 0.5, room);
       return [
         `M ${CX} ${CY}`,
         `C ${CX + r * 0.55} ${CY - h} ${CX + r} ${CY - h} ${CX + r} ${CY}`,
@@ -51,19 +51,19 @@ const buildPath = (shape: string, curviness: number, ribbonWidth: number): strin
       ].join(' ');
     }
     case 'arch': {
-      const rise = Math.min(120 + c * 1.1, room * 2);
-      return `M 120 ${CY + rise / 2} Q ${CX} ${CY - rise * 1.5} ${VIEW_W - 120} ${CY + rise / 2}`;
+      const rise = Math.min(30 + c * 0.6, room);
+      return `M 120 ${CY + rise / 2} Q ${CX} ${CY - rise} ${VIEW_W - 120} ${CY + rise / 2}`;
     }
     case 'line':
       return `M -320 ${CY} L ${VIEW_W + 320} ${CY}`;
     case 'wave-reverse':
     case 'counter-wave': {
-      const a = Math.min(c * 2.2, room * 2);
+      const a = Math.min(c * 1.1, room);
       return `M -320 ${CY} Q -160 ${CY + a} 0 ${CY} T 320 ${CY} T 640 ${CY} T 960 ${CY} T 1280 ${CY} T ${VIEW_W + 320} ${CY}`;
     }
     case 'wave':
     default: {
-      const a = Math.min(c * 2.2, room * 2);
+      const a = Math.min(c * 1.1, room);
       return `M -320 ${CY} Q -160 ${CY - a} 0 ${CY} T 320 ${CY} T 640 ${CY} T 960 ${CY} T 1280 ${CY} T ${VIEW_W + 320} ${CY}`;
     }
   }
@@ -139,7 +139,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
       }
       if (!length) return;
 
-      const reps = unitWidth > 0 ? Math.max(1, Math.round(length / unitWidth)) : 1;
+      const reps = unitWidth > 0 ? Math.max(2, Math.ceil(length / unitWidth) + 1) : 3;
       setMetrics(prev => (prev.length === length && prev.reps === reps && prev.unitWidth === unitWidth ? prev : { length, reps, unitWidth }));
     };
 
@@ -159,8 +159,8 @@ export const TextLoop: React.FC<TextLoopProps> = ({
     const tail = tailRef.current;
     if (!head || !tail || !length) return undefined;
 
-    // The cycle distance is the full length of the repeated text string
-    const cycle = unitWidth > 0 ? Math.max(length, unitWidth * reps) : length;
+    // The cycle distance is the exact integer multiple of repeated unit width
+    const cycle = unitWidth > 0 ? unitWidth * reps : length;
 
     const apply = (offset: number) => {
       const partner = offset >= 0 ? offset - cycle : offset + cycle;
@@ -188,15 +188,15 @@ export const TextLoop: React.FC<TextLoopProps> = ({
     const resume = () => tween.resume();
 
     if (pauseOnHover && root) {
-      root.addEventListener('pointerenter', pause);
-      root.addEventListener('pointerleave', resume);
+      root.addEventListener('mouseenter', pause);
+      root.addEventListener('mouseleave', resume);
     }
 
     return () => {
       tween.kill();
       if (pauseOnHover && root) {
-        root.removeEventListener('pointerenter', pause);
-        root.removeEventListener('pointerleave', resume);
+        root.removeEventListener('mouseenter', pause);
+        root.removeEventListener('mouseleave', resume);
       }
     };
   }, [metrics, speed, direction, pauseOnHover]);

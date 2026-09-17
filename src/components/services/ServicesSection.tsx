@@ -14,7 +14,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onRequestServi
   const { language, t } = useLanguage();
 
   return (
-    <section id="services" className="relative py-28 bg-[#020a06] overflow-hidden scroll-mt-24">
+    <section id="services" className="relative py-12 sm:py-16 md:py-20 bg-[#020a06] overflow-hidden scroll-mt-24">
       {/* Background Architectural Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#092c1c1a_1px,transparent_1px),linear-gradient(to_bottom,#092c1c1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
 
@@ -32,7 +32,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onRequestServi
         />
 
         {/* 6-Card Services Grid with 3D Physics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
           {services.map((service, idx) => (
             <ServiceCard
               key={service.id}

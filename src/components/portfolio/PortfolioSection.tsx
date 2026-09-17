@@ -33,7 +33,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
     : projects.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="portfolio" className="relative py-28 bg-[#041a12]/80">
+    <section id="portfolio" className="relative py-12 sm:py-16 md:py-20 bg-[#041a12]/80">
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 -start-20 w-80 h-80 bg-emerald-700/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 -end-20 w-80 h-80 bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none" />

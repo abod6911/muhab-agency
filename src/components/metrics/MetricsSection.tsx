@@ -113,7 +113,7 @@ export const MetricsSection: React.FC = () => {
   };
 
   return (
-    <section id="metrics" className="relative py-28 bg-[#020a06] overflow-hidden scroll-mt-24">
+    <section id="metrics" className="relative py-12 sm:py-16 md:py-20 bg-[#020a06] overflow-hidden scroll-mt-24">
       {/* Interactive Cybernetic Hexagon ShapeGrid Background */}
       <div className="absolute inset-0 w-full h-full pointer-events-auto opacity-35 z-0">
         <ShapeGrid

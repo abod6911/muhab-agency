@@ -87,7 +87,7 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
   return (
     <section 
       id="bento-architecture" 
-      className="relative py-24 bg-[#020a06] overflow-hidden border-t border-emerald-500/15 scroll-mt-28"
+      className="relative py-12 sm:py-16 md:py-20 bg-[#020a06] overflow-hidden border-t border-emerald-500/15 scroll-mt-28"
     >
       {/* Background Ambience & Grid Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(166,255,46,0.06)_0%,transparent_70%)] pointer-events-none" />
@@ -95,7 +95,7 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}

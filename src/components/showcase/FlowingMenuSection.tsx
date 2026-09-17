@@ -72,7 +72,7 @@ export const FlowingMenuSection: React.FC<FlowingMenuSectionProps> = ({
   ];
 
   return (
-    <section id="disciplines" className="relative py-24 sm:py-32 bg-[#020a06] overflow-hidden scroll-mt-20">
+    <section id="disciplines" className="relative py-12 sm:py-16 md:py-20 bg-[#020a06] overflow-hidden scroll-mt-20">
       {/* Ambient background glow & grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#092c1c14_1px,transparent_1px),linear-gradient(to_bottom,#092c1c14_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#a6ff2e]/5 rounded-full blur-[140px] pointer-events-none" />

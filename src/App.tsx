@@ -245,7 +245,7 @@ export function AppContent() {
             <MagicBentoSection onOpenContact={(title) => handleOpenContact(title)} />
 
             {/* Awwwards Physics-Driven Interactive Social Showcase */}
-            <section id="social-showcase" className="relative pt-16 pb-10 bg-[#020a06] px-4 sm:px-6 lg:px-8 scroll-mt-24">
+            <section id="social-showcase" className="relative pt-10 sm:pt-12 pb-6 sm:pb-8 bg-[#020a06] px-4 sm:px-6 lg:px-8 scroll-mt-24">
               <SocialPhysicsShowcase />
             </section>
 

@@ -148,7 +148,7 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
 
 export const TrustRibbon: React.FC = () => {
   return (
-    <section id="trust-ribbon" className="relative z-20 pt-10 sm:pt-16 pb-14 sm:pb-20 border-t border-emerald-500/10">
+    <section id="trust-ribbon" className="relative z-20 pt-6 sm:pt-10 pb-8 sm:pb-12 border-t border-emerald-500/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {trustRibbonData.map((item, index) => (

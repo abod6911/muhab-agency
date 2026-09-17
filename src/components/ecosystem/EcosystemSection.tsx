@@ -13,7 +13,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onOrderProdu
   const { t } = useLanguage();
 
   return (
-    <section id="ecosystem" className="relative py-28 overflow-hidden bg-[#020a06]">
+    <section id="ecosystem" className="relative py-12 sm:py-16 md:py-20 overflow-hidden bg-[#020a06]">
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-950/20 rounded-full blur-[140px] pointer-events-none" />
 
