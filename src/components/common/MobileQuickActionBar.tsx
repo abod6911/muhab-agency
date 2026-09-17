@@ -40,10 +40,10 @@ export const MobileQuickActionBar: React.FC<MobileQuickActionBarProps> = ({
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed bottom-4 inset-x-4 z-40 lg:hidden pointer-events-auto"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      className="fixed inset-x-3 z-40 lg:hidden pointer-events-auto"
+      style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom, 0.75rem))' }}
     >
-      <div className="relative w-full max-w-md mx-auto rounded-full bg-[#041a12]/92 backdrop-blur-2xl border border-emerald-500/35 p-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.75),0_0_25px_rgba(166,255,46,0.18)] flex items-center justify-between gap-2">
+      <div className="relative w-full max-w-sm mx-auto rounded-full bg-[#03140e]/95 backdrop-blur-2xl border border-emerald-500/40 p-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(166,255,46,0.22)] flex items-center justify-between gap-2">
         {/* Top luminous border line */}
         <div className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-[#a6ff2e]/60 to-transparent" />
 

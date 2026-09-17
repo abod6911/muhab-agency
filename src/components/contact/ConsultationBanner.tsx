@@ -76,7 +76,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-[32px] sm:rounded-[36px] bg-gradient-to-br from-[#08281b]/95 via-[#03150e]/95 to-[#010905]/98 border border-emerald-500/30 p-7 sm:p-12 lg:p-14 overflow-hidden shadow-[0_35px_100px_rgba(0,0,0,0.9),0_0_60px_rgba(16,185,129,0.15)]"
+          className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-br from-[#08281b]/95 via-[#03150e]/95 to-[#010905]/98 border border-emerald-500/30 p-5 sm:p-10 lg:p-14 overflow-hidden shadow-[0_35px_100px_rgba(0,0,0,0.9),0_0_60px_rgba(16,185,129,0.15)]"
         >
           {/* Top Specular Shimmer Edge Beam */}
           <div className="absolute inset-x-0 top-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent rounded-t-[36px] shadow-[0_0_20px_#a6ff2e]" />
@@ -238,7 +238,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                   rotateY,
                   transformStyle: 'preserve-3d',
                 }}
-                className="relative w-full max-w-[390px] rounded-3xl bg-gradient-to-b from-[#0c261b]/95 via-[#061911]/95 to-[#020d07] border border-emerald-500/40 p-5 sm:p-6 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(166,255,46,0.15)] group overflow-hidden transition-all duration-300"
+                className="relative w-full max-w-[340px] sm:max-w-[390px] mx-auto rounded-3xl bg-gradient-to-b from-[#0c261b]/95 via-[#061911]/95 to-[#020d07] border border-emerald-500/40 p-4 sm:p-6 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(166,255,46,0.15)] group overflow-hidden transition-all duration-300"
               >
                 {/* Ambient Backlight Glow behind the card */}
                 <div className="absolute -top-10 -end-10 w-48 h-48 bg-[#a6ff2e]/20 rounded-full blur-3xl pointer-events-none group-hover:bg-[#a6ff2e]/35 transition-colors duration-500" />
@@ -258,17 +258,14 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020d07]/90 via-transparent to-white/10 pointer-events-none rounded-[14px]" />
                   
-                  {/* High-Tech Animated Text Along Path Perimeter */}
+                  {/* High-Tech Animated Text Along Path Perimeter (Latin for 100% SVG Compatibility & Cyber-Luxury Aesthetic) */}
                   <AnimatedPathText
                     path="M 20,10 L 180,10 A 10,10 0 0,1 190,20 L 190,180 A 10,10 0 0,1 180,190 L 20,190 A 10,10 0 0,1 10,180 L 10,20 A 10,10 0 0,1 20,10"
                     viewBox="-4 -4 208 208"
                     svgClassName="absolute inset-0 w-full h-full pointer-events-none z-20"
                     showPath={true}
                     pathClassName="stroke-[#a6ff2e]/25 stroke-[1px] stroke-dasharray-[3_3]"
-                    text={language === 'ar'
-                      ? '✦ استوديو مهاب ✦ بطاقة الأولوية 2026 ✦ كود مخصص فائق السرعة ✦ استشارة معمارية مجانية ✦ ضمان TIER-1 ✦ '
-                      : '✦ MUHAB STUDIO ✦ VIP ACCESS 2026 ✦ TIER-1 SLA ✦ BESPOKE ARCHITECTURE ✦ PRIORITY INTAKE ✦ '
-                    }
+                    text="✦ MUHAB STUDIO ✦ VIP ACCESS 2026 ✦ TIER-1 SLA ✦ BESPOKE WEB ARCHITECTURE ✦ PRIORITY INTAKE ✦ "
                     textClassName="text-[7.2px] font-mono font-bold fill-[#a6ff2e] tracking-wider uppercase drop-shadow-[0_0_8px_rgba(166,255,46,0.8)]"
                     duration={18}
                     textAnchor="start"

@@ -39,6 +39,7 @@ export function AppContent() {
   const [previewProject, setPreviewProject] = useState<Project | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [showQuickActionBar, setShowQuickActionBar] = useState(false);
+  const [isInBottomZone, setIsInBottomZone] = useState(false);
 
   // Global scroll tracking for top neon beam
   const { scrollYProgress, scrollY } = useScroll();
@@ -67,7 +68,13 @@ export function AppContent() {
 
     const unsub = scrollY.on('change', (latest) => {
       setShowBackToTop(latest > 900);
-      setShowQuickActionBar(latest > 350);
+      setShowQuickActionBar(latest > 850);
+
+      const consultationEl = document.querySelector('#consultation');
+      if (consultationEl) {
+        const rect = consultationEl.getBoundingClientRect();
+        setIsInBottomZone(rect.top < window.innerHeight - 80);
+      }
     });
 
     return () => {
@@ -128,7 +135,7 @@ export function AppContent() {
         style={{ scaleX: smoothProgress }}
       />
 
-      {/* Floating Back-to-Top Quick Glide Capsule */}
+      {/* Floating Back-to-Top Quick Glide Capsule (Desktop & Large Screens) */}
       <AnimatePresence>
         {showBackToTop && !contactModalOpen && !previewProject && !curvedNavOpen && (
           <motion.button
@@ -138,7 +145,7 @@ export function AppContent() {
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToTop}
-            className="fixed bottom-24 end-4 lg:bottom-6 lg:end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/35 hover:border-[#a6ff2e] text-[#a6ff2e] shadow-[0_10px_30px_rgba(0,0,0,0.6),0_0_20px_rgba(166,255,46,0.25)] backdrop-blur-xl transition-all cursor-pointer group"
+            className="hidden lg:flex fixed bottom-6 end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/35 hover:border-[#a6ff2e] text-[#a6ff2e] shadow-[0_10px_30px_rgba(0,0,0,0.6),0_0_20px_rgba(166,255,46,0.25)] backdrop-blur-xl transition-all cursor-pointer group"
             aria-label="Scroll to top"
           >
             <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
@@ -146,10 +153,9 @@ export function AppContent() {
         )}
       </AnimatePresence>
 
-
-      {/* Mobile High-Converting Floating Quick Action Bar (Revealed after scrolling past Hero) */}
+      {/* Mobile High-Converting Floating Quick Action Bar (Revealed after scrolling past Hero, auto-hides in Consultation & Footer zone) */}
       <AnimatePresence>
-        {showQuickActionBar && (introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
+        {showQuickActionBar && !isInBottomZone && (introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
           <MobileQuickActionBar onOpenContact={() => handleOpenContact()} />
         )}
       </AnimatePresence>
@@ -190,7 +196,7 @@ export function AppContent() {
             }}
             style={{ willChange: 'transform, opacity' }}
             transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden"
+            className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden pb-12 lg:pb-0"
           >
             {/* Split Hero Section with iPhone 16 Pro Mockup Showcase */}
             <HeroSection

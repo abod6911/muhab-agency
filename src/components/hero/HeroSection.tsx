@@ -259,10 +259,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
       </div>
 
       {/* Bottom Status & Scroll Indicator Bar */}
-      <div className="relative z-30 flex items-center justify-between text-xs font-mono text-slate-400 border-t border-emerald-500/15 pt-4 mt-8">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse" />
-          <span>{language === 'ar' ? 'مرّر لأسفل لاستكشاف حلولنا الذكية والمشاريع' : 'SCROLL TO EXPLORE SMART SYSTEMS & WORK'}</span>
+      <div className="relative z-30 flex flex-wrap items-center justify-between gap-3 text-[11px] sm:text-xs font-mono text-slate-400 border-t border-emerald-500/15 pt-4 mt-8 pb-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse shrink-0" />
+          <span className="truncate">{language === 'ar' ? 'مرّر لأسفل لاستكشاف حلولنا الذكية والمشاريع' : 'SCROLL TO EXPLORE SMART SYSTEMS & WORK'}</span>
         </div>
 
         <div className="hidden sm:flex items-center gap-4">
@@ -272,7 +272,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
           </div>
         </div>
 
-        <span className="text-[#a6ff2e] font-bold">MUHAB © 2026</span>
+        <span className="text-[#a6ff2e] font-bold shrink-0">MUHAB © 2026</span>
       </div>
 
     </section>
