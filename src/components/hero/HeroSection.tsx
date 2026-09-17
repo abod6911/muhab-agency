@@ -13,6 +13,8 @@ import {
   Layers
 } from 'lucide-react';
 
+import { getAssetUrl } from '../../utils/assets';
+
 interface HeroSectionProps {
   onOpenContact: () => void;
   onSelectProject: (id: string) => void;
@@ -36,21 +38,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
   const trustHighlights = [
     {
       icon: Zap,
-      image: '/assets/icons/speed-crystal.jpg',
+      image: getAssetUrl('assets/icons/speed-crystal.jpg'),
       label: language === 'ar' ? 'سرعة قياسية < 0.8 ثانية' : '< 0.8s Sub-Second Speed',
       detail: language === 'ar' ? 'استجابة فورية فائقة' : 'Ultra Fast Latency',
       color: 'text-[#a6ff2e]'
     },
     {
       icon: ShieldCheck,
-      image: '/assets/icons/saudi-shield.jpg',
+      image: getAssetUrl('assets/icons/saudi-shield.jpg'),
       label: language === 'ar' ? 'بوابات دفع معتمدة' : 'Verified Gateways',
       detail: language === 'ar' ? 'مدى و Apple Pay' : 'Mada & Apple Pay',
       color: 'text-emerald-400'
     },
     {
       icon: Sparkles,
-      image: '/assets/icons/mobile-luxury.jpg',
+      image: getAssetUrl('assets/icons/mobile-luxury.jpg'),
       label: language === 'ar' ? 'تصاميم مخصصة 100%' : '100% Bespoke Code',
       detail: language === 'ar' ? 'برمجة نقية بدون قوالب' : 'Zero Generic Templates',
       color: 'text-teal-300'

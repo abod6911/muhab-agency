@@ -1,4 +1,5 @@
 import type { Project, EcosystemProduct, ServiceItem, TrustPill, MetricItem } from '../types';
+import { getAssetUrl } from '../utils/assets';
 
 export const projects: Project[] = [
   {
@@ -18,7 +19,7 @@ export const projects: Project[] = [
     tags: ['Next.js', 'Tailwind CSS', 'QR Ordering', 'Apple Pay', 'Interactive Menu'],
     accentColor: '#10B981',
     gradientBg: 'from-emerald-950 via-[#12261e] to-[#041a12]',
-    image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=1200&q=80',
+    image: getAssetUrl('assets/projects/gotcha/hero-desktop.png'),
     liveUrl: 'https://gotcha-fresh-tea-jeddah-jwmw.vercel.app',
     devicePreview: {
       badgeAr: 'شاي البوبا والفاكهة الطازجة',
@@ -171,7 +172,7 @@ export const projects: Project[] = [
     tags: ['React', 'Edge Workers', 'Cloudflare', 'VIP Booking', 'Luxury Hospitality'],
     accentColor: '#10B981',
     gradientBg: 'from-emerald-950 via-[#162e24] to-[#041a12]',
-    image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80',
+    image: getAssetUrl('assets/projects/lavoa/hero-desktop.png'),
     liveUrl: 'https://lavoa.hgendi3.workers.dev/',
     devicePreview: {
       badgeAr: 'لاونج وضيافة فاخرة',
@@ -556,7 +557,7 @@ export const trustRibbonData: TrustPill[] = [
     titleEn: '100% Mobile & Touch Ergonomics',
     subtitleAr: 'واجهات انسيابية بمعدل 120Hz، مُهندسة لتناسب أدق تفاصيل استخدام العميل السعودي على كافة الهواتف دون أي أخطاء عرض.',
     subtitleEn: 'Silky smooth 120Hz fluid interfaces tailored for optimal Saudi smartphone interactions without layout breakage.',
-    image: '/assets/icons/mobile-luxury.jpg',
+    image: getAssetUrl('assets/icons/mobile-luxury.jpg'),
     badgeAr: 'استجابة فائقة 100%',
     badgeEn: '100% Touch Responsive',
   },
@@ -567,7 +568,7 @@ export const trustRibbonData: TrustPill[] = [
     titleEn: 'Sub-Second Page Load Speed',
     subtitleAr: 'فتح فوري للصفحات يمنع ارتداد الزوار ويضمن عدم خسارة أي عميل على شبكات 5G مع علامة 100/100 على Lighthouse.',
     subtitleEn: 'Instantaneous sub-second page delivery preventing drop-offs and securing perfect 100/100 Lighthouse.',
-    image: '/assets/icons/speed-crystal.jpg',
+    image: getAssetUrl('assets/icons/speed-crystal.jpg'),
     badgeAr: 'سرعة قياسية < 0.8 ثانية',
     badgeEn: '< 0.8s Sub-Second',
   },
@@ -578,7 +579,7 @@ export const trustRibbonData: TrustPill[] = [
     titleEn: 'Certified Saudi Financial Core',
     subtitleAr: 'ربط رسمي فوري مع مدى وApple Pay وسداد، متوافق كلياً مع الفوترة الإلكترونية وهيئة الزكاة والضريبة (ZATCA).',
     subtitleEn: 'Native certified integrations with Mada, Apple Pay & Sadad, fully compliant with ZATCA e-invoicing.',
-    image: '/assets/icons/saudi-shield.jpg',
+    image: getAssetUrl('assets/icons/saudi-shield.jpg'),
     badgeAr: 'مدى & Apple Pay معتمد',
     badgeEn: 'Mada & Apple Pay',
   },
@@ -589,7 +590,7 @@ export const trustRibbonData: TrustPill[] = [
     titleEn: 'Search Dominance & Growth',
     subtitleAr: 'بنية برمجية معمارية نظيفة وهندسة بيانات Schema تضمن هيمنة موقعك في نتائج Google الأولى واكتساب عملاء دائمين.',
     subtitleEn: 'Architectural clean code & schema data engineering securing top 1% rank on Google without ad spend.',
-    image: '/assets/icons/seo-growth.jpg',
+    image: getAssetUrl('assets/icons/seo-growth.jpg'),
     badgeAr: 'Google SEO // Top 1%',
     badgeEn: 'Google SEO Authority',
   },

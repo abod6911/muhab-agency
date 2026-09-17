@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetUrl } from '../../utils/assets';
 
 interface MuhabLogoMarkProps {
   className?: string;
@@ -139,7 +140,7 @@ export const MuhabLogoImage: React.FC<{
   return (
     <div className={`relative inline-flex items-center justify-center ${className}`}>
       <img
-        src="/muhab-logo.webp"
+        src={getAssetUrl('muhab-logo.webp')}
         alt="MUHAB Studio - Saudi Webmakers"
         className={`object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)] ${sizeClasses[size]}`}
       />
@@ -153,7 +154,7 @@ export const MuhabEmblemImage: React.FC<{
 }> = ({ size = 36, className = '' }) => {
   return (
     <img
-      src="/muhab-emblem.png"
+      src={getAssetUrl('muhab-emblem.png')}
       alt="MUHAB Emblem"
       style={{ width: size, height: size }}
       className={`object-contain shrink-0 drop-shadow-[0_4px_12px_rgba(166,255,46,0.3)] ${className}`}

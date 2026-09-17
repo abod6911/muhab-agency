@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { useLanguage } from '../../context/LanguageContext';
 import { Sparkles, ArrowUpRight, ShieldCheck, Zap, Volume2, VolumeX } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
+import { getAssetUrl } from '../../utils/assets';
 
 interface IntroSplashScreenProps {
   onStartExit?: () => void;
@@ -436,7 +437,7 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
                 {/* Official 3D Master Logo with Pristine Alpha Transparency */}
                 <div className="relative flex items-center justify-center p-1">
                   <img
-                    src="/muhab-logo.png"
+                    src={getAssetUrl('muhab-logo.png')}
                     alt="MUHAB Studio - صُنّاع المواقع السعودية"
                     className="w-[320px] sm:w-[440px] md:w-[510px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_20px_45px_rgba(166,255,46,0.35)]"
                   />

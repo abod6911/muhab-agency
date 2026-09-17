@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { trustRibbonData } from '../../data/portfolioData';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
+import { getAssetUrl } from '../../utils/assets';
 
 interface BentoTrustCardProps {
   item: typeof trustRibbonData[0];
@@ -98,7 +99,7 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
             <div className="relative w-15 h-15 sm:w-16 sm:h-16 p-1 rounded-2xl bg-gradient-to-b from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover:border-[#a6ff2e] shadow-[0_10px_25px_rgba(0,0,0,0.8),0_0_18px_rgba(166,255,46,0.18)] group-hover:shadow-[0_12px_35px_rgba(0,0,0,0.9),0_0_28px_rgba(166,255,46,0.45)] transition-all duration-500 overflow-hidden flex items-center justify-center">
               {item.image ? (
                 <img 
-                  src={item.image} 
+                  src={getAssetUrl(item.image)} 
                   alt={language === 'ar' ? item.titleAr : item.titleEn}
                   className="w-full h-full object-cover rounded-xl transform group-hover/icon:scale-110 group-hover/icon:rotate-2 transition-transform duration-500 select-none pointer-events-none"
                   loading="lazy"

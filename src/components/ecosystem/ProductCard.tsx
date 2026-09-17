@@ -13,6 +13,7 @@ import {
   QrCode,
   Sparkles
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assets';
 
 interface ProductCardProps {
   product: EcosystemProduct;
@@ -94,7 +95,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderProduc
           {product.mockupType === 'nfc' && (
             <div className="relative w-full rounded-xl overflow-hidden border border-emerald-500/20 group/stand">
               <img
-                src="/taqyeemi-showcase.jpg"
+                src={getAssetUrl('taqyeemi-showcase.jpg')}
                 alt="Taqyeemi Google Maps Review Stand & Dashboard"
                 className="w-full h-48 sm:h-56 object-cover object-center group-hover/stand:scale-105 transition-transform duration-500"
               />

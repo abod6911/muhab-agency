@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { SectionHeader } from '../common/SectionHeader';
 import { ShapeGrid } from '../common/ShapeGrid';
 import { audioSynth } from '../../utils/audioSynth';
+import { getAssetUrl } from '../../utils/assets';
 import { 
   Activity, 
   Check, 
@@ -177,7 +178,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative group/icon w-12 h-12 rounded-2xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover:border-[#a6ff2e] shadow-[0_8px_20px_rgba(0,0,0,0.7),0_0_15px_rgba(166,255,46,0.2)] transition-all duration-300 shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
-                      src="/assets/icons/mobile-luxury.jpg" 
+                      src={getAssetUrl('assets/icons/mobile-luxury.jpg')} 
                       alt="Mobile Architecture"
                       className="w-full h-full object-cover rounded-[14px] transform group-hover/icon:scale-115 transition-transform duration-500 pointer-events-none select-none"
                     />
@@ -368,7 +369,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative group/icon w-12 h-12 rounded-2xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-[#a6ff2e]/60 shadow-[0_8px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(166,255,46,0.35)] transition-all duration-300 shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
-                      src="/assets/icons/speed-crystal.jpg" 
+                      src={getAssetUrl('assets/icons/speed-crystal.jpg')} 
                       alt="Sub-Second Speed Crystal"
                       className="w-full h-full object-cover rounded-[14px] transform group-hover/icon:scale-115 transition-transform duration-500 pointer-events-none select-none"
                     />
@@ -555,7 +556,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative group/icon w-12 h-12 rounded-2xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-400/50 shadow-[0_8px_20px_rgba(0,0,0,0.7),0_0_18px_rgba(52,211,153,0.3)] transition-all duration-300 shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
-                      src="/assets/icons/cloud-quantum.jpg" 
+                      src={getAssetUrl('assets/icons/cloud-quantum.jpg')} 
                       alt="Quantum Cloud Server Architecture"
                       className="w-full h-full object-cover rounded-[14px] transform group-hover/icon:scale-115 transition-transform duration-500 pointer-events-none select-none"
                     />

@@ -1,3 +1,5 @@
+import { getAssetUrl } from '../utils/assets';
+
 export interface AgencyPageConfig {
   hero: {
     badge: string;
@@ -56,7 +58,7 @@ export const defaultAgencyConfig: AgencyPageConfig = {
     hudTopRight: '21°32\'36"N 39°10\'22"E • JEDDAH',
     hudBottomLeft: 'SCROLL TO EXPAND GEOMETRIC MASK',
     hudBottomRight: 'MUHAB STUDIO ©2026 • SAUDI DIGITAL LEADERSHIP',
-    mediaSrc: '/taqyeemi-showcase.jpg',
+    mediaSrc: getAssetUrl('taqyeemi-showcase.jpg'),
     mediaAlt: 'Taqyeemi Luxury Hardware & Dashboard Suite',
   },
   editorial: {

@@ -4,6 +4,7 @@ import { MagneticSocialDock } from './MagneticSocialDock';
 import { useLanguage } from '../../context/LanguageContext';
 import { TikTokIcon, InstagramIcon } from './SocialIcons';
 import { audioSynth } from '../../utils/audioSynth';
+import { getAssetUrl } from '../../utils/assets';
 import { 
   Play, 
   ArrowUpRight, 
@@ -63,7 +64,7 @@ export const SocialPhysicsShowcase: React.FC = () => {
       descEn: 'Engineering a cinematic reservation & digital dining menu that reached 100% occupancy with 0% intermediary cuts.',
       views: '145K',
       likes: '4.2K',
-      image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=800&q=80',
+      image: getAssetUrl('assets/projects/lavoa/hero-desktop.png'),
       url: 'https://www.instagram.com/muhabwebmakers?stkn=OTYydnJiejlpN3B2',
       tag: 'Instagram Reel'
     },
@@ -78,7 +79,7 @@ export const SocialPhysicsShowcase: React.FC = () => {
       descEn: 'Real-time demonstration of high-throughput sub-second ordering with Apple Pay during peak operational hours.',
       views: '290K',
       likes: '8.6K',
-      image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=800&q=80',
+      image: getAssetUrl('assets/projects/gotcha/hero-desktop.png'),
       url: 'https://www.tiktok.com/@muhabmebmakers?_r=1&_t=ZS-99jitaEr8Uu',
       tag: 'TikTok Viral'
     },
@@ -93,7 +94,7 @@ export const SocialPhysicsShowcase: React.FC = () => {
       descEn: 'Analyzing how minimalist Japanese UI principles sold out ceremonial tea tasting flights weeks in advance.',
       views: '112K',
       likes: '3.8K',
-      image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80',
+      image: getAssetUrl('assets/icons/speed-crystal.jpg'),
       url: 'https://www.instagram.com/muhabwebmakers?stkn=OTYydnJiejlpN3B2',
       tag: 'Instagram Reel'
     },
@@ -108,7 +109,7 @@ export const SocialPhysicsShowcase: React.FC = () => {
       descEn: 'Behind-the-scenes engineering of contactless NFC smart stands propelling local businesses to top Google rankings.',
       views: '340K',
       likes: '12.1K',
-      image: '/taqyeemi-showcase.jpg',
+      image: getAssetUrl('taqyeemi-showcase.jpg'),
       url: 'https://www.tiktok.com/@muhabmebmakers?_r=1&_t=ZS-99jitaEr8Uu',
       tag: 'TikTok Tech'
     }

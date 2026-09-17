@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { ParticleWaveCanvas } from '../common/ParticleWaveCanvas';
 import { audioSynth } from '../../utils/audioSynth';
+import { getAssetUrl } from '../../utils/assets';
 
 interface ConsultationBannerProps {
   onOpenContact: () => void;
@@ -129,7 +130,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
                   <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
-                      src="/assets/icons/saudi-shield.jpg" 
+                      src={getAssetUrl('assets/icons/saudi-shield.jpg')} 
                       alt="Official SLA" 
                       className="w-full h-full object-cover rounded-[10px] group-hover/pillar:scale-115 transition-transform duration-500"
                     />
@@ -149,7 +150,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
                   <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-[#a6ff2e]/50 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
-                      src="/assets/icons/speed-crystal.jpg" 
+                      src={getAssetUrl('assets/icons/speed-crystal.jpg')} 
                       alt="Sub-second Speed" 
                       className="w-full h-full object-cover rounded-[10px] group-hover/pillar:scale-115 transition-transform duration-500"
                     />
@@ -169,7 +170,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
                   <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
-                      src="/assets/icons/seo-growth.jpg" 
+                      src={getAssetUrl('assets/icons/seo-growth.jpg')} 
                       alt="Free Strategy" 
                       className="w-full h-full object-cover rounded-[10px] group-hover/pillar:scale-115 transition-transform duration-500"
                     />
@@ -248,7 +249,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                   style={{ transform: 'translateZ(30px)' }}
                 >
                   <img 
-                    src="/assets/icons/vip-black-card.jpg" 
+                    src={getAssetUrl('assets/icons/vip-black-card.jpg')} 
                     alt="MUHAB VIP Sovereign Obsidian Pass"
                     className="w-full h-full object-cover rounded-[14px] transform group-hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
                   />
