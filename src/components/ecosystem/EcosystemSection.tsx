@@ -24,6 +24,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onOrderProdu
           badgeIcon={<Layers className="w-3.5 h-3.5 text-[#a6ff2e]" />}
           title={t('ecosystemTitle')}
           subtitle={t('ecosystemSubtitle')}
+          className="mb-8 sm:mb-12"
         />
 
         {/* 3-Card Bento Grid */}

@@ -48,13 +48,13 @@ export function AppContent() {
   // Initialize Global Lenis 120 FPS Inertial Smooth Scroll
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.05,
+      duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.0,
+      wheelMultiplier: 1.05,
+      touchMultiplier: 1.1,
     });
 
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;
@@ -66,20 +66,42 @@ export function AppContent() {
     }
     rafId = requestAnimationFrame(raf);
 
-    const unsub = scrollY.on('change', (latest) => {
-      setShowBackToTop(latest > 900);
-      setShowQuickActionBar(latest > 850);
+    // Efficient IntersectionObserver for bottom consultation zone (zero layout thrashing)
+    const consultationEl = document.querySelector('#consultation');
+    let consultationObserver: IntersectionObserver | null = null;
+    if (consultationEl) {
+      consultationObserver = new IntersectionObserver(
+        ([entry]) => {
+          setIsInBottomZone(entry.isIntersecting);
+        },
+        { rootMargin: '0px 0px -80px 0px' }
+      );
+      consultationObserver.observe(consultationEl);
+    }
 
-      const consultationEl = document.querySelector('#consultation');
-      if (consultationEl) {
-        const rect = consultationEl.getBoundingClientRect();
-        setIsInBottomZone(rect.top < window.innerHeight - 80);
+    // State change guards to prevent unnecessary re-renders during high-speed scrolling
+    let lastBackToTop = false;
+    let lastQuickAction = false;
+
+    const unsub = scrollY.on('change', (latest) => {
+      const nextBackToTop = latest > 900;
+      const nextQuickAction = latest > 850;
+      if (nextBackToTop !== lastBackToTop) {
+        lastBackToTop = nextBackToTop;
+        setShowBackToTop(nextBackToTop);
+      }
+      if (nextQuickAction !== lastQuickAction) {
+        lastQuickAction = nextQuickAction;
+        setShowQuickActionBar(nextQuickAction);
       }
     });
 
     return () => {
       cancelAnimationFrame(rafId);
       unsub();
+      if (consultationObserver) {
+        consultationObserver.disconnect();
+      }
       lenis.destroy();
       delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };

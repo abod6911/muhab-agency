@@ -17,23 +17,24 @@ export const CursorFollower: React.FC = () => {
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
     if (isTouch) return;
 
+    let lastInteractive = false;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!isVisible) setIsVisible(true);
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
 
-      // Check if hovering over clickable or interactive element
+      // Lightweight check for clickable or interactive elements
       const target = e.target as HTMLElement | null;
       if (target) {
         const isInteractive = Boolean(
-          target.closest('button') ||
-          target.closest('a') ||
-          target.closest('input') ||
-          target.closest('[role="button"]') ||
-          target.closest('.group') ||
-          target.getAttribute('tabindex')
+          target.matches('button, a, input, textarea, select, [role="button"], [tabindex]') ||
+          target.closest('button, a, [role="button"]')
         );
-        setIsHoveringInteractive(isInteractive);
+        if (isInteractive !== lastInteractive) {
+          lastInteractive = isInteractive;
+          setIsHoveringInteractive(isInteractive);
+        }
       }
     };
 
