@@ -12,10 +12,12 @@ import {
   Battery,
   Wifi,
   Signal,
-  Pause,
-  Play,
   Zap,
-  TrendingUp
+  TrendingUp,
+  Coffee,
+  UtensilsCrossed,
+  Sparkles,
+  Flame
 } from 'lucide-react';
 
 
@@ -26,7 +28,7 @@ interface PhoneMockupProps {
 }
 
 export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => {
-  const { language, isRTL, t } = useLanguage();
+  const { language, isRTL } = useLanguage();
   // We showcase the 4 authentic flagship projects from muhab.org: Gotcha Tea, Al-Khal, Ueno Saryo, Lavoa Lounge
   const showcaseProjects = projects.slice(0, 4);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,7 +55,11 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
   }, [showcaseProjects.length, isPaused]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full max-w-[290px] xs:max-w-[305px] sm:max-w-[320px] xl:max-w-[335px] mx-auto select-none">
+    <div 
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="relative flex flex-col items-center justify-center w-full max-w-[290px] xs:max-w-[305px] sm:max-w-[320px] xl:max-w-[335px] mx-auto select-none"
+    >
       {/* Flagship Segmented Capsule Control Bar (Unified, Perfectly Aligned) */}
       <div className="w-full mb-3.5 bg-[#051a11]/95 border border-emerald-500/35 rounded-2xl p-1 backdrop-blur-xl shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-30">
         <div className="grid grid-cols-4 gap-1 w-full">
@@ -62,7 +68,14 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
             const shortTitle = language === 'ar' 
               ? (p.id === 'gotcha-fresh-tea' ? 'جوتشا' : p.id === 'alkhal-aldimashki' ? 'الخال' : p.id === 'ueno-saryo' ? 'أوينو' : 'لافوا')
               : (p.id === 'gotcha-fresh-tea' ? 'Gotcha' : p.id === 'alkhal-aldimashki' ? 'Al-Khal' : p.id === 'ueno-saryo' ? 'Ueno' : 'Lavoa');
-            const icon = idx === 0 ? '🍵' : idx === 1 ? '🍽️' : idx === 2 ? '☕' : '✨';
+            
+            const renderTabIcon = () => {
+              if (idx === 0) return <Coffee className="w-3.5 h-3.5" />;
+              if (idx === 1) return <UtensilsCrossed className="w-3.5 h-3.5" />;
+              if (idx === 2) return <Flame className="w-3.5 h-3.5" />;
+              return <Sparkles className="w-3.5 h-3.5" />;
+            };
+
             return (
               <button
                 key={p.id}
@@ -70,7 +83,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                   setCurrentIndex(idx);
                   audioSynth.playHoverBlip();
                 }}
-                className={`relative py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 overflow-hidden select-none ${
+                className={`relative py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 overflow-hidden select-none ${
                   isActive
                     ? 'text-[#020704] font-black'
                     : 'text-slate-300 hover:text-white hover:bg-emerald-500/10'
@@ -83,7 +96,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                     transition={{ type: 'spring', damping: 24, stiffness: 350 }}
                   />
                 )}
-                <span className="relative z-10 text-[12px]">{icon}</span>
+                <span className="relative z-10">{renderTabIcon()}</span>
                 <span className="relative z-10 text-[11px] truncate tracking-tight">{shortTitle}</span>
               </button>
             );
@@ -119,11 +132,11 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
         </div>
       </motion.div>
 
-      {/* Floating Spatial Card 2: Growth & Payment Gateway (Bottom Outer Flank) */}
+      {/* Floating Spatial Card 2: Growth & Payment Gateway (Bottom-Start Flank) */}
       <motion.div
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-        className="hidden lg:flex absolute bottom-24 -end-6 xl:-end-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-emerald-500/35 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(16,185,129,0.2)] select-none hover:scale-105 transition-transform"
+        className="hidden lg:flex absolute bottom-24 -start-6 xl:-start-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-emerald-500/35 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(16,185,129,0.2)] select-none hover:scale-105 transition-transform"
       >
         <div className="w-7 h-7 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 shadow-sm">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
@@ -432,88 +445,36 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
       </div>
 
       {/* Unified Executive Project Dock (Single-Row Glass Capsule) */}
-      <div className="hidden lg:flex mt-4 items-center justify-between w-full bg-[#051a11]/95 border border-emerald-500/35 p-2 sm:p-2.5 rounded-2xl backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.7)] gap-2 z-30">
+      <div className="hidden lg:flex mt-3.5 items-center justify-between w-full bg-[#051a11]/95 border border-emerald-500/35 px-3 py-2 rounded-2xl backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.7)] gap-2.5 z-30">
         {/* Active Project Info */}
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="w-7 h-7 rounded-xl bg-[#020b06] border border-emerald-500/30 flex items-center justify-center shrink-0">
-            <span className="text-xs">{currentIndex === 0 ? '🍵' : currentIndex === 1 ? '🍽️' : currentIndex === 2 ? '☕' : '✨'}</span>
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <div className="w-7 h-7 rounded-xl bg-[#020b06] border border-emerald-500/30 flex items-center justify-center shrink-0 text-[#a6ff2e]">
+            {currentIndex === 0 && <Coffee className="w-3.5 h-3.5" />}
+            {currentIndex === 1 && <UtensilsCrossed className="w-3.5 h-3.5" />}
+            {currentIndex === 2 && <Flame className="w-3.5 h-3.5" />}
+            {currentIndex === 3 && <Sparkles className="w-3.5 h-3.5" />}
           </div>
           <div className="flex flex-col min-w-0 text-start">
-            <span className="text-xs font-black text-white truncate">
-              {language === 'ar' ? current.titleAr.split('|')[0] : current.titleEn.split('|')[0]}
+            <span className="text-xs font-bold text-white truncate">
+              {language === 'ar' ? current.titleAr.split('|')[0].trim() : current.titleEn.split('|')[0].trim()}
             </span>
-            <span className="text-[10px] text-[#a6ff2e] font-semibold truncate">
+            <span className="text-[10px] text-emerald-400/90 font-medium truncate">
               {language === 'ar' ? current.categoryLabelAr : current.categoryLabelEn}
             </span>
           </div>
         </div>
 
-        {/* Interactive Carousel Controls */}
-        <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-[#020b06] border border-emerald-500/20 shrink-0">
-          <button
-            onClick={() => {
-              try { audioSynth.playHoverBlip(); } catch {}
-              if (isRTL) { nextSlide(); } else { prevSlide(); }
-            }}
-            className="text-slate-300 hover:text-[#a6ff2e] transition-colors p-1 active:scale-90 cursor-pointer"
-            aria-label={t('heroPrev')}
-          >
-            {isRTL ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-          </button>
-
-          <div className="flex items-center gap-1">
-            {showcaseProjects.map((p, idx) => (
-              <button
-                key={p.id}
-                onClick={() => {
-                  try { audioSynth.playHoverBlip(); } catch {}
-                  setCurrentIndex(idx);
-                }}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  currentIndex === idx
-                    ? 'w-4 bg-[#a6ff2e] shadow-[0_0_8px_#a6ff2e]'
-                    : 'w-1.5 bg-[#1b3d2f] hover:bg-[#285743]'
-                }`}
-                aria-label={`Slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={() => {
-              try { audioSynth.playHoverBlip(); } catch {}
-              if (isRTL) { prevSlide(); } else { nextSlide(); }
-            }}
-            className="text-slate-300 hover:text-[#a6ff2e] transition-colors p-1 active:scale-90 cursor-pointer"
-            aria-label={t('heroNext')}
-          >
-            {isRTL ? <ChevronLeft className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-          </button>
-
-          <div className="w-[1px] h-3 bg-emerald-500/25 mx-0.5" />
-
-          <button
-            onClick={() => setIsPaused(!isPaused)}
-            className="text-[#a6ff2e] hover:brightness-125 transition-all p-1 active:scale-90 cursor-pointer"
-            title={isPaused ? 'Resume auto-slider' : 'Pause auto-slider'}
-          >
-            {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
-          </button>
-        </div>
-
         {/* Direct Live Preview Button */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            onClick={() => {
-              try { audioSynth.playHarmonicSuccess(); } catch {}
-              onSelectProject(current.id);
-            }}
-            className="flex items-center gap-1 text-xs font-bold text-[#05140d] bg-[#a6ff2e] hover:bg-[#8ee622] px-3 py-1.5 rounded-xl transition-all active:scale-95 shadow-[0_0_12px_rgba(166,255,46,0.3)] cursor-pointer"
-          >
-            <span>{language === 'ar' ? 'معاينة' : 'Preview'}</span>
-            <ExternalLink className="w-3 h-3" />
-          </button>
-        </div>
+        <button
+          onClick={() => {
+            try { audioSynth.playHarmonicSuccess(); } catch {}
+            onSelectProject(current.id);
+          }}
+          className="flex items-center gap-1.5 text-xs font-bold text-[#05140d] bg-gradient-to-r from-[#a6ff2e] to-[#8ee622] hover:brightness-110 px-3.5 py-1.5 rounded-xl transition-all active:scale-95 shadow-[0_0_12px_rgba(166,255,46,0.3)] shrink-0 cursor-pointer"
+        >
+          <span>{language === 'ar' ? 'معاينة حية' : 'Live Demo'}</span>
+          <ExternalLink className="w-3 h-3" />
+        </button>
       </div>
     </div>
   );
