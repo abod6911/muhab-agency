@@ -228,7 +228,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 <button
                   onClick={() => {
                     try { audioSynth.playHoverBlip(); } catch {}
-                    isRTL ? nextSlide() : prevSlide();
+                    if (isRTL) { nextSlide(); } else { prevSlide(); }
                   }}
                   className="p-1 rounded-lg hover:text-[#a6ff2e] active:scale-90 transition-colors"
                   aria-label="Previous Slide"
@@ -246,7 +246,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                       }}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
                         currentIndex === idx
-                          ? 'w-4 bg-[#a6ff2e] shadow-[0_0_8px_#a6ff2e]'
+                            ? 'w-4 bg-[#a6ff2e] shadow-[0_0_8px_#a6ff2e]'
                           : 'w-1.5 bg-[#234939]'
                       }`}
                       aria-label={`Slide ${idx + 1}`}
@@ -257,7 +257,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 <button
                   onClick={() => {
                     try { audioSynth.playHoverBlip(); } catch {}
-                    isRTL ? prevSlide() : nextSlide();
+                    if (isRTL) { prevSlide(); } else { nextSlide(); }
                   }}
                   className="p-1 rounded-lg hover:text-[#a6ff2e] active:scale-90 transition-colors"
                   aria-label="Next Slide"
@@ -453,7 +453,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
           <button
             onClick={() => {
               try { audioSynth.playHoverBlip(); } catch {}
-              isRTL ? nextSlide() : prevSlide();
+              if (isRTL) { nextSlide(); } else { prevSlide(); }
             }}
             className="text-slate-300 hover:text-[#a6ff2e] transition-colors p-1 active:scale-90 cursor-pointer"
             aria-label={t('heroPrev')}
@@ -482,7 +482,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
           <button
             onClick={() => {
               try { audioSynth.playHoverBlip(); } catch {}
-              isRTL ? prevSlide() : nextSlide();
+              if (isRTL) { prevSlide(); } else { nextSlide(); }
             }}
             className="text-slate-300 hover:text-[#a6ff2e] transition-colors p-1 active:scale-90 cursor-pointer"
             aria-label={t('heroNext')}

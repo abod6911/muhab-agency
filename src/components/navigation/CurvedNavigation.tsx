@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import { Curve } from './Curve';
@@ -77,7 +77,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     try {
       audioSynth.playHoverBlip();
     } catch {}
@@ -86,7 +86,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     } else {
       setInternalIsOpen(false);
     }
-  };
+  }, [isControlled, controlledOnClose]);
 
   const [showMagnetic, setShowMagnetic] = useState(false);
 
@@ -108,7 +108,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleClose]);
 
   const navItems = [
     {

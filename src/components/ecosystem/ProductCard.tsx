@@ -44,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderProduc
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
       whileHover={{ y: -6 }}
       className="relative rounded-3xl bg-[#071912]/85 backdrop-blur-2xl border border-emerald-500/20 hover:border-[#a6ff2e]/50 p-6 sm:p-8 flex flex-col justify-between overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.5)] group transition-all duration-300"

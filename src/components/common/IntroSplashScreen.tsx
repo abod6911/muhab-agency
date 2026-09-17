@@ -48,8 +48,11 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
 
   const onStartExitRef = useRef(onStartExit);
   const onCompleteRef = useRef(onComplete);
-  onStartExitRef.current = onStartExit;
-  onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    onStartExitRef.current = onStartExit;
+    onCompleteRef.current = onComplete;
+  }, [onStartExit, onComplete]);
 
   const handleExit = useCallback(() => {
     if (isExitingRef.current) return;
@@ -252,22 +255,22 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
   }, [handleExit]);
 
   const getStatusTelemetry = () => {
-    if (progress < 25) {
+    if (progress < 28) {
       return language === 'ar'
-        ? 'تشغيل النواة الرقمية // MUHAB.CORE 1.0'
-        : 'INITIALIZING SUB-SECOND CORE // QUANTUM.BOOT';
-    } else if (progress < 60) {
+        ? 'تهيئة الهوية الرقمية الفاخرة لعلامتك التجارية...'
+        : 'Curating bespoke digital elegance for your brand...';
+    } else if (progress < 65) {
       return language === 'ar'
-        ? 'مزامنة المنظومات المخصصة // BESPOKE.SYNC'
-        : 'SYNCHRONIZING BESPOKE ECOSYSTEMS // WEBSITES.GROWTH';
-    } else if (progress < 90) {
+        ? 'بناء واجهات تفاعلية مخصصة لمضاعفة المبيعات...'
+        : 'Crafting high-converting interfaces built to scale...';
+    } else if (progress < 92) {
       return language === 'ar'
-        ? 'معايرة فيزياء الأبعاد الثلاثية // 120FPS.LOCKED'
-        : 'CALIBRATING 3D SPATIAL TILT & PHYSICS // 120FPS.LOCKED';
+        ? 'تجهيز حلول رقمية سريعة ومتوافقة مع السوق السعودي...'
+        : 'Optimizing ultra-fast architectures for the GCC market...';
     } else {
       return language === 'ar'
-        ? 'جاهزية كاملة 100% // مرحباً بك في استوديو مُهاب'
-        : 'ALL SYSTEMS NOMINAL // WELCOME TO MUHAB STUDIO';
+        ? 'مرحباً بك في عالم التميّز الرقمي • استوديو مهاب'
+        : 'Welcome to extraordinary digital craft • MUHAB Studio';
     }
   };
 
@@ -313,7 +316,7 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] bg-[#a6ff2e]/12 rounded-full blur-[180px] pointer-events-none z-10" />
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[650px] h-[380px] bg-emerald-700/18 rounded-full blur-[160px] pointer-events-none z-10" />
 
-          {/* Top HUD Telemetry Header */}
+          {/* Top Marketing Telemetry Header */}
           <div className="absolute inset-x-0 top-0 z-40 flex items-center justify-between p-6 sm:p-10 font-mono text-xs text-slate-400 border-b border-emerald-500/15 backdrop-blur-sm">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
@@ -321,13 +324,13 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]" />
               </span>
               <span className="font-bold text-[#a6ff2e] tracking-wider text-[11px] sm:text-xs">
-                SYS.STATUS // ONLINE • LATENCY 0.4ms
+                {language === 'ar' ? 'استوديو مهاب • نصنع حلولاً رقمية تضاعف مبيعاتك' : 'MUHAB STUDIO • BESPOKE DIGITAL FLAGSHIPS'}
               </span>
             </div>
 
             <div className="hidden sm:flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#051a11]/90 border border-emerald-500/30 text-[11px] text-[#a6ff2e] font-bold shadow-inner">
               <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e] animate-pulse" />
-              <span>{language === 'ar' ? 'صُنّاع المواقع السعودية • جدة' : 'SAUDI WEBMAKERS • JEDDAH HQ'}</span>
+              <span>{language === 'ar' ? 'حلول حصرية للشركات والمتاجر الفاخرة' : 'BESPOKE DIGITAL SOLUTIONS FOR PREMIER BRANDS'}</span>
             </div>
 
             <div className="flex items-center gap-3">
@@ -352,16 +355,16 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
             </div>
           </div>
 
-          {/* Bottom HUD Telemetry Footer */}
+          {/* Bottom Marketing Telemetry Footer */}
           <div className="absolute inset-x-0 bottom-0 z-40 flex items-center justify-between p-6 sm:p-10 font-mono text-xs text-slate-400 border-t border-emerald-500/15 backdrop-blur-sm">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1.5 text-slate-300">
                 <ShieldCheck className="w-4 h-4 text-[#a6ff2e]" />
-                <span>{language === 'ar' ? 'تصاميم مخصصة 100% بدون قوالب' : '100% BESPOKE ARCHITECTURE'}</span>
+                <span>{language === 'ar' ? 'واجهات برمجية خاصة بدون قوالب جاهزة' : 'ZERO TEMPLATES • 100% BESPOKE ARCHITECTURE'}</span>
               </div>
               <div className="hidden md:flex items-center gap-1.5 text-slate-300">
                 <Zap className="w-3.5 h-3.5 text-[#a6ff2e]" />
-                <span>LIGHTHOUSE SCORE 100/100</span>
+                <span>{language === 'ar' ? 'أداء استثنائي وتجربة مستخدم ترفع المبيعات' : 'HIGH-VELOCITY PERFORMANCE & MAXIMUM ROI'}</span>
               </div>
             </div>
 
@@ -404,30 +407,41 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
               className="relative flex flex-col items-center justify-center my-auto transition-transform duration-75 ease-out"
             >
               {/* === HOLOGRAPHIC GYROSCOPE RINGS SYSTEM === */}
-              {/* Ring 1: Outer Celestial Coordinate Ring with tick marks */}
+              {/* Ring 1: Outer Orbit Ring */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[370px] h-[370px] sm:w-[500px] sm:h-[500px] rounded-full border border-[#a6ff2e]/20 border-dashed pointer-events-none -z-10"
-              >
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] font-mono text-[#a6ff2e]/80 bg-[#020704] px-1.5">N 21°32'36"</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[9px] font-mono text-[#a6ff2e]/80 bg-[#020704] px-1.5">S 39°10'22"</span>
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 text-[9px] font-mono text-[#a6ff2e]/80 bg-[#020704] px-1.5">120FPS</span>
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 text-[9px] font-mono text-[#a6ff2e]/80 bg-[#020704] px-1.5">0.4MS</span>
-              </motion.div>
+                className="absolute w-[260px] h-[260px] sm:w-[500px] sm:h-[500px] rounded-full border border-[#a6ff2e]/20 border-dashed pointer-events-none -z-10"
+              />
+
+              {/* Static 4 Marketing Pillars around the circle - Desktop (Upright and Legible) */}
+              <div className="hidden sm:block absolute w-[500px] h-[500px] pointer-events-none -z-10">
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[11px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-3 py-1 rounded-full shadow-[0_0_12px_rgba(166,255,46,0.25)] whitespace-nowrap">
+                  {language === 'ar' ? 'تصاميم مخصصة 100%' : '100% Bespoke Design'}
+                </span>
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 text-[11px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-3 py-1 rounded-full shadow-[0_0_12px_rgba(166,255,46,0.25)] whitespace-nowrap">
+                  {language === 'ar' ? 'أعلى معدل تحويل مبيعات' : 'Max Sales Conversion'}
+                </span>
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 text-[11px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-3 py-1 rounded-full shadow-[0_0_12px_rgba(166,255,46,0.25)] whitespace-nowrap">
+                  {language === 'ar' ? 'سرعة فائقة واستجابة لحظية' : 'Sub-Second Speed'}
+                </span>
+                <span className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 text-[11px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-3 py-1 rounded-full shadow-[0_0_12px_rgba(166,255,46,0.25)] whitespace-nowrap">
+                  {language === 'ar' ? 'شريك رقمي معتمد' : 'Enterprise Saudi Partner'}
+                </span>
+              </div>
 
               {/* Ring 2: Medium Counter-rotating Radar Ring with Orbiting Satellite Beacons */}
               <motion.div
                 animate={{ rotate: -360 }}
                 transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[290px] h-[290px] sm:w-[380px] sm:h-[380px] rounded-full border border-emerald-500/30 pointer-events-none -z-10"
+                className="absolute w-[220px] h-[220px] sm:w-[380px] sm:h-[380px] rounded-full border border-emerald-500/30 pointer-events-none -z-10"
               >
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#a6ff2e] shadow-[0_0_15px_#a6ff2e]" />
                 <div className="absolute bottom-4 right-10 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
               </motion.div>
 
               {/* Ring 3: Inner High-Velocity Pulse Ring */}
-              <div className="absolute w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] rounded-full border border-[#a6ff2e]/40 animate-ping opacity-35 pointer-events-none -z-10" />
+              <div className="absolute w-[180px] h-[180px] sm:w-[280px] sm:h-[280px] rounded-full border border-[#a6ff2e]/40 animate-ping opacity-35 pointer-events-none -z-10" />
 
               {/* === CENTRAL OFFICIAL 3D MUHAB LOGO ARTWORK (Pristine High-Res Master Asset) === */}
               <div className="relative mb-2 flex flex-col items-center">
@@ -439,7 +453,7 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
                   <img
                     src={getAssetUrl('muhab-logo.png')}
                     alt="MUHAB Studio - صُنّاع المواقع السعودية"
-                    className="w-[320px] sm:w-[440px] md:w-[510px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_20px_45px_rgba(166,255,46,0.35)]"
+                    className="w-[260px] sm:w-[440px] md:w-[510px] h-auto object-contain select-none pointer-events-none drop-shadow-[0_20px_45px_rgba(166,255,46,0.35)]"
                   />
                   
                   {/* Laser Pinpoint on the 3D Growth Arrowhead */}
@@ -450,10 +464,23 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
                 </div>
               </div>
 
+              {/* Mobile Upright Marketing Badges (Clean, no screen clipping) */}
+              <div className="flex sm:hidden flex-wrap items-center justify-center gap-1.5 mb-2 px-2 max-w-xs pointer-events-none">
+                <span className="text-[10px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(166,255,46,0.2)]">
+                  {language === 'ar' ? 'تصاميم مخصصة 100%' : '100% Bespoke'}
+                </span>
+                <span className="text-[10px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(166,255,46,0.2)]">
+                  {language === 'ar' ? 'مضاعفة المبيعات' : 'Max Conversion'}
+                </span>
+                <span className="text-[10px] font-bold text-[#a6ff2e] bg-[#020704]/90 border border-emerald-500/40 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(166,255,46,0.2)]">
+                  {language === 'ar' ? 'سرعة فائقة' : 'Fast Speed'}
+                </span>
+              </div>
+
               {/* Authority Subtitle */}
-              <div className="flex flex-col items-center text-center mb-6 max-w-lg">
-                <span className="text-xs sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-200 to-[#a6ff2e] tracking-widest uppercase mb-1 drop-shadow-[0_0_20px_rgba(166,255,46,0.4)]">
-                  {language === 'ar' ? 'هندسة النظم الرقمية الفاخرة • تجربة تفاعلية متكاملة' : 'BESPOKE DIGITAL ARCHITECTURE & FLAGSHIP EXPERIENCES'}
+              <div className="flex flex-col items-center text-center mb-6 max-w-lg px-4">
+                <span className="text-xs sm:text-sm md:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-200 to-[#a6ff2e] tracking-wide mb-1 drop-shadow-[0_0_20px_rgba(166,255,46,0.4)]">
+                  {language === 'ar' ? 'نصنع لعلامتك التجارية حضوراً رقمياً فاخراً يضاعف أرباحك ومبيعاتك' : 'ENGINEERING BESPOKE DIGITAL FLAGSHIPS THAT SCALE YOUR BUSINESS'}
                 </span>
               </div>
 
@@ -495,7 +522,7 @@ export const IntroSplashScreen: React.FC<IntroSplashScreenProps> = ({ onStartExi
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                     
                     <Sparkles className="w-4 h-4 text-[#020704] animate-spin" style={{ animationDuration: '4s' }} />
-                    <span>{language === 'ar' ? 'ادخل التحفة الرقمية // اكتشف الموقع' : 'EXPLORE THE DIGITAL FLAGSHIP'}</span>
+                    <span>{language === 'ar' ? 'اكتشف كيف نصنع تميّزك الرقمي • ادخل الموقع' : 'EXPLORE HOW WE ELEVATE YOUR BRAND • ENTER SITE'}</span>
                     <ArrowUpRight className="w-4 h-4 text-[#020704] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </motion.button>
                 )}

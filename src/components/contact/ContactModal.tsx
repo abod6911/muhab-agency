@@ -59,12 +59,22 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [createdOrder, setCreatedOrder] = useState<OrderPayload | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Update service when prop changes
-  React.useEffect(() => {
-    if (preselectedService) {
-      setFormData((prev) => ({ ...prev, service: preselectedService }));
-    }
-  }, [preselectedService]);
+  // Synchronize service when prop changes (React recommended pattern)
+  const [prevPropService, setPrevPropService] = useState(preselectedService);
+  if (preselectedService && preselectedService !== prevPropService) {
+    setPrevPropService(preselectedService);
+    setFormData((prev) => ({ ...prev, service: preselectedService }));
+  }
+
+  const handleCloseModal = React.useCallback(() => {
+    onClose();
+    // Delay resetting state so animations exit gracefully
+    setTimeout(() => {
+      setCreatedOrder(null);
+      setIsSubmitting(false);
+      setCopied(false);
+    }, 400);
+  }, [onClose]);
 
   // Handle Escape key to close modal with smooth transition
   React.useEffect(() => {
@@ -76,7 +86,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, handleCloseModal]);
 
   // Lock body scroll when modal is active
   React.useEffect(() => {
@@ -91,16 +101,6 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       lenis?.start();
     };
   }, [isOpen]);
-
-  const handleCloseModal = () => {
-    onClose();
-    // Delay resetting state so animations exit gracefully
-    setTimeout(() => {
-      setCreatedOrder(null);
-      setIsSubmitting(false);
-      setCopied(false);
-    }, 400);
-  };
 
   const toggleTag = (tag: string) => {
     audioSynth.playTelemetryTick();
