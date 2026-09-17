@@ -10,3 +10,4 @@ export * from './MuhabLogo';
 export * from './CursorFollower';
 export * from './MobileQuickActionBar';
 export * from './ShapeGrid';
+export * from './FlowingMenu';

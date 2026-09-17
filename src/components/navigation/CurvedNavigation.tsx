@@ -132,6 +132,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       href: '#services',
     },
     {
+      label: language === 'ar' ? 'المسارات التفاعلية' : 'Kinetic Disciplines',
+      sublabel: language === 'ar' ? 'العرض الانسيابي الحي 120 FPS' : '120 FPS Flowing Menu Preview',
+      href: '#disciplines',
+    },
+    {
       label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics & Proof',
       sublabel: language === 'ar' ? 'أرقام حقيقية للسوق السعودي' : 'Sub-Second Performance',
       href: '#metrics',

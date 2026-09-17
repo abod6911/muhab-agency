@@ -11,6 +11,7 @@ import { TrustRibbon } from './components/trust/TrustRibbon';
 import { EcosystemSection } from './components/ecosystem/EcosystemSection';
 import { PortfolioSection } from './components/portfolio/PortfolioSection';
 import { ServicesSection } from './components/services/ServicesSection';
+import { FlowingMenuSection } from './components/showcase';
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
 import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar } from './components/common';
@@ -212,6 +213,12 @@ export function AppContent() {
             {/* 6-Card Services Grid Matrix */}
             <ServicesSection
               onRequestService={(serviceTitle) => handleOpenContact(serviceTitle)}
+            />
+
+            {/* Awwwards-Grade Interactive Flowing Menu Showcase from React Bits */}
+            <FlowingMenuSection
+              onOpenContact={(serviceTitle) => handleOpenContact(serviceTitle)}
+              onSelectProject={handleSelectProjectId}
             />
 
             {/* Metrics, Proof & Engineering Comparison Section */}
