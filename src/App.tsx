@@ -18,7 +18,6 @@ import { MagicBentoSection } from './components/bento';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
 import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar } from './components/common';
 import { AgencyLandingPage } from './components/agency';
-import { LeadArchitectSection } from './components/architect';
 import { Footer } from './components/layout/Footer';
 import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
 import { ContactModal } from './components/contact/ContactModal';
@@ -48,13 +47,13 @@ export function AppContent() {
   // Initialize Global Lenis 120 FPS Inertial Smooth Scroll
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.6,
+      touchMultiplier: 1.0,
     });
 
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;
@@ -240,9 +239,6 @@ export function AppContent() {
             <section id="social-showcase" className="relative pt-16 pb-10 bg-[#020a06] px-4 sm:px-6 lg:px-8 scroll-mt-24">
               <SocialPhysicsShowcase />
             </section>
-
-            {/* React Bits Interactive 3D ProfileCard & Executive Architecture Section */}
-            <LeadArchitectSection onOpenContact={(subject) => handleOpenContact(subject)} />
 
             {/* Pre-Footer High-Converting Consultation Banner with Interactive Particle Wave Background */}
             <ConsultationBanner onOpenContact={() => handleOpenContact()} />

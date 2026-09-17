@@ -53,6 +53,23 @@ export const ParticleWaveCanvas: React.FC<ParticleWaveCanvasProps> = ({
     const rows = Math.floor(height / 22);
     let step = 0;
 
+    // Visibility control via IntersectionObserver to save GPU/CPU when offscreen
+    let isIntersecting = false;
+    let isPageVisible = !document.hidden;
+
+    const startLoop = () => {
+      if (!animationFrameId && isIntersecting && isPageVisible) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+
+    const stopLoop = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = 0;
+      }
+    };
+
     const render = () => {
       ctx.clearRect(0, 0, width, height);
       step += 0.03;
@@ -92,13 +109,36 @@ export const ParticleWaveCanvas: React.FC<ParticleWaveCanvasProps> = ({
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+    observer.observe(canvas);
+
+    const handleVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible && isIntersecting) {
+        startLoop();
+      } else {
+        stopLoop();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      observer.disconnect();
+      stopLoop();
     };
   }, [particleColor, hoverColor, repulsionRadius]);
 

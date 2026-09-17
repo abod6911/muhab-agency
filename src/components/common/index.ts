@@ -16,6 +16,5 @@ export * from './MagicBento';
 export * from './ScrollReveal';
 export * from './CurvedLoop';
 export * from './AnimatedPathText';
-export * from './ProfileCard';
 
 

@@ -25,11 +25,11 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
     return (hasTrailing ? marqueeText.replace(/\s+$/, '') : marqueeText) + '\u00A0';
   }, [marqueeText]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<SVGTextElement>(null);
   const textPathRef = useRef<SVGTextPathElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [spacing, setSpacing] = useState(0);
-  const [offset, setOffset] = useState(0);
   const uid = useId();
   const safeUid = uid.replace(/[^a-zA-Z0-9_-]/g, '_');
   const pathId = `curve-${safeUid}`;
@@ -78,13 +78,15 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
     if (textPathRef.current) {
       const initial = -spacing;
       textPathRef.current.setAttribute('startOffset', initial + 'px');
-      setOffset(initial);
     }
   }, [spacing]);
 
   useEffect(() => {
-    if (!spacing) return;
+    if (!spacing || !containerRef.current) return;
     let frame = 0;
+    let isIntersecting = false;
+    let isPageVisible = !document.hidden;
+
     const step = () => {
       if (!dragRef.current && textPathRef.current) {
         const delta = dirRef.current === 'right' ? speed : -speed;
@@ -96,12 +98,56 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
         if (newOffset > 0) newOffset -= wrapPoint;
 
         textPathRef.current.setAttribute('startOffset', newOffset + 'px');
-        setOffset(newOffset);
       }
-      frame = requestAnimationFrame(step);
+      if (isIntersecting && isPageVisible) {
+        frame = requestAnimationFrame(step);
+      } else {
+        frame = 0;
+      }
     };
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
+
+    const startLoop = () => {
+      if (!frame && isIntersecting && isPageVisible) {
+        frame = requestAnimationFrame(step);
+      }
+    };
+
+    const stopLoop = () => {
+      if (frame) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    observer.observe(containerRef.current);
+
+    const onVisibility = () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible && isIntersecting) {
+        startLoop();
+      } else {
+        stopLoop();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      stopLoop();
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [spacing, speed]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -128,7 +174,6 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
     if (newOffset > 0) newOffset -= wrapPoint;
 
     textPathRef.current.setAttribute('startOffset', newOffset + 'px');
-    setOffset(newOffset);
   };
 
   const endDrag = () => {
@@ -141,6 +186,7 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
 
   return (
     <div
+      ref={containerRef}
       className={`curved-loop-jacket ${containerClassName || ''}`}
       style={{ opacity: ready ? 1 : 0, transition: 'opacity 0.25s ease-out', cursor: cursorStyle }}
       onPointerDown={onPointerDown}
@@ -167,7 +213,7 @@ export const CurvedLoop: React.FC<CurvedLoopProps> = ({
           <path ref={pathRef} id={pathId} d={pathD} fill="none" stroke="transparent" />
         </defs>
         <text fontWeight="bold" xmlSpace="preserve" className={className} style={{ direction: 'ltr' }}>
-          <textPath ref={textPathRef} href={`#${pathId}`} startOffset={offset + 'px'} xmlSpace="preserve">
+          <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0px" xmlSpace="preserve">
             {totalText}
           </textPath>
         </text>
