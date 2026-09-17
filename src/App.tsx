@@ -11,7 +11,7 @@ import { TrustRibbon } from './components/trust/TrustRibbon';
 import { EcosystemSection } from './components/ecosystem/EcosystemSection';
 import { PortfolioSection } from './components/portfolio/PortfolioSection';
 import { ServicesSection } from './components/services/ServicesSection';
-import { FlowingMenuSection, ManifestoSection, CurvedLoopSection } from './components/showcase';
+import { FlowingMenuSection, ManifestoSection, CurvedLoopSection, TextLoopSection } from './components/showcase';
 
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { MagicBentoSection } from './components/bento';
@@ -214,6 +214,9 @@ export function AppContent() {
             <EcosystemSection
               onOrderProduct={(productName) => handleOpenContact(productName)}
             />
+
+            {/* React Bits Interactive Wave TextLoop Showcase */}
+            <TextLoopSection />
 
             {/* Filterable Portfolio & Live Showcases Grid */}
             <PortfolioSection
