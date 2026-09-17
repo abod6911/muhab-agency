@@ -1,4 +1,4 @@
-import React, { type RefObject, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId, type RefObject } from 'react';
 
 import { useScroll, useTransform, type UseScrollOptions } from 'framer-motion';
 
@@ -90,8 +90,8 @@ export const AnimatedPathText: React.FC<AnimatedPathTextProps> = ({
   scrollTransformValues = [0, 100],
 }) => {
   const textPathRefs = useRef<SVGTextPathElement[]>([]);
-  const generatedId = useRef(`path-${Math.random().toString(36).substring(2, 9)}`);
-  const id = pathId || generatedId.current;
+  const reactId = useId();
+  const id = pathId || `path-${reactId.replace(/:/g, '')}`;
 
   const { scrollYProgress } = useScroll({
     ...(scrollContainer && { container: scrollContainer }),
@@ -123,7 +123,7 @@ export const AnimatedPathText: React.FC<AnimatedPathTextProps> = ({
           begin: '0s',
           dur: `${duration}s`,
           repeatCount: repeatCount,
-          ...(easingFunction && easingFunction),
+          ...(easingFunction ? easingFunction : {}),
         }
       : undefined;
 
