@@ -11,7 +11,8 @@ import { TrustRibbon } from './components/trust/TrustRibbon';
 import { EcosystemSection } from './components/ecosystem/EcosystemSection';
 import { PortfolioSection } from './components/portfolio/PortfolioSection';
 import { ServicesSection } from './components/services/ServicesSection';
-import { FlowingMenuSection, ManifestoSection } from './components/showcase';
+import { FlowingMenuSection, ManifestoSection, CurvedLoopSection } from './components/showcase';
+
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { MagicBentoSection } from './components/bento';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
@@ -199,6 +200,9 @@ export function AppContent() {
 
             {/* 4-Card Trust & Core Differentiators Ribbon */}
             <TrustRibbon />
+
+            {/* Awwwards Interactive Draggable Curved Loop Vision Ribbon from React Bits */}
+            <CurvedLoopSection />
 
             {/* Digital Ecosystem & SaaS Products ("لا نبني مجرد مواقع، بل نبتكر منتجات متكاملة") */}
             <EcosystemSection

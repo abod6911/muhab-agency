@@ -14,3 +14,5 @@ export * from './FlowingMenu';
 export * from './GooeyNav';
 export * from './MagicBento';
 export * from './ScrollReveal';
+export * from './CurvedLoop';
+
