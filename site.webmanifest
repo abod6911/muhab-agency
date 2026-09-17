@@ -1,0 +1,31 @@
+{
+  "name": "MUHAB STUDIO | استوديو مهاب للحلول الرقمية",
+  "short_name": "MUHAB Studio",
+  "description": "صُنّاع المواقع السعودية والأنظمة الرقمية المخصصة في المملكة العربية السعودية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020a06",
+  "theme_color": "#041a12",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/muhab-emblem.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/muhab-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
+  ]
+}
