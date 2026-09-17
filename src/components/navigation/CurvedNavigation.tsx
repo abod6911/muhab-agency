@@ -122,6 +122,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       href: '#portfolio',
     },
     {
+      label: language === 'ar' ? 'بيان الاستوديو' : 'Studio Manifesto',
+      sublabel: language === 'ar' ? 'فلسفة الهندسة والأداء الفائق' : 'Our Engineering Philosophy',
+      href: '#manifesto',
+    },
+    {
       label: language === 'ar' ? 'منظومتنا الرقمية' : 'Digital Ecosystem',
       sublabel: language === 'ar' ? 'تقييمي، بوينت باس، فودس' : 'Taqyeemi, PointPass, Foodus',
       href: '#ecosystem',

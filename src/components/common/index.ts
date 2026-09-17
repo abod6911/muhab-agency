@@ -13,3 +13,4 @@ export * from './ShapeGrid';
 export * from './FlowingMenu';
 export * from './GooeyNav';
 export * from './MagicBento';
+export * from './ScrollReveal';

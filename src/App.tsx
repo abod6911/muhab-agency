@@ -11,7 +11,7 @@ import { TrustRibbon } from './components/trust/TrustRibbon';
 import { EcosystemSection } from './components/ecosystem/EcosystemSection';
 import { PortfolioSection } from './components/portfolio/PortfolioSection';
 import { ServicesSection } from './components/services/ServicesSection';
-import { FlowingMenuSection } from './components/showcase';
+import { FlowingMenuSection, ManifestoSection } from './components/showcase';
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { MagicBentoSection } from './components/bento';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
@@ -210,6 +210,9 @@ export function AppContent() {
               onPreviewProject={(project) => setPreviewProject(project)}
               onRequestSimilar={(title) => handleOpenContact(title)}
             />
+
+            {/* Awwwards Scroll-Driven Typography Reveal Manifesto from React Bits */}
+            <ManifestoSection onOpenContact={(title) => handleOpenContact(title)} />
 
             {/* 6-Card Services Grid Matrix */}
             <ServicesSection
