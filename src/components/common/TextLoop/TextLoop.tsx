@@ -10,7 +10,7 @@ const EDGE_PAD = 6;
 
 export interface TextLoopProps {
   text?: string;
-  shape?: 'wave' | 'circle' | 'infinity' | 'arch' | 'line';
+  shape?: 'wave' | 'wave-reverse' | 'counter-wave' | 'circle' | 'infinity' | 'arch' | 'line';
   path?: string;
   speed?: number;
   direction?: 'forward' | 'reverse';
@@ -56,6 +56,11 @@ const buildPath = (shape: string, curviness: number, ribbonWidth: number): strin
     }
     case 'line':
       return `M -320 ${CY} L ${VIEW_W + 320} ${CY}`;
+    case 'wave-reverse':
+    case 'counter-wave': {
+      const a = Math.min(c * 2.2, room * 2);
+      return `M -320 ${CY} Q -160 ${CY + a} 0 ${CY} T 320 ${CY} T 640 ${CY} T 960 ${CY} T 1280 ${CY} T ${VIEW_W + 320} ${CY}`;
+    }
     case 'wave':
     default: {
       const a = Math.min(c * 2.2, room * 2);
@@ -90,7 +95,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   const headRef = useRef<SVGTextPathElement>(null);
   const tailRef = useRef<SVGTextPathElement>(null);
 
-  const [metrics, setMetrics] = useState({ length: 0, reps: 1 });
+  const [metrics, setMetrics] = useState({ length: 0, reps: 1, unitWidth: 0 });
 
   const rawId = useId();
   const pathId = `text-loop-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
@@ -135,7 +140,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
       if (!length) return;
 
       const reps = unitWidth > 0 ? Math.max(1, Math.round(length / unitWidth)) : 1;
-      setMetrics(prev => (prev.length === length && prev.reps === reps ? prev : { length, reps }));
+      setMetrics(prev => (prev.length === length && prev.reps === reps && prev.unitWidth === unitWidth ? prev : { length, reps, unitWidth }));
     };
 
     measure();
@@ -149,13 +154,16 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   }, [d, unit, fontSize, fontWeight, letterSpacing]);
 
   useEffect(() => {
-    const { length } = metrics;
+    const { length, unitWidth, reps } = metrics;
     const head = headRef.current;
     const tail = tailRef.current;
     if (!head || !tail || !length) return undefined;
 
+    // The cycle distance is the full length of the repeated text string
+    const cycle = unitWidth > 0 ? Math.max(length, unitWidth * reps) : length;
+
     const apply = (offset: number) => {
-      const partner = offset >= 0 ? offset - length : offset + length;
+      const partner = offset >= 0 ? offset - cycle : offset + cycle;
       head.setAttribute('startOffset', String(offset));
       tail.setAttribute('startOffset', String(partner));
     };
@@ -168,8 +176,8 @@ export const TextLoop: React.FC<TextLoopProps> = ({
 
     const state = { offset: 0 };
     const tween = gsap.to(state, {
-      offset: direction === 'reverse' ? -length : length,
-      duration: length / speed,
+      offset: direction === 'reverse' ? -cycle : cycle,
+      duration: cycle / speed,
       ease: 'none',
       repeat: -1,
       onUpdate: () => apply(state.offset)

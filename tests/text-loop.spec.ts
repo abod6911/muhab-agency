@@ -19,20 +19,29 @@ test.describe('React Bits TextLoop Component Integration', () => {
     await expect(waveSection).toBeVisible();
 
     // Verify SVG and text elements
-    const svg = waveSection.locator('.text-loop-svg');
-    await expect(svg).toBeVisible();
+    const svgs = waveSection.locator('.text-loop-svg');
+    await expect(svgs).toHaveCount(2);
 
-    const path = svg.locator('path');
-    await expect(path).toBeVisible();
+    await expect(svgs.first()).toBeVisible();
+    await expect(svgs.last()).toBeVisible();
 
-    // Verify text content exists inside textPath
-    const textPath = svg.locator('textPath').first();
-    await expect(textPath).toBeVisible();
-    await expect(textPath).toContainText('المواقع السعودية');
+    const firstTextPath = svgs.nth(0).locator('textPath').first();
+    await expect(firstTextPath).toBeVisible();
+    await expect(firstTextPath).toContainText('معمارية برمجية سيادية');
+
+    const secondTextPath = svgs.nth(1).locator('textPath').first();
+    await expect(secondTextPath).toBeVisible();
+    await expect(secondTextPath).toContainText('مضاعفة المبيعات');
 
     // Filter out expected autoplay audio warnings
     const realErrors = consoleErrors.filter(e => !e.includes('AudioContext'));
     expect(realErrors.length).toBe(0);
+
+    // Capture desktop screenshot of the dual ribbons
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.waitForTimeout(1200);
+    await waveSection.screenshot({ path: 'tests/screenshots/text-loop-wave-desktop.png' });
+    await waveSection.screenshot({ path: 'C:/Users/abodv/.gemini/antigravity/brain/8f70ae58-764e-47e6-a5a2-09361985db0d/text-loop-wave-desktop.png' });
   });
 
   test('responsive on mobile viewport (iPhone 14)', async ({ page }) => {
@@ -48,10 +57,14 @@ test.describe('React Bits TextLoop Component Integration', () => {
     const waveSection = page.locator('#text-loop-wave');
     await expect(waveSection).toBeVisible();
 
-    const badge = waveSection.locator('text=موجة الانسيابية الرقمية');
+    const badge = waveSection.locator('text=منظومة التميز الحركي المزدوج');
     await expect(badge).toBeVisible();
 
-    const svg = waveSection.locator('.text-loop-svg');
-    await expect(svg).toBeVisible();
+    const svgs = waveSection.locator('.text-loop-svg');
+    await expect(svgs).toHaveCount(2);
+
+    await page.waitForTimeout(1200);
+    await waveSection.screenshot({ path: 'tests/screenshots/text-loop-wave-mobile.png' });
+    await waveSection.screenshot({ path: 'C:/Users/abodv/.gemini/antigravity/brain/8f70ae58-764e-47e6-a5a2-09361985db0d/text-loop-wave-mobile.png' });
   });
 });
