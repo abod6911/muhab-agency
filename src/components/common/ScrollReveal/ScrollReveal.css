@@ -1,0 +1,26 @@
+.scroll-reveal {
+  margin: 20px 0;
+  position: relative;
+  will-change: transform;
+}
+
+.scroll-reveal-text {
+  font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+  line-height: 1.65;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+}
+
+.word {
+  display: inline-block;
+  will-change: opacity, filter;
+  transform: translateZ(0);
+  margin-inline-end: 0.28em;
+}
+
+/* Optional highlight styling for accent words */
+.word--accent {
+  color: #a6ff2e;
+  text-shadow: 0 0 20px rgba(166, 255, 46, 0.4);
+}
