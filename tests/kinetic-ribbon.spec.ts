@@ -50,7 +50,7 @@ test.describe('Kinetic Vision Ribbon (CurvedLoopSection)', () => {
 
       const ribbon = page.locator('#kinetic-ribbon');
       await expect(ribbon.locator('text=MUHAB DIGITAL STUDIO').first()).toBeVisible();
-      await expect(ribbon.locator('text=Interactive Kinetic Vision Ribbon')).toBeVisible();
+      await expect(ribbon.locator('text=BESPOKE WEB ARCHITECTURE').first()).toBeVisible();
     }
   });
 });

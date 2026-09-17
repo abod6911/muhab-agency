@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Sparkles, MoveHorizontal } from 'lucide-react';
 
 export const CurvedLoopSection: React.FC = () => {
   const { language } = useLanguage();
@@ -161,29 +160,12 @@ export const CurvedLoopSection: React.FC = () => {
     <section 
       id="kinetic-ribbon"
       ref={containerRef}
-      className="relative w-full py-5 sm:py-7 md:py-8 bg-gradient-to-b from-[#020a06] via-[#04160d] to-[#020a06] overflow-hidden border-y border-emerald-500/15 select-none"
+      className="relative w-full py-4 sm:py-5 md:py-6 bg-gradient-to-b from-[#020a06] via-[#04160d] to-[#020a06] overflow-hidden border-y border-emerald-500/15 select-none"
       aria-label="Kinetic Studio Vision Ribbon"
     >
       {/* Ambient background glow orbs */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-
-      {/* Micro-Header Guidance Pill */}
-      <div className="flex items-center justify-center mb-3 sm:mb-4 px-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#051a11]/90 border border-emerald-500/30 backdrop-blur-md text-[10px] sm:text-xs font-medium text-emerald-300 shadow-sm whitespace-nowrap">
-          <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e] shrink-0" />
-          <span className="font-semibold tracking-wide">
-            {language === 'ar' ? 'شريط الرؤية الحركي التفاعلي' : 'Interactive Kinetic Vision Ribbon'}
-          </span>
-          <span className="w-1 h-1 rounded-full bg-emerald-500/60 shrink-0" />
-          <div className="flex items-center gap-1.5 text-slate-400">
-            <MoveHorizontal className="w-3.5 h-3.5 text-[#a6ff2e]/90 shrink-0" />
-            <span className="text-[10px] sm:text-[11px]">
-              {language === 'ar' ? 'اسحب للتوجيه والتحكم' : 'Drag to steer'}
-            </span>
-          </div>
-        </div>
-      </div>
 
       {/* Kinetic Angled Ribbon Wrapper */}
       <div 
