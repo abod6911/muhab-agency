@@ -22,8 +22,8 @@ export const MobileQuickActionBar: React.FC<MobileQuickActionBarProps> = ({
       audioSynth.playHarmonicSuccess();
     } catch {}
     const defaultMsg = language === 'ar'
-      ? 'مرحباً استوديو مهاب 👋 أرغب في استشارة وبدء مشروع رقمي جديد.'
-      : 'Hello MUHAB Studio 👋 I would like a consultation for a new project.';
+      ? 'السلام عليكم، استوديو مهاب. أرغب في استشارة وبدء مشروع رقمي جديد.'
+      : 'Hello MUHAB Studio, I would like to inquire about starting a new digital project.';
     window.open(`https://wa.me/966565114955?text=${encodeURIComponent(defaultMsg)}`, '_blank');
   };
 

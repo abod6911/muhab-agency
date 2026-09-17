@@ -377,12 +377,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
 
                 {/* Brief Summary Pill */}
-                <div className="mt-1.5 pt-1.5 border-t border-emerald-500/20 flex items-center justify-center gap-1.5 text-[9.5px] sm:text-[10px] text-slate-300 flex-wrap font-medium">
-                  <span>🏢 {createdOrder.name}</span>
-                  <span>•</span>
-                  <span>🛠️ {createdOrder.service}</span>
-                  <span>•</span>
-                  <span>🌐 {OFFICIAL_DOMAIN}</span>
+                <div className="mt-1.5 pt-1.5 border-t border-emerald-500/20 flex items-center justify-center gap-2 text-[10px] sm:text-[10.5px] text-slate-300 flex-wrap font-medium">
+                  <span className="text-white font-semibold">{createdOrder.name}</span>
+                  <span className="text-emerald-500/50">•</span>
+                  <span className="text-slate-300">{createdOrder.service}</span>
+                  <span className="text-emerald-500/50">•</span>
+                  <span className="text-[#a6ff2e] font-mono">{OFFICIAL_DOMAIN}</span>
                 </div>
               </div>
 
@@ -528,7 +528,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       <span>{language === 'ar' ? 'البريد الإلكتروني للعميل' : 'Client Email'}</span>
                     </div>
                     <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap ${sendMethod === 'email' ? 'bg-[#a6ff2e]/20 text-[#a6ff2e] border border-[#a6ff2e]/40' : 'text-slate-400'}`}>
-                      {sendMethod === 'email' ? (language === 'ar' ? 'مطلوب للتواصل ✉️' : 'Required') : (language === 'ar' ? 'اختياري' : 'Optional')}
+                      {sendMethod === 'email' ? (language === 'ar' ? 'مطلوب للإرسال' : 'Required') : (language === 'ar' ? 'اختياري' : 'Optional')}
                     </span>
                   </label>
                   <input

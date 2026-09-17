@@ -114,9 +114,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
 
         <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-300 shrink-0">
           <Compass className="w-3 h-3 text-[#a6ff2e]" />
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1.5">
             <span>{language === 'ar' ? 'جدة' : 'JEDDAH'}</span>
-            <span className="hidden sm:inline">📍</span>
+            <span className="text-emerald-400/60 hidden sm:inline">•</span>
             <span dir="ltr" className="font-mono hidden xs:inline">21°32'N 39°10'E</span>
           </span>
         </div>

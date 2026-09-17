@@ -6,7 +6,8 @@ import {
   Phone, 
   Clock, 
   Star, 
-  ArrowUpRight 
+  ArrowUpRight,
+  Flame 
 } from 'lucide-react';
 import { ParticleWaveCanvas } from '../common/ParticleWaveCanvas';
 import { audioSynth } from '../../utils/audioSynth';
@@ -99,7 +100,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 </div>
                 <span className="text-emerald-500/40 hidden sm:inline">•</span>
                 <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold">
-                  <span>🔥</span>
+                  <Flame className="w-3.5 h-3.5 text-amber-400" />
                   <span>{language === 'ar' ? 'متبقي مشروعين فقط هذا الشهر' : '2 Priority Slots Left'}</span>
                 </div>
                 <span className="text-emerald-500/40 hidden md:inline">•</span>

@@ -64,21 +64,22 @@ export const sendOrderToEmail = async (
   }).format(new Date());
 
   const postBody: Record<string, any> = {
-    _subject: `🔥 [طلب مشروع جديد #${payload.orderId}] - ${payload.name || 'عميل استوديو مهاب'}`,
+    _subject: `طلب مشروع رسمي [${payload.orderId}] - ${payload.name || 'استوديو مهاب'}`,
     _template: 'table',
     _captcha: 'false',
-    _autoresponse: `مرحباً بك في استوديو مهاب، تم استلام طلبك برقم مرجعي: ${payload.orderId}. سنقوم بمراجعة متطلباتك والتواصل معك فوراً.`,
-    '🔖 رقم الطلب المعتمد (Order ID)': payload.orderId,
-    '🌐 النطاق والمصدر (Domain)': payload.sourceDomain || OFFICIAL_DOMAIN,
-    '👤 الاسم الكريم أو اسم المنشأة': payload.name || 'غير محدد',
-    '📱 رقم التواصل (واتساب)': formatDisplayPhone(payload.phone),
-    '📧 البريد الإلكتروني للعميل': payload.email?.trim() || 'لم يتم إدخاله',
-    '🛠️ نوع الخدمة المطلوبة': payload.service,
-    ...(payload.budget ? { '💰 الميزانية المقدرة للمشروع': payload.budget } : {}),
-    '📝 نبذة وتفاصيل المشروع': payload.brief?.trim() || 'أرغب في مناقشة التفاصيل خلال الاتصال',
-    '🏷️ الوسوم والخيارات السريعة': payload.tags && payload.tags.length > 0 ? payload.tags.join(' • ') : 'لا يوجد',
-    '🚀 طريقة الإرسال والتواصل': payload.sendMethod === 'whatsapp' ? 'الواتساب المباشر' : `البريد الإلكتروني (${COMPANY_EMAIL})`,
-    '⏰ تاريخ ووقت إنشاء الطلب': saudiTimeString,
+    ...(payload.email?.trim() ? { _replyto: payload.email.trim() } : {}),
+    _autoresponse: `شكراً لتواصلكم مع استوديو مهاب للحلول الرقمية. تم توثيق وتسجيل طلبكم رسمياً بالرقم المرجعي: [${payload.orderId}]. سيقوم فريقنا الاستشاري والهندسي بمراجعة متطلباتكم والتواصل معكم خلال وقت وجيز.`,
+    'الرقم المرجعي المعتمد (Order ID)': payload.orderId,
+    'الجهة أو اسم العميل': payload.name || 'غير محدد',
+    'رقم التواصل (هاتف / واتساب)': formatDisplayPhone(payload.phone),
+    'البريد الإلكتروني للعميل': payload.email?.trim() || 'لم يتم إدخاله',
+    'نوع الخدمة المطلوبة': payload.service,
+    ...(payload.budget ? { 'الميزانية المقدرة': payload.budget } : {}),
+    'نطاق وتفاصيل المشروع': payload.brief?.trim() || 'مناقشة التفاصيل ونطاق العمل خلال الاجتماع الاستشاري',
+    'المواصفات والخيارات المختارة': payload.tags && payload.tags.length > 0 ? payload.tags.join(' | ') : 'مواصفات قياسية مخصصة',
+    'قناة التواصل المعتمدة': payload.sendMethod === 'whatsapp' ? 'متابعة مباشرة عبر الواتساب' : `البريد الإلكتروني الرسمي (${COMPANY_EMAIL})`,
+    'تاريخ وتوقيت الطلب (بتوقيت مكة المكرمة)': saudiTimeString,
+    'منصة ومصدر الطلب': `${payload.sourceDomain || OFFICIAL_DOMAIN} (بوابة الطلبات الرسمية)`,
   };
 
   try {
@@ -118,72 +119,80 @@ export const sendOrderToEmail = async (
 };
 
 /**
- * Builds the prefilled WhatsApp URL with the exact matching Order ID
+ * Builds the prefilled WhatsApp URL with the exact matching Order ID (zero emojis, executive tone)
  */
 export const buildWhatsAppUrl = (payload: OrderPayload, language: 'ar' | 'en' = 'ar'): string => {
   const displayPhone = formatDisplayPhone(payload.phone);
   
-  const textAr = `مرحباً استوديو مهاب 👋
-أود استشارة وبدء مشروع رقمي رسمي معكم:
-🔖 رقم الطلب المعتمد: [${payload.orderId}]
-🌐 المصدر: ${payload.sourceDomain || OFFICIAL_DOMAIN}
-• الاسم / المنشأة: ${payload.name || 'غير محدد'}
-• رقم الجوال: ${displayPhone}
-${payload.email ? `• البريد الإلكتروني: ${payload.email}\n` : ''}• الخدمة المطلوبة: ${payload.service}
-${payload.budget ? `• الميزانية المقدرة: ${payload.budget}\n` : ''}• تفاصيل المشروع: ${payload.brief || 'أرغب في مناقشة التفاصيل خلال الاتصال'}
-${payload.tags && payload.tags.length > 0 ? `• إضافات سريعة: ${payload.tags.join(' • ')}\n` : ''}`;
+  const textAr = `السلام عليكم ورحمة الله، استوديو مهاب للحلول الرقمية.
+طلب استشارة وبدء مشروع رقمي رسمي:
 
-  const textEn = `Hello MUHAB Studio 👋
-I would like to consult & launch a digital project:
-🔖 Verified Order ID: [${payload.orderId}]
-🌐 Source: ${payload.sourceDomain || OFFICIAL_DOMAIN}
-• Name / Brand: ${payload.name || 'N/A'}
-• Phone: ${displayPhone}
-${payload.email ? `• Email: ${payload.email}\n` : ''}• Service: ${payload.service}
-${payload.budget ? `• Budget: ${payload.budget}\n` : ''}• Brief: ${payload.brief || 'Let\'s discuss on call'}
-${payload.tags && payload.tags.length > 0 ? `• Tags: ${payload.tags.join(' • ')}\n` : ''}`;
+- الرقم المرجعي للطلب: [${payload.orderId}]
+- منصة المصدر: ${payload.sourceDomain || OFFICIAL_DOMAIN}
+- الاسم / اسم المنشأة: ${payload.name || 'غير محدد'}
+- رقم الاتصال: ${displayPhone}
+${payload.email ? `- البريد الإلكتروني: ${payload.email}\n` : ''}- نوع الخدمة: ${payload.service}
+- نطاق ومواصفات المشروع: ${payload.brief || 'مناقشة التفاصيل خلال الاتصال'}
+${payload.tags && payload.tags.length > 0 ? `- الخيارات المختارة: ${payload.tags.join(' | ')}\n` : ''}`;
+
+  const textEn = `Official Project Inquiry - MUHAB Studio
+Reference Order ID: [${payload.orderId}]
+Source: ${payload.sourceDomain || OFFICIAL_DOMAIN}
+
+- Client / Entity: ${payload.name || 'N/A'}
+- Contact Phone: ${displayPhone}
+${payload.email ? `- Email: ${payload.email}\n` : ''}- Requested Service: ${payload.service}
+- Project Scope: ${payload.brief || 'To be discussed during consultation'}
+${payload.tags && payload.tags.length > 0 ? `- Selected Options: ${payload.tags.join(' | ')}\n` : ''}`;
 
   const message = language === 'ar' ? textAr : textEn;
   return `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
 };
 
 /**
- * Builds direct mailto: URL for instant email composition to muhabagency@gmail.com
+ * Builds direct mailto: URL for instant email composition to muhabagency@gmail.com (zero emojis, executive corporate standard)
  */
 export const buildEmailMailtoUrl = (payload: OrderPayload, language: 'ar' | 'en' = 'ar'): string => {
   const displayPhone = formatDisplayPhone(payload.phone);
   
   const subject = language === 'ar'
-    ? `[طلب مشروع جديد #${payload.orderId}] - ${payload.name || 'استوديو مهاب'}`
-    : `[New Project Request #${payload.orderId}] - ${payload.name || 'MUHAB Studio'}`;
+    ? `طلب مشروع جديد [${payload.orderId}] - ${payload.name || 'استوديو مهاب'}`
+    : `Official Project Inquiry [${payload.orderId}] - ${payload.name || 'MUHAB Studio'}`;
 
-  const bodyAr = `مرحباً استوديو مهاب 👋
-أود طلب استشارة وبدء مشروع رقمي رسمي معكم:
+  const bodyAr = `السادة إدارة استوديو مهاب للحلول الرقمية المحترمين،
+تحية طيبة وبعد،
 
-🔖 رقم الطلب المعتمد: [${payload.orderId}]
-🌐 المصدر: ${payload.sourceDomain || OFFICIAL_DOMAIN}
-👤 الاسم الكريم / اسم المنشأة: ${payload.name || 'غير محدد'}
-📱 رقم الجوال (واتساب): ${displayPhone}
-📧 البريد الإلكتروني للتواصل: ${payload.email || 'غير محدد'}
-🛠️ نوع الخدمة المطلوبة: ${payload.service}
-📝 نبذة وتفاصيل المشروع: ${payload.brief || 'أرغب في مناقشة التفاصيل معكم'}
-${payload.tags && payload.tags.length > 0 ? `🏷️ إضافات سريعة: ${payload.tags.join(' • ')}\n` : ''}
-----------------------------------------
-تم إرسال هذا الطلب رسمياً عبر منصة ${payload.sourceDomain || OFFICIAL_DOMAIN}`;
+أود رفع طلب استشارة وبدء مشروع رقمي وفق البيانات التالية:
 
-  const bodyEn = `Hello MUHAB Studio 👋
-I would like to submit a formal digital project inquiry:
+الرقم المرجعي للطلب: [${payload.orderId}]
+بوابة الطلبات: ${payload.sourceDomain || OFFICIAL_DOMAIN}
 
-🔖 Verified Order Reference ID: [${payload.orderId}]
-🌐 Source: ${payload.sourceDomain || OFFICIAL_DOMAIN}
-👤 Name / Brand: ${payload.name || 'N/A'}
-📱 Phone Number: ${displayPhone}
-📧 Client Email: ${payload.email || 'N/A'}
-🛠️ Service Requested: ${payload.service}
-📝 Project Brief: ${payload.brief || 'To be discussed'}
-${payload.tags && payload.tags.length > 0 ? `🏷️ Selected Tags: ${payload.tags.join(' • ')}\n` : ''}
-----------------------------------------
-Submitted officially via ${payload.sourceDomain || OFFICIAL_DOMAIN}`;
+بيانات العميل والمشروع:
+- الاسم / اسم المنشأة: ${payload.name || 'غير محدد'}
+- رقم الاتصال: ${displayPhone}
+- البريد الإلكتروني: ${payload.email || 'غير محدد'}
+- الخدمة المطلوبة: ${payload.service}
+- نطاق ومتطلبات العمل: ${payload.brief || 'مناقشة التفاصيل خلال الاجتماع'}
+${payload.tags && payload.tags.length > 0 ? `- الخيارات المحددة: ${payload.tags.join(' | ')}\n` : ''}
+
+وتفضلوا بقبول خالص الشكر والتقدير.`;
+
+  const bodyEn = `To MUHAB Studio Management,
+
+Please find the details of our official project inquiry below:
+
+Reference Order ID: [${payload.orderId}]
+Portal: ${payload.sourceDomain || OFFICIAL_DOMAIN}
+
+Client & Project Specifications:
+- Name / Entity: ${payload.name || 'N/A'}
+- Contact Number: ${displayPhone}
+- Email Address: ${payload.email || 'N/A'}
+- Requested Service: ${payload.service}
+- Project Scope: ${payload.brief || 'To be discussed during consultation'}
+${payload.tags && payload.tags.length > 0 ? `- Selected Options: ${payload.tags.join(' | ')}\n` : ''}
+
+Kind regards.`;
 
   const body = language === 'ar' ? bodyAr : bodyEn;
   return `mailto:${COMPANY_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
