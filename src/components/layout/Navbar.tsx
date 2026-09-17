@@ -7,6 +7,7 @@ import {
   Globe
 } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
+import { GooeyNav, type GooeyNavItem } from '../common/GooeyNav';
 
 interface NavbarProps {
   onOpenContact: () => void;
@@ -25,11 +26,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: '#portfolio', label: language === 'ar' ? 'مشاريعنا' : 'Projects' },
-    { href: '#ecosystem', label: language === 'ar' ? 'أعمالنا' : 'Our Work' },
-    { href: '#services', label: language === 'ar' ? 'الخدمات' : 'Services' },
-    { href: '#contact', label: language === 'ar' ? 'تواصل معنا' : 'Contact Us' },
+  const gooeyNavItems: GooeyNavItem[] = [
+    {
+      label: language === 'ar' ? 'مشاريعنا' : 'Portfolio',
+      href: '#portfolio',
+      onClick: (e) => handleNavClick(e as any, '#portfolio'),
+    },
+    {
+      label: language === 'ar' ? 'المسارات التفاعلية' : 'Disciplines',
+      href: '#disciplines',
+      onClick: (e) => handleNavClick(e as any, '#disciplines'),
+    },
+    {
+      label: language === 'ar' ? 'خدماتنا' : 'Services',
+      href: '#services',
+      onClick: (e) => handleNavClick(e as any, '#services'),
+    },
+    {
+      label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics',
+      href: '#metrics',
+      onClick: (e) => handleNavClick(e as any, '#metrics'),
+    },
+    {
+      label: language === 'ar' ? 'تواصل معنا' : 'Contact',
+      href: '#contact',
+      onClick: (e) => handleNavClick(e as any, '#contact'),
+    },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -104,20 +126,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
             </div>
           </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 bg-[#12261e]/60 border border-[#234939] px-6 py-1.5 rounded-full backdrop-blur-md">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-[#a6ff2e] transition-colors duration-200 relative py-0.5 group"
-              >
-                {link.label}
-                <span className="absolute bottom-0 inset-x-0 h-0.5 bg-[#a6ff2e] scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
-              </a>
-            ))}
-          </nav>
+          {/* Desktop Navigation Links with React Bits GooeyNav */}
+          <div className="hidden lg:flex items-center bg-[#071d14]/85 border border-emerald-500/25 p-1 rounded-full backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+            <GooeyNav
+              items={gooeyNavItems}
+              animationTime={500}
+              particleCount={14}
+              particleDistances={[70, 8]}
+              particleR={85}
+              colors={[1, 2, 3, 1, 2, 4]}
+            />
+          </div>
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-2.5">

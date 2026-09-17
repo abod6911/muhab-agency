@@ -7,6 +7,7 @@ import { SectionHeader } from '../common/SectionHeader';
 import { ProjectCard } from './ProjectCard';
 import { Briefcase } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
+import { GooeyNav } from '../common/GooeyNav';
 
 interface PortfolioSectionProps {
   onPreviewProject: (project: Project) => void;
@@ -46,31 +47,25 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
           subtitle={t('portfolioSubtitle')}
         />
 
-        {/* Filter Tabs Bar */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-14 overflow-x-auto py-1 px-2 no-scrollbar max-w-full">
-          {filterTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                try { audioSynth.playHoverBlip(); } catch {}
-                setActiveCategory(tab.id as any);
-              }}
-              className={`relative px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-300 active:scale-95 cursor-pointer ${
-                activeCategory === tab.id
-                  ? 'text-[#041a12] shadow-[0_0_20px_rgba(0,229,153,0.35)]'
-                  : 'text-slate-300 hover:text-white bg-[#12261e]/60 hover:bg-[#12261e] border border-emerald-500/20'
-              }`}
-            >
-              {activeCategory === tab.id && (
-                <motion.div
-                  layoutId="activeFilterPill"
-                  className="absolute inset-0 bg-[#a6ff2e] rounded-2xl -z-0"
-                  transition={{ type: 'spring', stiffness: 450, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{tab.label}</span>
-            </button>
-          ))}
+        {/* Filter Tabs Bar with React Bits GooeyNav */}
+        <div className="flex items-center justify-center mb-10 sm:mb-14 overflow-x-auto py-2 px-2 no-scrollbar max-w-full">
+          <div className="bg-[#071d14]/85 border border-emerald-500/25 p-1 rounded-full backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
+            <GooeyNav
+              items={filterTabs.map((tab) => ({
+                label: tab.label,
+                onClick: (e) => {
+                  e.preventDefault();
+                  try { audioSynth.playHoverBlip(); } catch {}
+                  setActiveCategory(tab.id as any);
+                },
+              }))}
+              animationTime={500}
+              particleCount={14}
+              particleDistances={[75, 10]}
+              particleR={95}
+              colors={[1, 2, 3, 1, 2, 4]}
+            />
+          </div>
         </div>
 
         {/* Projects Grid Container with Stable Min-Height */}
