@@ -17,9 +17,10 @@ import {
   Coffee,
   UtensilsCrossed,
   Sparkles,
-  Flame
+  Flame,
+  Clock,
+  Check
 } from 'lucide-react';
-
 
 import { audioSynth } from '../../utils/audioSynth';
 
@@ -27,15 +28,86 @@ interface PhoneMockupProps {
   onSelectProject: (projectId: string) => void;
 }
 
+interface DishSpec {
+  prepAr: string;
+  prepEn: string;
+  cals: string;
+  dishDescAr: string;
+  dishDescEn: string;
+}
+
+const DISH_SPECS: Record<string, DishSpec> = {
+  'gotcha-fresh-tea': {
+    prepAr: '6 دقائق',
+    prepEn: '6 mins',
+    cals: '240 سعرة',
+    dishDescAr: 'شاي ماتشا ياباني طازج مع طبقة كريمة الجبنة المالحة الغنية وكرات البوبا الطازجة المطبوخة يومياً.',
+    dishDescEn: 'Artisanal ceremonial matcha topped with signature salted cheese foam and slow-cooked boba pearls.',
+  },
+  'alkhal-aldimashki': {
+    prepAr: '12 دقيقة',
+    prepEn: '12 mins',
+    cals: '580 سعرة',
+    dishDescAr: 'شاورما دجاج متبلة على السيخ الشامي الأصيل مع بطاطس مقرمشة، ثومية كريمية، مخلل وخبز صاج طازج.',
+    dishDescEn: 'Authentic Damascene spiced chicken shawarma served with golden fries, garlic dip, and hot saj bread.',
+  },
+  'ueno-saryo': {
+    prepAr: '5 دقائق',
+    prepEn: '5 mins',
+    cals: '180 سعرة',
+    dishDescAr: 'ماتشا احتفالية نقية مستوردة من كيوتو، مخفوقة يدوياً بحليب الشوفان العضوي وقليل من العسل الطبيعي.',
+    dishDescEn: 'Pure Kyoto ceremonial-grade matcha hand-whisked with organic oat milk and a drizzle of natural honey.',
+  },
+  'lavoa': {
+    prepAr: '7 دقائق',
+    prepEn: '7 mins',
+    cals: '310 سعرة',
+    dishDescAr: 'مزيج قهوة مختصة إثيوبية فاخرة مع حليب مبخر وصوص الكاراميل المملح المحضر يدوياً.',
+    dishDescEn: 'Specialty Ethiopian single-origin espresso blended with steamed milk and house salted caramel.',
+  },
+};
+
 export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => {
   const { language, isRTL } = useLanguage();
   // We showcase the 4 authentic flagship projects from muhab.org: Gotcha Tea, Al-Khal, Ueno Saryo, Lavoa Lounge
   const showcaseProjects = projects.slice(0, 4);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [orderToast, setOrderToast] = useState(false);
+
+  // Live real-time clock updating accurately every second
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  });
+
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
+    };
+    updateClock();
+    const timer = setInterval(updateClock, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const current = showcaseProjects[currentIndex];
   const preview = current.devicePreview;
+  const specs = DISH_SPECS[current.id] || {
+    prepAr: '8 دقائق',
+    prepEn: '8 mins',
+    cals: '350 سعرة',
+    dishDescAr: current.descAr,
+    dishDescEn: current.descEn,
+  };
+
+  const handleSimulateOrder = () => {
+    try { audioSynth.playHarmonicSuccess(); } catch {}
+    setOrderToast(true);
+    setTimeout(() => {
+      setOrderToast(false);
+    }, 4000);
+  };
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % showcaseProjects.length);
@@ -167,27 +239,28 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
               className="flex flex-col"
             >
               {/* Header: Project Badge & Verified Rating */}
-              <div className="flex items-center justify-between mb-2.5">
-                <span
-                  className="text-[10px] font-bold px-2.5 py-1 rounded-full border"
+              <div className="flex items-center justify-between mb-2">
+                <div
+                  className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full border backdrop-blur-sm max-w-[170px]"
                   style={{
-                    backgroundColor: `${current.accentColor}15`,
+                    backgroundColor: `${current.accentColor}18`,
                     borderColor: `${current.accentColor}40`,
                     color: current.accentColor,
                   }}
                 >
-                  {language === 'ar' ? preview.badgeAr : preview.badgeEn}
-                </span>
+                  <Sparkles className="w-2.5 h-2.5 shrink-0" />
+                  <span className="truncate">{language === 'ar' ? preview.badgeAr : preview.badgeEn}</span>
+                </div>
 
-                <div className="flex items-center gap-1.5 bg-black/50 px-2.5 py-1 rounded-full border border-white/10 text-xs">
+                <div className="flex items-center gap-1.5 bg-black/50 px-2.5 py-0.5 rounded-full border border-white/10 text-xs">
                   <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                  <span className="font-bold text-white text-[11px]">{preview.rating}</span>
+                  <span className="font-bold text-white text-[11px] font-mono">{preview.rating}</span>
                   <span className="text-[10px] text-slate-400">({preview.reviewCount})</span>
                 </div>
               </div>
 
               {/* Showcase Image with Glowing Tag */}
-              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-3 border border-emerald-500/25">
+              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-2.5 border border-emerald-500/25">
                 <img
                   src={current.image}
                   alt={current.titleAr}
@@ -199,7 +272,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 </span>
               </div>
 
-              {/* Project Title & Price/Metric */}
+              {/* Project Title & Price */}
               <div className="flex items-baseline justify-between gap-2 mb-1">
                 <h4 className="text-sm font-black text-white leading-snug truncate">
                   {language === 'ar' ? preview.heroTitleAr : preview.heroTitleEn}
@@ -209,12 +282,38 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 </span>
               </div>
 
-              <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed mb-2.5">
-                {language === 'ar' ? current.descAr : current.descEn}
+              {/* Appetizing Dish Description (Untruncated & Clear) */}
+              <p className="text-[11px] text-slate-300 leading-relaxed mb-2.5">
+                {language === 'ar' ? specs.dishDescAr : specs.dishDescEn}
               </p>
 
+              {/* Chef Prep & Nutrition Specs Bar */}
+              <div className="grid grid-cols-3 gap-1 mb-2.5 py-1.5 px-2 rounded-xl bg-[#041d13]/85 border border-emerald-500/20 text-center shadow-inner">
+                <div className="flex flex-col items-center justify-center">
+                  <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'التحضير' : 'Prep'}</span>
+                  <span className="text-[10px] font-bold text-slate-100 font-mono flex items-center gap-0.5 mt-0.5">
+                    <Clock className="w-2.5 h-2.5 text-[#a6ff2e]" />
+                    {language === 'ar' ? specs.prepAr : specs.prepEn}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center justify-center border-x border-emerald-500/20">
+                  <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'السعرات' : 'Energy'}</span>
+                  <span className="text-[10px] font-bold text-amber-300 font-mono flex items-center gap-0.5 mt-0.5">
+                    <Flame className="w-2.5 h-2.5 text-amber-400 fill-amber-400/40" />
+                    {specs.cals}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'الطلب الحي' : 'Live Order'}</span>
+                  <span className="text-[10px] font-bold text-[#a6ff2e] flex items-center gap-0.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                    {language === 'ar' ? 'متاح الآن' : 'Available'}
+                  </span>
+                </div>
+              </div>
+
               {/* Bullet Features (High-Trust Points) */}
-              <div className="space-y-1 mb-3 bg-[#072418]/60 p-2.5 rounded-xl border border-emerald-500/15">
+              <div className="space-y-1 mb-3 bg-[#072418]/60 p-2 rounded-xl border border-emerald-500/15">
                 {(language === 'ar' ? preview.subItemsAr : preview.subItemsEn).slice(0, 2).map((item, idx) => (
                   <div key={idx} className="flex items-center gap-1.5 text-[10px] text-slate-200">
                     <CheckCircle2 className="w-3 h-3 text-[#a6ff2e] shrink-0" />
@@ -225,15 +324,25 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
 
               {/* High-Contrast Interactive CTA Button */}
               <button
-                onClick={() => {
-                  try { audioSynth.playHarmonicSuccess(); } catch {}
-                  onSelectProject(current.id);
-                }}
-                className="w-full py-3 rounded-xl font-black text-xs text-[#020b06] bg-[#a6ff2e] hover:bg-[#8ee622] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(166,255,46,0.35)] active:scale-98 transition-all cursor-pointer"
+                onClick={handleSimulateOrder}
+                className={`w-full py-3 rounded-xl font-black text-xs flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer ${
+                  orderToast
+                    ? 'bg-emerald-500 text-white shadow-[0_0_25px_rgba(16,185,129,0.7)]'
+                    : 'text-[#020b06] bg-[#a6ff2e] hover:bg-[#8ee622] shadow-[0_0_20px_rgba(166,255,46,0.35)]'
+                }`}
               >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>{language === 'ar' ? preview.ctaTextAr : preview.ctaTextEn}</span>
-                <ExternalLink className="w-3.5 h-3.5 ms-1 opacity-70" />
+                {orderToast ? (
+                  <>
+                    <Check className="w-4 h-4 stroke-[3]" />
+                    <span>{language === 'ar' ? 'تم إرسال الطلب للمطبخ بنجاح!' : 'Order Dispatched to Kitchen!'}</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <span>{language === 'ar' ? preview.ctaTextAr : preview.ctaTextEn}</span>
+                    <ExternalLink className="w-3.5 h-3.5 ms-1 opacity-70" />
+                  </>
+                )}
               </button>
 
               {/* Integrated Bottom Pagination & Speed Badge */}
@@ -307,24 +416,43 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
         {/* Screen Bezel & Container (Ultra-thin symmetrical 1.15mm bezel) */}
         <div className="relative w-full h-full bg-[#020905] rounded-[44px] overflow-hidden flex flex-col justify-between border border-black/80 ring-1 ring-white/5">
           
-          {/* Status Bar */}
+          {/* Status Bar with LIVE Real-Time Clock */}
           <div className="relative z-30 pt-2.5 px-4 flex items-center justify-between text-slate-300 text-[10px] font-semibold tracking-tight">
-            <span className="font-mono text-[11px] font-bold text-slate-200">20:59</span>
+            <span data-testid="phone-clock" className="font-mono text-[11px] font-bold text-slate-200">
+              {currentTime}
+            </span>
 
             {/* Dynamic Island Pill with Interactive Status */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-2 w-24 h-5.5 bg-black rounded-full flex items-center justify-between px-2 shadow-inner border border-white/10 z-40 group cursor-default">
-              {/* TrueDepth Lens */}
-              <div className="w-2 h-2 rounded-full bg-[#041009] flex items-center justify-center border border-white/10">
-                <div className="w-1 h-1 rounded-full bg-emerald-400/90 shadow-[0_0_6px_#a6ff2e]" />
-              </div>
-              {/* Micro Live Wave */}
-              <div className="flex items-center gap-0.5 opacity-80">
-                <span className="w-0.5 h-1.5 bg-[#a6ff2e] rounded-full animate-pulse" />
-                <span className="w-0.5 h-2.5 bg-[#a6ff2e] rounded-full animate-pulse delay-75" />
-                <span className="w-0.5 h-1 bg-[#a6ff2e] rounded-full animate-pulse delay-150" />
-              </div>
-              {/* Front Camera */}
-              <div className="w-2 h-2 rounded-full bg-[#0b1622] border border-blue-500/20" />
+            <div 
+              onClick={() => setOrderToast((prev) => !prev)}
+              className={`absolute left-1/2 -translate-x-1/2 top-2 h-5.5 bg-black rounded-full flex items-center justify-between px-2 shadow-inner border border-white/10 z-40 group cursor-pointer transition-all duration-300 ${
+                orderToast ? 'w-44 bg-[#041a10] border-[#a6ff2e]/40' : 'w-24 hover:w-28'
+              }`}
+            >
+              {orderToast ? (
+                <div className="flex items-center justify-between w-full text-[9px] text-emerald-300 px-1 font-mono">
+                  <div className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                    <span className="font-bold text-[#a6ff2e]">{language === 'ar' ? 'المطبخ' : 'Kitchen'}</span>
+                  </div>
+                  <span className="text-white font-bold">{specs.prepAr}</span>
+                </div>
+              ) : (
+                <>
+                  {/* TrueDepth Lens */}
+                  <div className="w-2 h-2 rounded-full bg-[#041009] flex items-center justify-center border border-white/10">
+                    <div className="w-1 h-1 rounded-full bg-emerald-400/90 shadow-[0_0_6px_#a6ff2e]" />
+                  </div>
+                  {/* Micro Live Wave */}
+                  <div className="flex items-center gap-0.5 opacity-80">
+                    <span className="w-0.5 h-1.5 bg-[#a6ff2e] rounded-full animate-pulse" />
+                    <span className="w-0.5 h-2.5 bg-[#a6ff2e] rounded-full animate-pulse delay-75" />
+                    <span className="w-0.5 h-1 bg-[#a6ff2e] rounded-full animate-pulse delay-150" />
+                  </div>
+                  {/* Front Camera */}
+                  <div className="w-2 h-2 rounded-full bg-[#0b1622] border border-blue-500/20" />
+                </>
+              )}
             </div>
 
             <div className="flex items-center gap-1 text-slate-200">
@@ -337,7 +465,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
           </div>
 
           {/* Screen Content Slider with Animation */}
-          <div className="relative flex-1 overflow-hidden pt-3">
+          <div className="relative flex-1 overflow-hidden pt-2.5">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.id}
@@ -345,31 +473,32 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, scale: 1.02, y: -8, filter: 'blur(3px)' }}
                 transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full h-full flex flex-col justify-between p-4"
+                className="w-full h-full flex flex-col justify-between p-3.5"
               >
-                {/* App Header */}
+                {/* App Header & Details */}
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span 
-                      className="text-[10px] font-bold px-2 py-0.5 rounded-md border"
+                  <div className="flex items-center justify-between mb-2">
+                    <div 
+                      className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border backdrop-blur-sm max-w-[165px]"
                       style={{
-                        backgroundColor: `${current.accentColor}15`,
-                        borderColor: `${current.accentColor}35`,
+                        backgroundColor: `${current.accentColor}18`,
+                        borderColor: `${current.accentColor}40`,
                         color: current.accentColor,
                       }}
                     >
-                      {language === 'ar' ? preview.badgeAr : preview.badgeEn}
-                    </span>
+                      <Sparkles className="w-2.5 h-2.5 shrink-0" />
+                      <span className="truncate">{language === 'ar' ? preview.badgeAr : preview.badgeEn}</span>
+                    </div>
 
-                    <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded-full border border-white/5">
+                    <div className="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-full border border-white/10">
                       <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
-                      <span className="text-[10px] font-bold text-white">{preview.rating}</span>
+                      <span className="text-[10px] font-bold text-white font-mono">{preview.rating}</span>
                       <span className="text-[9px] text-slate-400">({preview.reviewCount})</span>
                     </div>
                   </div>
 
                   {/* Product Hero Image / Showcase Card */}
-                  <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-2.5 border border-[#1b4d3b] group">
+                  <div className="relative w-full aspect-[16/9.5] rounded-2xl overflow-hidden mb-2 border border-[#1b4d3b] group">
                     <img 
                       src={current.image} 
                       alt={current.titleAr}
@@ -377,24 +506,55 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#020a06] via-transparent to-black/20" />
                     
-                    <span className="absolute bottom-2 inset-inline-start-2 text-[10px] font-bold bg-[#020a06]/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[#a6ff2e] border border-[#1b4d3b]">
+                    <span className="absolute bottom-2 inset-inline-start-2 text-[9.5px] font-bold bg-[#020a06]/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[#a6ff2e] border border-[#1b4d3b]">
                       {language === 'ar' ? preview.highlightTagAr : preview.highlightTagEn}
                     </span>
                   </div>
 
                   {/* Product Title & Highlight Metrics */}
-                  <h4 className="text-sm font-extrabold text-white leading-snug mb-1">
-                    {language === 'ar' ? preview.heroTitleAr : preview.heroTitleEn}
-                  </h4>
+                  <div className="flex items-baseline justify-between gap-1.5 mb-1">
+                    <h4 className="text-sm font-extrabold text-white leading-snug truncate">
+                      {language === 'ar' ? preview.heroTitleAr : preview.heroTitleEn}
+                    </h4>
+                    <span className="text-xs font-black text-[#a6ff2e] shrink-0 font-mono">
+                      {language === 'ar' ? preview.priceTagAr : preview.priceTagEn}
+                    </span>
+                  </div>
 
-                  <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed mb-2.5">
-                    {language === 'ar' ? current.descAr : current.descEn}
+                  {/* Clear & Appetizing Dish Copy (Untruncated) */}
+                  <p className="text-[10.5px] text-slate-300 leading-relaxed mb-2 line-clamp-2">
+                    {language === 'ar' ? specs.dishDescAr : specs.dishDescEn}
                   </p>
 
-                  {/* Feature Sub-items list (2 high-impact verified items) */}
-                  <div className="space-y-1 mb-2.5">
+                  {/* Useful Specs Bar (Chef Prep, Calories, Live Availability) */}
+                  <div className="grid grid-cols-3 gap-1 mb-2 py-1 px-1.5 rounded-xl bg-[#041d13]/85 border border-emerald-500/20 text-center shadow-inner">
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'التحضير' : 'Prep'}</span>
+                      <span className="text-[10px] font-bold text-slate-100 font-mono flex items-center gap-0.5 mt-0.5">
+                        <Clock className="w-2.5 h-2.5 text-[#a6ff2e]" />
+                        {language === 'ar' ? specs.prepAr : specs.prepEn}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center border-x border-emerald-500/20">
+                      <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'السعرات' : 'Energy'}</span>
+                      <span className="text-[10px] font-bold text-amber-300 font-mono flex items-center gap-0.5 mt-0.5">
+                        <Flame className="w-2.5 h-2.5 text-amber-400 fill-amber-400/40" />
+                        {specs.cals}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="text-[8.5px] text-slate-400">{language === 'ar' ? 'الطلب الحي' : 'Live'}</span>
+                      <span className="text-[10px] font-bold text-[#a6ff2e] flex items-center gap-0.5 mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
+                        {language === 'ar' ? 'متاح الآن' : 'Active'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Feature Sub-items list */}
+                  <div className="space-y-1 mb-1">
                     {(language === 'ar' ? preview.subItemsAr : preview.subItemsEn).slice(0, 2).map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-1.5 text-[10px] text-slate-300">
+                      <div key={idx} className="flex items-center gap-1.5 text-[9.5px] text-slate-300">
                         <CheckCircle2 className="w-3 h-3 text-[#a6ff2e] shrink-0" />
                         <span className="truncate">{item}</span>
                       </div>
@@ -402,34 +562,76 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                   </div>
                 </div>
 
-                {/* Bottom App Action Bar with Price & Checkout CTA */}
-                <div className="pt-2 border-t border-[#1b4d3b]/30 bg-[#12261e]/90 backdrop-blur-md -mx-4 -mb-4 p-2.5 rounded-b-[40px]">
+                {/* Bottom App Action Bar with Price & Interactive Checkout CTA */}
+                <div className="pt-2 border-t border-[#1b4d3b]/30 bg-[#0c1f17]/95 backdrop-blur-md -mx-3.5 -mb-3.5 p-2.5 rounded-b-[40px] relative">
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[10px] text-slate-400">
                       {language === 'ar' ? 'السعر الشامل' : 'Total Price'}
                     </span>
-                    <span className="text-xs font-black text-[#a6ff2e]">
+                    <span className="text-xs font-black text-[#a6ff2e] font-mono">
                       {language === 'ar' ? preview.priceTagAr : preview.priceTagEn}
                     </span>
                   </div>
 
                   <button 
-                    onClick={() => {
-                      try { audioSynth.playHarmonicSuccess(); } catch {}
-                      onSelectProject(current.id);
-                    }}
-                    className="w-full py-2.5 rounded-full font-black text-xs text-[#05140c] bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] hover:brightness-110 flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(166,255,46,0.4)] active:scale-98 transition-all cursor-pointer"
+                    onClick={handleSimulateOrder}
+                    className={`w-full py-2.5 rounded-full font-black text-xs flex items-center justify-center gap-2 active:scale-98 transition-all cursor-pointer ${
+                      orderToast 
+                        ? 'bg-emerald-500 text-white shadow-[0_0_25px_rgba(16,185,129,0.7)]' 
+                        : 'text-[#05140c] bg-gradient-to-r from-[#a6ff2e] via-[#b6ff4d] to-[#84cc16] hover:brightness-110 shadow-[0_0_25px_rgba(166,255,46,0.4)]'
+                    }`}
                   >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>{language === 'ar' ? preview.ctaTextAr : preview.ctaTextEn}</span>
+                    {orderToast ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        <span>{language === 'ar' ? 'تم استلام الطلب بنجاح!' : 'Order Received!'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span>{language === 'ar' ? preview.ctaTextAr : preview.ctaTextEn}</span>
+                      </>
+                    )}
                   </button>
 
                   <div className="text-center mt-1">
-                    <span className="text-[9px] text-[#a6ff2e]/80">
+                    <span className="text-[9px] text-[#a6ff2e]/85">
                       {language === 'ar' ? preview.primaryMetricAr : preview.primaryMetricEn}
                     </span>
                   </div>
                 </div>
+
+                {/* In-Screen Animated Live Order Toast Sheet */}
+                <AnimatePresence>
+                  {orderToast && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                      transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                      className="absolute inset-x-2.5 bottom-16 z-50 p-2.5 rounded-2xl bg-[#041a10]/98 border border-[#a6ff2e]/50 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.95),0_0_25px_rgba(166,255,46,0.3)] text-start"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-5 h-5 rounded-full bg-[#a6ff2e] text-[#020704] flex items-center justify-center shrink-0 shadow-sm">
+                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-[10.5px] font-black text-white truncate">
+                            {language === 'ar' ? 'تم إرسال الطلب للمطبخ!' : 'Order Sent to Kitchen!'}
+                          </span>
+                          <span className="text-[9px] text-[#a6ff2e] font-mono">
+                            {language === 'ar' ? 'طلب #584 • دفع Apple Pay' : 'Order #584 • Apple Pay Paid'}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-[9px] text-slate-300 ps-7">
+                        {language === 'ar' 
+                          ? `جاهز خلال ${specs.prepAr} • طاولة رقم 4`
+                          : `Ready in ${specs.prepEn} • Table #4`}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             </AnimatePresence>
           </div>

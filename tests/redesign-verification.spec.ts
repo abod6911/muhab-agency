@@ -10,7 +10,8 @@ test.describe('Redesign Verification: Restored Hero, Darkened Palette & Elevated
     const hero = page.locator('#hero');
     await expect(hero).toBeVisible();
     await expect(page.locator('text=نصمم أفضل المواقع')).toBeVisible();
-    await expect(page.locator('text=20:59')).toBeVisible(); // iPhone status bar
+    await expect(page.locator('[data-testid="phone-clock"]')).toBeVisible(); // iPhone status bar live clock
+    await expect(page.locator('[data-testid="phone-clock"]')).toHaveText(/\d{1,2}:\d{2}/);
     await expect(page.locator('text=Apple Pay').first()).toBeVisible();
 
     // 2. Verify Ecosystem Cards with enhanced mockups

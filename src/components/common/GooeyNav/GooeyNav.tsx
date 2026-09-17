@@ -205,6 +205,7 @@ export const GooeyNav: React.FC<GooeyNavProps> = ({
           {items.map((item, index) => (
             <li key={index} className={activeIndex === index ? 'active' : ''}>
               <a
+                role="button"
                 href={item.href || '#'}
                 onClick={(e) => handleItemClick(e, index, item)}
                 onKeyDown={(e) => handleKeyDown(e, index, item)}
