@@ -27,10 +27,16 @@ export const ParticleWaveCanvas: React.FC<ParticleWaveCanvasProps> = ({
 
     const mouse = { x: -1000, y: -1000, radius: repulsionRadius };
 
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      cachedRect = canvas.getBoundingClientRect();
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+      if (!cachedRect) updateRect();
+      if (!cachedRect) return;
+      mouse.x = e.clientX - cachedRect.left;
+      mouse.y = e.clientY - cachedRect.top;
     };
 
     const handleMouseLeave = () => {
@@ -42,9 +48,15 @@ export const ParticleWaveCanvas: React.FC<ParticleWaveCanvasProps> = ({
       if (!canvas.parentElement) return;
       width = canvas.width = canvas.parentElement.clientWidth;
       height = canvas.height = canvas.parentElement.clientHeight;
+      updateRect();
+    };
+
+    const handleScroll = () => {
+      cachedRect = null;
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseleave', handleMouseLeave);
 
@@ -134,6 +146,7 @@ export const ParticleWaveCanvas: React.FC<ParticleWaveCanvasProps> = ({
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('visibilitychange', handleVisibilityChange);

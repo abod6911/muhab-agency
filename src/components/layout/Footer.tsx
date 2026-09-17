@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
-  MapPin, 
   MessageSquare, 
   Mail, 
   Phone
@@ -72,11 +71,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
               {t('footerDesc')}
             </p>
 
-            {/* Location Pill */}
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300 bg-[#12261e]/80 border border-emerald-500/25 px-3.5 py-2 rounded-xl mb-4">
-              <MapPin className="w-3.5 h-3.5 text-[#a6ff2e]" />
-              <span>{t('footerLocation')}</span>
-            </div>
 
             {/* Availability Status Indicator */}
             <div className="flex items-center gap-2 text-xs font-bold text-[#a6ff2e]">

@@ -16,6 +16,8 @@ test.describe('React Bits TextLoop Component Integration', () => {
     }
 
     const waveSection = page.locator('#text-loop-wave');
+    await waveSection.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(400);
     await expect(waveSection).toBeVisible();
 
     // Verify single SVG and text elements

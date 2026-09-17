@@ -78,12 +78,15 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       const wordElements = el.querySelectorAll('.word');
 
       if (wordElements.length > 0) {
+        const isFinePointer = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches;
+
         gsap.fromTo(
           wordElements,
-          { opacity: baseOpacity, willChange: 'opacity' },
+          { opacity: baseOpacity, y: 10, willChange: 'opacity, transform' },
           {
             ease: 'none',
             opacity: 1,
+            y: 0,
             stagger: 0.05,
             scrollTrigger: {
               trigger: el,
@@ -95,10 +98,11 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
           }
         );
 
-        if (enableBlur) {
+        if (enableBlur && isFinePointer) {
+          const safeBlur = Math.min(blurStrength, 4);
           gsap.fromTo(
             wordElements,
-            { filter: `blur(${blurStrength}px)` },
+            { filter: `blur(${safeBlur}px)` },
             {
               ease: 'none',
               filter: 'blur(0px)',

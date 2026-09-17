@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUp } from 'lucide-react';
 import { LanguageProvider } from './context/LanguageContext';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 import { Navbar } from './components/layout/Navbar';
 import { CurvedNavigation } from './components/navigation';
@@ -45,26 +51,32 @@ export function AppContent() {
   const { scrollYProgress, scrollY } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 350, damping: 30 });
 
-  // Initialize Global Lenis 120 FPS Inertial Smooth Scroll
+  // Initialize Global Lenis 120 FPS Inertial Smooth Scroll synchronized with GSAP
   useEffect(() => {
+    const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: isTouch ? 0.85 : 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.05,
-      touchMultiplier: 1.1,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: false, // Preserves buttery-smooth 120Hz native momentum on mobile touchscreens
     });
 
     (window as unknown as { __lenis: Lenis }).__lenis = lenis;
 
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
+    // Connect Lenis with GSAP ScrollTrigger so they never get desynchronized
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const tickerCb = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(tickerCb);
+    gsap.ticker.lagSmoothing(0);
 
     // Efficient IntersectionObserver for bottom consultation zone (zero layout thrashing)
     const consultationEl = document.querySelector('#consultation');
@@ -97,7 +109,7 @@ export function AppContent() {
     });
 
     return () => {
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(tickerCb);
       unsub();
       if (consultationObserver) {
         consultationObserver.disconnect();

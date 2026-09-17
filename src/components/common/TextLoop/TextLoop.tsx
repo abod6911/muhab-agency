@@ -169,6 +169,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   // Continuous 120 FPS hardware-accelerated RAF animation loop matching CurvedLoopSection
   useEffect(() => {
     let frameId = 0;
+    let isIntersecting = false;
     let isPageVisible = typeof document !== 'undefined' ? !document.hidden : true;
 
     const step = () => {
@@ -194,7 +195,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
         textPath.setAttribute('startOffset', `${offsetRef.current}px`);
       }
 
-      if (isPageVisible) {
+      if (isIntersecting && isPageVisible) {
         frameId = requestAnimationFrame(step);
       } else {
         frameId = 0;
@@ -202,7 +203,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
     };
 
     const start = () => {
-      if (!frameId && isPageVisible) {
+      if (!frameId && isIntersecting && isPageVisible) {
         frameId = requestAnimationFrame(step);
       }
     };
@@ -214,17 +215,30 @@ export const TextLoop: React.FC<TextLoopProps> = ({
       }
     };
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting) start();
+        else stop();
+      },
+      { rootMargin: '120px' }
+    );
+
+    if (rootRef.current) {
+      observer.observe(rootRef.current);
+    }
+
     const handleVisibility = () => {
       isPageVisible = !document.hidden;
-      if (isPageVisible) start();
+      if (isPageVisible && isIntersecting) start();
       else stop();
     };
 
     document.addEventListener('visibilitychange', handleVisibility);
-    start();
 
     return () => {
       stop();
+      observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, [pauseOnHover, textLength]);

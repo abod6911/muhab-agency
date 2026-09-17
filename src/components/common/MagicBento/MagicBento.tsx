@@ -399,28 +399,40 @@ const GlobalSpotlight: React.FC<{
     document.body.appendChild(spotlight);
     spotlightRef.current = spotlight;
 
+    let lastCheckTime = 0;
+    let cachedRect: DOMRect | null = null;
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!spotlightRef.current || !gridRef.current) return;
 
-      const section = gridRef.current.closest('.bento-section') || gridRef.current;
-      const rect = section.getBoundingClientRect();
+      const now = performance.now();
+      if (!cachedRect || now - lastCheckTime > 150) {
+        lastCheckTime = now;
+        const section = gridRef.current.closest('.bento-section') || gridRef.current;
+        cachedRect = section.getBoundingClientRect();
+      }
+
+      const rect = cachedRect;
       const mouseInside =
         rect && e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
 
-      isInsideSection.current = Boolean(mouseInside);
-      const cards = gridRef.current.querySelectorAll('.magic-bento-card');
-
       if (!mouseInside) {
-        gsap.to(spotlightRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: 'power2.out'
-        });
-        cards.forEach(card => {
-          (card as HTMLElement).style.setProperty('--glow-intensity', '0');
-        });
+        if (isInsideSection.current) {
+          isInsideSection.current = false;
+          gsap.to(spotlightRef.current, {
+            opacity: 0,
+            duration: 0.3,
+            ease: 'power2.out'
+          });
+          gridRef.current.querySelectorAll('.magic-bento-card').forEach(card => {
+            (card as HTMLElement).style.setProperty('--glow-intensity', '0');
+          });
+        }
         return;
       }
+
+      isInsideSection.current = true;
+      const cards = gridRef.current.querySelectorAll('.magic-bento-card');
 
       const { proximity, fadeDistance } = calculateSpotlightValues(spotlightRadius);
       let minDistance = Infinity;
@@ -481,10 +493,18 @@ const GlobalSpotlight: React.FC<{
       }
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    const handleScrollOrResize = () => {
+      cachedRect = null;
+    };
+
+    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
+    window.addEventListener('resize', handleScrollOrResize, { passive: true });
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      window.removeEventListener('scroll', handleScrollOrResize);
+      window.removeEventListener('resize', handleScrollOrResize);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
       if (spotlightRef.current && spotlightRef.current.parentNode) {

@@ -92,9 +92,15 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
 
   // Show magnetic button on scroll or when drawer is open
   useEffect(() => {
+    let lastShow = false;
     const handleScroll = () => {
-      setShowMagnetic(window.scrollY > 120);
+      const show = window.scrollY > 120;
+      if (show !== lastShow) {
+        lastShow = show;
+        setShowMagnetic(show);
+      }
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
