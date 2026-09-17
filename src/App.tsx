@@ -13,6 +13,7 @@ import { PortfolioSection } from './components/portfolio/PortfolioSection';
 import { ServicesSection } from './components/services/ServicesSection';
 import { FlowingMenuSection } from './components/showcase';
 import { MetricsSection } from './components/metrics/MetricsSection';
+import { MagicBentoSection } from './components/bento';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
 import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar } from './components/common';
 import { AgencyLandingPage } from './components/agency';
@@ -223,6 +224,9 @@ export function AppContent() {
 
             {/* Metrics, Proof & Engineering Comparison Section */}
             <MetricsSection />
+
+            {/* React Bits Interactive 3D MagicBento Architecture Section */}
+            <MagicBentoSection onOpenContact={(title) => handleOpenContact(title)} />
 
             {/* Awwwards Physics-Driven Interactive Social Showcase */}
             <section id="social-showcase" className="relative py-8 bg-[#020a06] px-4 sm:px-6 lg:px-8">

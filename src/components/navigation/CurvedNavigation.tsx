@@ -142,6 +142,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       href: '#metrics',
     },
     {
+      label: language === 'ar' ? 'المعمارية التقنية' : 'Bento Architecture',
+      sublabel: language === 'ar' ? 'أركان المنظومة الهندسية الفائقة' : 'Interactive 3D Bento Grid',
+      href: '#bento-architecture',
+    },
+    {
       label: language === 'ar' ? 'تواصل معنا' : 'Contact & Booking',
       sublabel: language === 'ar' ? 'استشارة فورية وحساب التكلفة' : 'Direct Inquiry & Proposal',
       href: '#contact',
