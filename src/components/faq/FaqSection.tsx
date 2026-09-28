@@ -88,7 +88,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenContact }) => {
   return (
     <section
       id="faq"
-      className="relative py-20 sm:py-28 bg-[#020a06] text-white overflow-hidden scroll-mt-20 border-t border-emerald-500/15"
+      className="relative pt-24 pb-20 sm:pt-32 sm:pb-28 bg-[#020a06] text-white overflow-hidden scroll-mt-28 border-t border-emerald-500/15"
     >
       {/* Background radial glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(166,255,46,0.06),transparent_60%)] pointer-events-none" />

@@ -73,7 +73,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({
   return (
     <section
       id="process"
-      className="relative py-20 sm:py-28 bg-[#020a06] text-white overflow-hidden scroll-mt-20"
+      className="relative pt-24 pb-20 sm:pt-32 sm:pb-28 bg-[#020a06] text-white overflow-hidden scroll-mt-28"
     >
       {/* Background Ambience & Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(166,255,46,0.08),rgba(2,10,6,0))] pointer-events-none" />

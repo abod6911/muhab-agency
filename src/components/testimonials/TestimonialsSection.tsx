@@ -72,7 +72,7 @@ export const TestimonialsSection: React.FC = () => {
   return (
     <section
       id="testimonials"
-      className="relative py-20 sm:py-28 bg-[#010805] text-white overflow-hidden scroll-mt-20 border-t border-emerald-500/15"
+      className="relative pt-24 pb-20 sm:pt-32 sm:pb-28 bg-[#010805] text-white overflow-hidden scroll-mt-28 border-t border-emerald-500/15"
     >
       {/* Background Lighting Beam */}
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#a6ff2e]/25 to-transparent pointer-events-none" />
