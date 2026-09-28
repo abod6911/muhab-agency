@@ -186,9 +186,21 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
               {language === 'ar' ? 'خريطة الموقع' : 'Sitemap'}
             </a>
             <span>•</span>
-            <a href="#" className="hover:text-white transition-colors">{t('footerPrivacy')}</a>
+            <button
+              type="button"
+              onClick={onOpenContact}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              {t('footerPrivacy')}
+            </button>
             <span>•</span>
-            <a href="#" className="hover:text-white transition-colors">{t('footerTerms')}</a>
+            <button
+              type="button"
+              onClick={onOpenContact}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              {t('footerTerms')}
+            </button>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ import { FlowingMenuSection, ManifestoSection, CurvedLoopSection, TextLoopSectio
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { MagicBentoSection } from './components/bento';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
-import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar } from './components/common';
+import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar, NotFoundPage } from './components/common';
 import { AgencyLandingPage } from './components/agency';
 import { Footer } from './components/layout/Footer';
 import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
@@ -31,6 +31,11 @@ import { projects } from './data/portfolioData';
 import type { Project } from './types';
 
 export function AppContent() {
+  const [isNotFound] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const path = window.location.pathname.replace(/\/+$/, '');
+    return path !== '' && path !== '/index.html';
+  });
   const [activeView] = useState<'classic' | 'agency'>(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=agency')) {
       return 'agency';
@@ -53,6 +58,7 @@ export function AppContent() {
 
   // Initialize Global Lenis 120 FPS Inertial Smooth Scroll synchronized with GSAP
   useEffect(() => {
+    if (isNotFound) return;
     const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
     const lenis = new Lenis({
@@ -117,7 +123,7 @@ export function AppContent() {
       lenis.destroy();
       delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
-  }, [scrollY]);
+  }, [scrollY, isNotFound]);
 
   const scrollToTop = () => {
     const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
@@ -160,6 +166,22 @@ export function AppContent() {
       lenis?.start();
     };
   }, [contactModalOpen, previewProject]);
+
+  if (isNotFound) {
+    return (
+      <div className="min-h-screen w-full bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e]">
+        <NotFoundPage onOpenContact={() => handleOpenContact()} />
+        <ContactModal
+          isOpen={contactModalOpen}
+          onClose={() => {
+            setContactModalOpen(false);
+            setPreselectedService('');
+          }}
+          preselectedService={preselectedService}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e] ambient-glow-bg">

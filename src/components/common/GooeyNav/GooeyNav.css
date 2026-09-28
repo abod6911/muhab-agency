@@ -105,15 +105,7 @@
 }
 
 .gooey-nav-container .effect.text {
-  color: #020a06;
-  font-weight: 800;
-  font-size: 0.8125rem;
-  transition: color 0.3s ease;
-  white-space: nowrap;
-}
-
-.gooey-nav-container .effect.text.active {
-  color: #020a06;
+  display: none !important;
 }
 
 .gooey-nav-container .effect.filter {

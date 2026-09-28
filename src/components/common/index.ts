@@ -17,5 +17,4 @@ export * from './ScrollReveal';
 export * from './CurvedLoop';
 export * from './AnimatedPathText';
 export * from './TextLoop';
-
-
+export * from './NotFoundPage';

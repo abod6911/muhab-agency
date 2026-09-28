@@ -7,7 +7,6 @@ import { SectionHeader } from '../common/SectionHeader';
 import { ProjectCard } from './ProjectCard';
 import { Briefcase } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
-import { GooeyNav } from '../common/GooeyNav';
 
 interface PortfolioSectionProps {
   onPreviewProject: (project: Project) => void;
@@ -18,7 +17,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
   onPreviewProject,
   onRequestSimilar,
 }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<'all' | 'ecommerce' | 'fnb' | 'tea'>('all');
 
   const filterTabs = [
@@ -47,24 +46,43 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
           subtitle={t('portfolioSubtitle')}
         />
 
-        {/* Filter Tabs Bar with React Bits GooeyNav */}
+        {/* Filter Tabs Bar with Animated Sliding Pill */}
         <div className="flex items-center justify-center mb-10 sm:mb-14 overflow-x-auto py-2 px-2 no-scrollbar max-w-full">
-          <div className="bg-[#071d14]/85 border border-emerald-500/25 p-1 rounded-full backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.5)]">
-            <GooeyNav
-              items={filterTabs.map((tab) => ({
-                label: tab.label,
-                onClick: (e) => {
-                  e.preventDefault();
-                  try { audioSynth.playHoverBlip(); } catch {}
-                  setActiveCategory(tab.id as any);
-                },
-              }))}
-              animationTime={500}
-              particleCount={14}
-              particleDistances={[75, 10]}
-              particleR={95}
-              colors={[1, 2, 3, 1, 2, 4]}
-            />
+          <div
+            role="tablist"
+            aria-label={language === 'ar' ? 'تصنيفات المشاريع' : 'Portfolio Categories'}
+            className="inline-flex items-center p-1.5 rounded-full bg-[#061811]/90 backdrop-blur-2xl border border-emerald-500/25 shadow-[0_10px_35px_rgba(0,0,0,0.5)] gap-1 shrink-0"
+          >
+            {filterTabs.map((tab) => {
+              const isActive = activeCategory === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => {
+                    if (activeCategory !== tab.id) {
+                      try { audioSynth.playHoverBlip(); } catch {}
+                      setActiveCategory(tab.id as any);
+                    }
+                  }}
+                  className={`relative z-10 px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-bold transition-colors duration-200 cursor-pointer select-none whitespace-nowrap focus:outline-none ${
+                    isActive
+                      ? 'text-[#020a06]'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="portfolioActiveTabPill"
+                      className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_0_25px_rgba(166,255,46,0.35)] -z-10"
+                      transition={{ type: 'spring', stiffness: 480, damping: 36 }}
+                    />
+                  )}
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

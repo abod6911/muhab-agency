@@ -58,6 +58,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdOrder, setCreatedOrder] = useState<OrderPayload | null>(null);
   const [copied, setCopied] = useState(false);
+  const [formErrors, setFormErrors] = useState<{
+    name?: string;
+    phone?: string;
+    email?: string;
+  }>({});
 
   // Synchronize service when prop changes (React recommended pattern)
   const [prevPropService, setPrevPropService] = useState(preselectedService);
@@ -73,6 +78,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       setCreatedOrder(null);
       setIsSubmitting(false);
       setCopied(false);
+      setFormErrors({});
     }, 400);
   }, [onClose]);
 
@@ -121,14 +127,57 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     }
   };
 
+  const validateForm = (targetMethod: 'email' | 'whatsapp'): boolean => {
+    const errors: { name?: string; phone?: string; email?: string } = {};
+
+    // Validate Name (Required for all channels)
+    if (!formData.name.trim()) {
+      errors.name = language === 'ar' ? 'يرجى كتابة الاسم أو اسم المنشأة' : 'Please enter your name or company';
+    } else if (formData.name.trim().length < 2) {
+      errors.name = language === 'ar' ? 'الاسم يجب أن يحتوي على حرفين على الأقل' : 'Name must be at least 2 characters';
+    }
+
+    // Validate Phone (Required for all channels)
+    const cleanPhone = formData.phone.trim().replace(/[^\d]/g, '');
+    if (!formData.phone.trim()) {
+      errors.phone = language === 'ar' ? 'يرجى إدخال رقم الجوال للتواصل' : 'Please enter your contact phone number';
+    } else if (cleanPhone.length < 8) {
+      errors.phone = language === 'ar' ? 'يرجى إدخال رقم جوال صحيح (8 أرقام على الأقل)' : 'Please enter a valid phone number (at least 8 digits)';
+    }
+
+    // Validate Email (Strictly required for email dispatch, optional but validated if provided for WhatsApp)
+    if (targetMethod === 'email') {
+      if (!formData.email.trim()) {
+        errors.email = language === 'ar' ? 'البريد الإلكتروني مطلوب للإرسال عبر البريد' : 'Email is required for email dispatch';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        errors.email = language === 'ar' ? 'صيغة البريد الإلكتروني غير صحيحة' : 'Invalid email address format';
+      }
+    } else if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errors.email = language === 'ar' ? 'صيغة البريد الإلكتروني غير صحيحة' : 'Invalid email address format';
+    }
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      audioSynth.playTelemetryTick();
+      if (errors.name) {
+        document.getElementById('contact-name-input')?.focus();
+      } else if (errors.phone) {
+        document.getElementById('contact-phone-input')?.focus();
+      } else if (errors.email) {
+        document.getElementById('contact-email-input')?.focus();
+      }
+      return false;
+    }
+
+    return true;
+  };
+
   const processOrder = async (targetMethod: 'email' | 'whatsapp') => {
     if (isSubmitting) return;
 
-    // Validate email if submitting via email channel
-    if (targetMethod === 'email' && !formData.email.trim()) {
-      audioSynth.playTelemetryTick();
-      const emailInput = document.getElementById('contact-email-input');
-      emailInput?.focus();
+    // Strict validation for both WhatsApp and Email before creating order or dispatching
+    if (!validateForm(targetMethod)) {
       return;
     }
 
@@ -432,7 +481,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-2.5 relative z-10">
+            <form noValidate onSubmit={handleSubmit} className="space-y-2.5 relative z-10">
               {/* Name & Phone in 2-column grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {/* Name / Company field */}
@@ -444,14 +493,28 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     <span>{language === 'ar' ? 'الاسم الكريم أو اسم الشركة' : 'Full Name or Company'}</span>
                   </label>
                   <input
+                    id="contact-name-input"
                     type="text"
                     required
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
                     placeholder={language === 'ar' ? 'اكتب اسمك أو اسم شركتك هنا' : 'Enter your name or company'}
                     style={{ fontSize: '16px' }}
-                    className="w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all shadow-inner"
+                    className={`w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
+                      formErrors.name 
+                        ? 'border-rose-500/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/40' 
+                        : 'border-emerald-500/25 hover:border-emerald-500/45 focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30'
+                    }`}
                   />
+                  {formErrors.name && (
+                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                      <span>•</span>
+                      <span>{formErrors.name}</span>
+                    </p>
+                  )}
                 </div>
 
                 {/* Phone field with dedicated Saudi Prefix container */}
@@ -463,7 +526,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     <span>{t('formPhone')}</span>
                   </label>
                   <div 
-                    className="flex items-center rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 focus-within:border-[#a6ff2e] focus-within:ring-1 focus-within:ring-[#a6ff2e]/30 overflow-hidden shadow-inner transition-all"
+                    className={`flex items-center rounded-xl bg-[#0a2318]/70 border overflow-hidden shadow-inner transition-all ${
+                      formErrors.phone 
+                        ? 'border-rose-500/80 focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-500/40' 
+                        : 'border-emerald-500/25 hover:border-emerald-500/45 focus-within:border-[#a6ff2e] focus-within:ring-1 focus-within:ring-[#a6ff2e]/30'
+                    }`}
                     dir="ltr"
                   >
                     <div className="flex items-center gap-1 px-2.5 py-2 bg-[#051810] border-r border-emerald-500/25 text-[11px] font-mono font-bold text-[#a6ff2e] select-none shrink-0">
@@ -471,21 +538,28 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       <span>+966</span>
                     </div>
                     <input
+                      id="contact-phone-input"
                       type="tel"
                       inputMode="numeric"
                       required
                       dir="ltr"
                       value={formData.phone}
                       onChange={(e) => {
-                        // Keep numeric digits, spaces and hyphens clean
                         const val = e.target.value.replace(/[^\d\s-]/g, '');
                         setFormData({ ...formData, phone: val });
+                        if (formErrors.phone) setFormErrors((prev) => ({ ...prev, phone: undefined }));
                       }}
                       placeholder="5X XXX XXXX"
                       style={{ fontSize: '16px' }}
                       className="w-full px-2.5 py-2 bg-transparent text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none font-mono text-left"
                     />
                   </div>
+                  {formErrors.phone && (
+                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                      <span>•</span>
+                      <span>{formErrors.phone}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -536,15 +610,26 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     type="email"
                     required={sendMethod === 'email'}
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
                     placeholder="name@company.com"
                     style={{ fontSize: '16px' }}
                     className={`w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
-                      sendMethod === 'email' 
-                        ? 'border-[#a6ff2e]/40 focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30' 
-                        : 'border-emerald-500/25 hover:border-emerald-500/45 focus:border-[#a6ff2e]'
+                      formErrors.email
+                        ? 'border-rose-500/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/40'
+                        : sendMethod === 'email' 
+                          ? 'border-[#a6ff2e]/40 focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30' 
+                          : 'border-emerald-500/25 hover:border-emerald-500/45 focus:border-[#a6ff2e]'
                     }`}
                   />
+                  {formErrors.email && (
+                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                      <span>•</span>
+                      <span>{formErrors.email}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 

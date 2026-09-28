@@ -2,12 +2,164 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=./" />
-    <script>
-      sessionStorage.redirect = location.href;
-    </script>
-    <title>Muhab Agency - Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - الصفحة غير موجودة | استوديو مهاب</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;900&family=IBM+Plex+Sans+Arabic:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #020a06;
+        color: #f1f5f9;
+        font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+      .top-beam {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2.5px;
+        background: linear-gradient(90deg, #10b981, #a6ff2e, #34d399);
+        box-shadow: 0 0 15px #a6ff2e;
+      }
+      .glow-1 {
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 300px;
+        background: rgba(166, 255, 46, 0.08);
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+      }
+      .card {
+        position: relative;
+        z-index: 10;
+        max-width: 500px;
+        width: 100%;
+        background: linear-gradient(180deg, rgba(8, 40, 27, 0.95), rgba(4, 23, 15, 0.98), #010905);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        border-radius: 28px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 40px rgba(166, 255, 46, 0.12);
+      }
+      .emblem-wrapper {
+        display: inline-flex;
+        padding: 3px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #a6ff2e, #10b981, #041a12);
+        box-shadow: 0 0 25px rgba(166, 255, 46, 0.3);
+        margin-bottom: 24px;
+      }
+      .emblem-inner {
+        width: 56px;
+        height: 56px;
+        background: #020a06;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .emblem-inner img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+      }
+      .code-404 {
+        font-size: 80px;
+        font-weight: 900;
+        font-family: monospace;
+        line-height: 1;
+        background: linear-gradient(180deg, #ffffff, #cbd5e1, rgba(52, 211, 153, 0.4));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 12px;
+      }
+      h1 {
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 10px;
+      }
+      p {
+        font-size: 13.5px;
+        color: #cbd5e1;
+        line-height: 1.6;
+        max-width: 380px;
+        margin: 0 auto 30px;
+      }
+      .btn-home {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 13px 24px;
+        border-radius: 14px;
+        background: linear-gradient(90deg, #a6ff2e, #b8ff52, #a6ff2e);
+        color: #020a06;
+        font-weight: 900;
+        font-size: 14px;
+        text-decoration: none;
+        box-shadow: 0 0 25px rgba(166, 255, 46, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .btn-home:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 35px rgba(166, 255, 46, 0.65);
+      }
+      .footer-strip {
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(16, 185, 129, 0.2);
+        font-size: 11px;
+        color: #94a3b8;
+        font-family: monospace;
+      }
+      .footer-strip b {
+        color: #a6ff2e;
+      }
+    </style>
   </head>
   <body>
+    <div class="top-beam"></div>
+    <div class="glow-1"></div>
+
+    <div class="card">
+      <div class="emblem-wrapper">
+        <div class="emblem-inner">
+          <img src="/favicon-32x32.png" alt="Muhab Studio" />
+        </div>
+      </div>
+
+      <div class="code-404">404</div>
+      <h1>الصفحة المطلوبة غير موجودة</h1>
+      <p>يبدو أنك سلكت مساراً غير صحيح أو تم تحديث الرابط ضمن بنية استوديو مهاب الرقمية الجديدة.</p>
+
+      <a href="/" class="btn-home">
+        <span>العودة إلى الصفحة الرئيسية</span>
+        <span>←</span>
+      </a>
+
+      <div class="footer-strip">
+        <b>MUHAB.org</b> • صُنّاع المواقع والأنظمة الرقمية السعودية
+      </div>
+    </div>
   </body>
 </html>
