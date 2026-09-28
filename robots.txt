@@ -32,4 +32,4 @@ User-agent: *
 Allow: /
 
 # Sitemap Location
-Sitemap: https://temporary-turbo-silver-q7z0t6z.vercel.app/sitemap.xml
+Sitemap: https://muhab.org/sitemap.xml
