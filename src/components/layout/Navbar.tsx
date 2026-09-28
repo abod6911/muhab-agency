@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
 import { Button } from '../common/Button';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
@@ -7,7 +8,6 @@ import {
   Globe
 } from 'lucide-react';
 import { audioSynth } from '../../utils/audioSynth';
-import { GooeyNav, type GooeyNavItem } from '../common/GooeyNav';
 
 interface NavbarProps {
   onOpenContact: () => void;
@@ -17,6 +17,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => {
   const { language, toggleLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeNav, setActiveNav] = useState<string>('#portfolio');
 
   useEffect(() => {
     let lastScrolled = false;
@@ -32,33 +33,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const gooeyNavItems: GooeyNavItem[] = [
+  const navItems = [
     {
       label: language === 'ar' ? 'مشاريعنا' : 'Portfolio',
       href: '#portfolio',
-      onClick: (e) => handleNavClick(e as any, '#portfolio'),
     },
     {
       label: language === 'ar' ? 'المسارات التفاعلية' : 'Disciplines',
       href: '#disciplines',
-      onClick: (e) => handleNavClick(e as any, '#disciplines'),
     },
     {
       label: language === 'ar' ? 'خدماتنا' : 'Services',
       href: '#services',
-      onClick: (e) => handleNavClick(e as any, '#services'),
     },
     {
       label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics',
       href: '#metrics',
-      onClick: (e) => handleNavClick(e as any, '#metrics'),
     },
     {
       label: language === 'ar' ? 'تواصل معنا' : 'Contact',
       href: '#contact',
-      onClick: (e) => handleNavClick(e as any, '#contact'),
     },
   ];
+
+  useEffect(() => {
+    const sectionIds = ['portfolio', 'disciplines', 'services', 'metrics', 'contact'];
+    const handleScrollSpy = () => {
+      const scrollPos = window.scrollY + 140;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveNav(`#${id}`);
+          break;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScrollSpy, { passive: true });
+    return () => window.removeEventListener('scroll', handleScrollSpy);
+  }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -132,16 +145,40 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
             </div>
           </a>
 
-          {/* Desktop Navigation Links with React Bits GooeyNav */}
+          {/* Desktop Navigation Links with Animated Pill Navigation */}
           <div className="hidden lg:flex items-center bg-[#071d14]/85 border border-emerald-500/25 p-1 rounded-full backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
-            <GooeyNav
-              items={gooeyNavItems}
-              animationTime={500}
-              particleCount={14}
-              particleDistances={[70, 8]}
-              particleR={85}
-              colors={[1, 2, 3, 1, 2, 4]}
-            />
+            <nav role="navigation" aria-label="Main Navigation">
+              <ul className="flex items-center gap-0.5 m-0 p-0 list-none">
+                {navItems.map((item) => {
+                  const isActive = activeNav === item.href;
+                  return (
+                    <li key={item.href} className="relative">
+                      <a
+                        href={item.href}
+                        onClick={(e) => {
+                          handleNavClick(e, item.href);
+                          setActiveNav(item.href);
+                        }}
+                        className={`relative z-10 inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-bold transition-colors duration-200 select-none whitespace-nowrap rounded-full cursor-pointer focus:outline-none ${
+                          isActive
+                            ? 'text-[#020a06]'
+                            : 'text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="navbarActivePill"
+                            className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_0_20px_rgba(166,255,46,0.35)] -z-10"
+                            transition={{ type: 'spring', stiffness: 500, damping: 36 }}
+                          />
+                        )}
+                        <span>{item.label}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
           </div>
 
           {/* Desktop Actions */}
