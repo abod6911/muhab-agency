@@ -33,8 +33,11 @@ import type { Project } from './types';
 export function AppContent() {
   const [isNotFound] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
-    const path = window.location.pathname.replace(/\/+$/, '');
-    return path !== '' && path !== '/index.html';
+    const normalized = window.location.pathname
+      .replace(/\/+$/, '')
+      .replace(/^\/muhab-agency(?:\/|$)/i, '')
+      .replace(/^\/index\.html$/i, '');
+    return normalized !== '' && normalized !== '/';
   });
   const [activeView] = useState<'classic' | 'agency'>(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=agency')) {

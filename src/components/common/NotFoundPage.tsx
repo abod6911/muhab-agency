@@ -12,7 +12,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ onOpenContact }) => 
   const isAr = language === 'ar';
 
   const handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = window.location.pathname.startsWith('/muhab-agency') ? '/muhab-agency/' : '/';
   };
 
   const handleContact = () => {
