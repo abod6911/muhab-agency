@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { MagneticSocialDock } from '../common/MagneticSocialDock';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
+import { TrustBadges } from '../trust/TrustBadges';
 
 interface FooterProps {
   onOpenContact: () => void;
@@ -46,6 +47,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenContact }) => {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#a6ff2e]/30 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* National Compliance & Trust Badges */}
+        <div className="mb-14 pb-12 border-b border-emerald-500/15">
+          <TrustBadges />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-emerald-500/15">
           
           {/* Col 1: Brand & Mission (4 cols) */}

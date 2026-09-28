@@ -18,3 +18,4 @@ export * from './CurvedLoop';
 export * from './AnimatedPathText';
 export * from './TextLoop';
 export * from './NotFoundPage';
+export * from './FloatingWhatsApp';

@@ -148,6 +148,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       href: '#disciplines',
     },
     {
+      label: language === 'ar' ? 'منهجية العمل' : 'Methodology',
+      sublabel: language === 'ar' ? 'مراحل البناء وضمان الإطلاق' : '4-Step Engineering Roadmap',
+      href: '#process',
+    },
+    {
       label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics & Proof',
       sublabel: language === 'ar' ? 'أرقام حقيقية للسوق السعودي' : 'Sub-Second Performance',
       href: '#metrics',
@@ -156,6 +161,11 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
       label: language === 'ar' ? 'المعمارية التقنية' : 'Bento Architecture',
       sublabel: language === 'ar' ? 'أركان المنظومة الهندسية الفائقة' : 'Interactive 3D Bento Grid',
       href: '#bento-architecture',
+    },
+    {
+      label: language === 'ar' ? 'الأسئلة الشائعة' : 'FAQ & Inquiries',
+      sublabel: language === 'ar' ? 'إجابات واضحة لقرارات واثقة' : 'Clear Answers to Objections',
+      href: '#faq',
     },
     {
       label: language === 'ar' ? 'تواصل معنا' : 'Contact & Booking',

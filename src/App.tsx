@@ -21,8 +21,11 @@ import { FlowingMenuSection, ManifestoSection, CurvedLoopSection, TextLoopSectio
 
 import { MetricsSection } from './components/metrics/MetricsSection';
 import { MagicBentoSection } from './components/bento';
+import { ProcessSection } from './components/process';
+import { TestimonialsSection } from './components/testimonials';
+import { FaqSection } from './components/faq';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
-import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar, NotFoundPage } from './components/common';
+import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar, NotFoundPage, FloatingWhatsApp } from './components/common';
 import { AgencyLandingPage } from './components/agency';
 import { Footer } from './components/layout/Footer';
 import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
@@ -291,6 +294,9 @@ export function AppContent() {
               onRequestService={(serviceTitle) => handleOpenContact(serviceTitle)}
             />
 
+            {/* 4-Step Engineering Methodology & SLA Roadmap */}
+            <ProcessSection onRequestConsultation={() => handleOpenContact()} />
+
             {/* Awwwards-Grade Interactive Flowing Menu Showcase from React Bits */}
             <FlowingMenuSection
               onOpenContact={(serviceTitle) => handleOpenContact(serviceTitle)}
@@ -302,6 +308,12 @@ export function AppContent() {
 
             {/* React Bits Interactive 3D MagicBento Architecture Section */}
             <MagicBentoSection onOpenContact={(title) => handleOpenContact(title)} />
+
+            {/* Real Client Success Stories & Social Proof */}
+            <TestimonialsSection />
+
+            {/* Transparent B2B FAQ Accordion */}
+            <FaqSection onOpenContact={() => handleOpenContact()} />
 
             {/* Awwwards Physics-Driven Interactive Social Showcase */}
             <section id="social-showcase" className="relative pt-10 sm:pt-12 pb-6 sm:pb-8 bg-[#020a06] px-4 sm:px-6 lg:px-8 scroll-mt-24">
@@ -316,6 +328,11 @@ export function AppContent() {
           <Footer onOpenContact={() => handleOpenContact()} />
         </>
       )}
+
+      {/* Floating High-Converting Smart WhatsApp Action Button (Active Presence & Radar Beacon) */}
+      <FloatingWhatsApp
+        isModalOpen={contactModalOpen || previewProject !== null || curvedNavOpen}
+      />
 
       {/* Live Interactive Project Device Modal */}
       <LivePreviewModal

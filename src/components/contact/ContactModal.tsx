@@ -17,20 +17,21 @@ import {
   Sparkles, 
   Phone, 
   User, 
-  Mail,
+  Mail, 
   Layers, 
-  FileText,
-  CheckCircle2,
-  ChevronDown,
-  ArrowUpRight,
-  ShieldCheck,
-  Zap,
-  Check,
-  Copy,
-  Loader2,
-  Send,
-  ExternalLink
+  FileText, 
+  CheckCircle2, 
+  ChevronDown, 
+  ArrowUpRight, 
+  ShieldCheck, 
+  Zap, 
+  Check, 
+  Copy, 
+  Loader2, 
+  Send, 
+  ExternalLink 
 } from 'lucide-react';
+import { sanitizeInput, sanitizePhone, isValidEmail, submissionRateLimiter } from '../../utils/security';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -53,6 +54,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     brief: '',
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [sendMethod, setSendMethod] = useState<'email' | 'whatsapp'>('email');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -128,17 +130,33 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   };
 
   const validateForm = (targetMethod: 'email' | 'whatsapp'): boolean => {
+    // 0. Anti-bot honeypot check (Silent drop if bot filled hidden field)
+    if (honeypot.trim() !== '') {
+      return false;
+    }
+
+    // 0.1 Rate limiting against brute-force or spam submissions
+    if (!submissionRateLimiter.canSubmit()) {
+      setFormErrors({
+        name: language === 'ar' 
+          ? 'تم تجاوز حد إرسال الطلبات مؤقتاً، يرجى الانتظار دقيقة قبل المحاولة مجدداً' 
+          : 'Submission rate limit exceeded. Please wait a minute before trying again.'
+      });
+      return false;
+    }
+
     const errors: { name?: string; phone?: string; email?: string } = {};
 
     // Validate Name (Required for all channels)
-    if (!formData.name.trim()) {
+    const sanitizedName = sanitizeInput(formData.name.trim());
+    if (!sanitizedName) {
       errors.name = language === 'ar' ? 'يرجى كتابة الاسم أو اسم المنشأة' : 'Please enter your name or company';
-    } else if (formData.name.trim().length < 2) {
+    } else if (sanitizedName.length < 2) {
       errors.name = language === 'ar' ? 'الاسم يجب أن يحتوي على حرفين على الأقل' : 'Name must be at least 2 characters';
     }
 
     // Validate Phone (Required for all channels)
-    const cleanPhone = formData.phone.trim().replace(/[^\d]/g, '');
+    const cleanPhone = sanitizePhone(formData.phone.trim());
     if (!formData.phone.trim()) {
       errors.phone = language === 'ar' ? 'يرجى إدخال رقم الجوال للتواصل' : 'Please enter your contact phone number';
     } else if (cleanPhone.length < 8) {
@@ -146,13 +164,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     }
 
     // Validate Email (Strictly required for email dispatch, optional but validated if provided for WhatsApp)
+    const trimmedEmail = formData.email.trim();
     if (targetMethod === 'email') {
-      if (!formData.email.trim()) {
+      if (!trimmedEmail) {
         errors.email = language === 'ar' ? 'البريد الإلكتروني مطلوب للإرسال عبر البريد' : 'Email is required for email dispatch';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      } else if (!isValidEmail(trimmedEmail)) {
         errors.email = language === 'ar' ? 'صيغة البريد الإلكتروني غير صحيحة' : 'Invalid email address format';
       }
-    } else if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    } else if (trimmedEmail && !isValidEmail(trimmedEmail)) {
       errors.email = language === 'ar' ? 'صيغة البريد الإلكتروني غير صحيحة' : 'Invalid email address format';
     }
 
@@ -189,12 +208,12 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
     const payload: OrderPayload = {
       orderId,
-      name: formData.name.trim(),
-      phone: formData.phone.trim(),
-      email: formData.email.trim(),
-      service: formData.service,
-      brief: formData.brief.trim(),
-      tags: selectedTags,
+      name: sanitizeInput(formData.name.trim()),
+      phone: sanitizePhone(formData.phone.trim()),
+      email: sanitizeInput(formData.email.trim()),
+      service: sanitizeInput(formData.service),
+      brief: sanitizeInput(formData.brief.trim()),
+      tags: selectedTags.map((t) => sanitizeInput(t)),
       sourceDomain: OFFICIAL_DOMAIN,
       sendMethod: targetMethod,
     };
@@ -482,6 +501,18 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             </motion.div>
           ) : (
             <form noValidate onSubmit={handleSubmit} className="space-y-2.5 relative z-10">
+              {/* Security Honeypot Anti-Spam Field - Invisible to genuine users */}
+              <div className="hidden opacity-0 pointer-events-none absolute -left-[9999px]" aria-hidden="true">
+                <input
+                  type="text"
+                  name="website_security_verify"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               {/* Name & Phone in 2-column grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {/* Name / Company field */}
