@@ -336,7 +336,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             exit={{ opacity: 0, scale: 0.94, y: 14 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            className="relative w-full max-w-lg bg-gradient-to-b from-[#09281b]/98 via-[#04170f]/98 to-[#010905] border border-emerald-500/35 hover:border-[#a6ff2e]/45 rounded-2xl sm:rounded-3xl shadow-[0_20px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(166,255,46,0.12)] z-10 px-4 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-5 my-auto max-h-[92vh] overflow-y-auto transition-colors duration-300 [&::-webkit-scrollbar]:hidden"
+            className="relative w-full max-w-lg bg-gradient-to-b from-[#09281b]/98 via-[#04170f]/98 to-[#010905] border border-emerald-500/35 hover:border-[#a6ff2e]/45 rounded-2xl sm:rounded-3xl shadow-[0_20px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(166,255,46,0.12)] z-10 px-3.5 pt-4 pb-3.5 sm:px-6 sm:pt-6 sm:pb-5 my-auto max-h-[92vh] overflow-y-auto transition-colors duration-300 [&::-webkit-scrollbar]:hidden"
           >
             {/* Top Luminous Beam */}
             <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e]" />
@@ -363,19 +363,19 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
           {/* Modal Header (Only shown when form is open) */}
           {!createdOrder && (
-            <div className="mb-3 relative z-10 pe-8 rtl:pe-0 rtl:ps-0">
+            <div className="mb-2 sm:mb-3 relative z-10 pe-7 rtl:pe-0 rtl:ps-0">
               <div className="flex items-center gap-1.5 mb-1">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-[0_0_10px_rgba(166,255,46,0.12)]">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-[0_0_10px_rgba(166,255,46,0.12)]">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
                   <Sparkles className="w-2.5 h-2.5 text-[#a6ff2e]" />
                   <span>{language === 'ar' ? 'استشارة VIP مباشرة • متاح الآن' : 'VIP DIRECT LINE • ONLINE'}</span>
                 </span>
               </div>
 
-              <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
+              <h3 className="text-sm sm:text-lg font-black text-white tracking-tight leading-tight">
                 {t('contactModalTitle')}
               </h3>
-              <p className="text-[11.5px] sm:text-xs text-slate-300 mt-0.5 leading-relaxed">
+              <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5 leading-relaxed hidden sm:block">
                 {t('contactModalSubtitle')}
               </p>
             </div>
@@ -500,7 +500,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
             </motion.div>
           ) : (
-            <form noValidate onSubmit={handleSubmit} className="space-y-2.5 relative z-10">
+            <form noValidate onSubmit={handleSubmit} className="space-y-2 sm:space-y-2.5 relative z-10">
               {/* Security Honeypot Anti-Spam Field - Invisible to genuine users */}
               <div className="hidden opacity-0 pointer-events-none absolute -left-[9999px]" aria-hidden="true">
                 <input
@@ -514,10 +514,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
 
               {/* Name & Phone in 2-column grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                 {/* Name / Company field */}
                 <div className="group/field">
-                  <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center gap-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-0.5 sm:mb-1 flex items-center gap-1.5">
                     <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                       <User className="w-2 h-2 text-[#a6ff2e]" />
                     </div>
@@ -534,14 +534,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     }}
                     placeholder={language === 'ar' ? 'اكتب اسمك أو اسم شركتك هنا' : 'Enter your name or company'}
                     style={{ fontSize: '16px' }}
-                    className={`w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
+                    className={`w-full px-3 py-1.5 sm:py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
                       formErrors.name 
                         ? 'border-rose-500/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/40' 
                         : 'border-emerald-500/25 hover:border-emerald-500/45 focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30'
                     }`}
                   />
                   {formErrors.name && (
-                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                    <p className="text-[10px] text-rose-400 mt-0.5 flex items-center gap-1 font-semibold">
                       <span>•</span>
                       <span>{formErrors.name}</span>
                     </p>
@@ -550,7 +550,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
                 {/* Phone field with dedicated Saudi Prefix container */}
                 <div className="group/field">
-                  <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center gap-1.5">
+                  <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-0.5 sm:mb-1 flex items-center gap-1.5">
                     <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                       <Phone className="w-2 h-2 text-[#a6ff2e]" />
                     </div>
@@ -564,7 +564,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     }`}
                     dir="ltr"
                   >
-                    <div className="flex items-center gap-1 px-2.5 py-2 bg-[#051810] border-r border-emerald-500/25 text-[11px] font-mono font-bold text-[#a6ff2e] select-none shrink-0">
+                    <div className="flex items-center gap-1 px-2.5 py-1.5 sm:py-2 bg-[#051810] border-r border-emerald-500/25 text-[11px] font-mono font-bold text-[#a6ff2e] select-none shrink-0">
                       <span className="text-xs">🇸🇦</span>
                       <span>+966</span>
                     </div>
@@ -582,11 +582,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       }}
                       placeholder="5X XXX XXXX"
                       style={{ fontSize: '16px' }}
-                      className="w-full px-2.5 py-2 bg-transparent text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none font-mono text-left"
+                      className="w-full px-2.5 py-1.5 sm:py-2 bg-transparent text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none font-mono text-left"
                     />
                   </div>
                   {formErrors.phone && (
-                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                    <p className="text-[10px] text-rose-400 mt-0.5 flex items-center gap-1 font-semibold">
                       <span>•</span>
                       <span>{formErrors.phone}</span>
                     </p>
@@ -595,10 +595,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               </div>
 
               {/* Service Select & Optional Email in 2 columns */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                 {/* Service Select */}
                 <div className="group/field">
-                  <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center gap-1.5">
+                  <label className="block text-[11px] sm:text-xs font-bold text-slate-200 mb-0.5 sm:mb-1 flex items-center gap-1.5">
                     <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                       <Layers className="w-2 h-2 text-[#a6ff2e]" />
                     </div>
@@ -609,7 +609,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       style={{ fontSize: '16px' }}
-                      className="w-full ps-3 pe-8 py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
+                      className="w-full ps-3 pe-8 py-1.5 sm:py-2 rounded-xl bg-[#0a2318]/90 border border-emerald-500/25 hover:border-emerald-500/45 text-white text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all cursor-pointer appearance-none shadow-inner"
                     >
                       {serviceOptions.map((opt, i) => (
                         <option key={i} value={opt} className="bg-[#03150d] text-white py-2">
@@ -625,7 +625,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
                 {/* Email field (Highlighted) */}
                 <div className="group/field">
-                  <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
+                  <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-0.5 sm:mb-1 flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                         <Mail className="w-2 h-2 text-[#a6ff2e]" />
@@ -647,7 +647,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     }}
                     placeholder="name@company.com"
                     style={{ fontSize: '16px' }}
-                    className={`w-full px-3 py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
+                    className={`w-full px-3 py-1.5 sm:py-2 rounded-xl bg-[#0a2318]/70 border text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none transition-all shadow-inner ${
                       formErrors.email
                         ? 'border-rose-500/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/40'
                         : sendMethod === 'email' 
@@ -656,7 +656,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     }`}
                   />
                   {formErrors.email && (
-                    <p className="text-[10px] text-rose-400 mt-1 flex items-center gap-1 font-semibold">
+                    <p className="text-[10px] text-rose-400 mt-0.5 flex items-center gap-1 font-semibold">
                       <span>•</span>
                       <span>{formErrors.email}</span>
                     </p>
@@ -666,7 +666,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               {/* Preferred Sending & Contact Channel Selector */}
               <div>
-                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1.5 flex items-center justify-between">
+                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                       <Send className="w-2 h-2 text-[#a6ff2e]" />
@@ -687,20 +687,20 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       audioSynth.playTelemetryTick();
                       setSendMethod('email');
                     }}
-                    className={`h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
+                    className={`h-10 sm:h-12 px-2 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
                       sendMethod === 'email'
                         ? 'bg-gradient-to-r from-[#a6ff2e]/25 via-[#a6ff2e]/10 to-transparent border-[#a6ff2e] text-[#a6ff2e] shadow-[0_0_15px_rgba(166,255,46,0.25)] ring-1 ring-[#a6ff2e]/30'
                         : 'bg-[#0a2318]/60 text-slate-300 border-emerald-500/20 hover:border-emerald-500/40 hover:text-white'
                     }`}
                   >
-                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'email' ? 'bg-[#a6ff2e] text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
-                      <Mail className="w-3.5 h-3.5" />
+                    <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'email' ? 'bg-[#a6ff2e] text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
+                      <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </div>
                     <div className="text-start leading-tight min-w-0">
-                      <div className="text-[11px] sm:text-xs font-black truncate">
+                      <div className="text-[10.5px] sm:text-xs font-black truncate">
                         {language === 'ar' ? 'عبر البريد الإلكتروني' : 'Via Official Email'}
                       </div>
-                      <div className="text-[9px] text-slate-400 font-mono truncate">
+                      <div className="text-[8.5px] sm:text-[9px] text-slate-400 font-mono truncate">
                         muhabagency@gmail.com
                       </div>
                     </div>
@@ -715,20 +715,20 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       audioSynth.playTelemetryTick();
                       setSendMethod('whatsapp');
                     }}
-                    className={`h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
+                    className={`h-10 sm:h-12 px-2 sm:px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-start gap-2 relative ${
                       sendMethod === 'whatsapp'
                         ? 'bg-gradient-to-r from-emerald-500/25 via-emerald-500/10 to-transparent border-emerald-400 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.25)] ring-1 ring-emerald-400/30'
                         : 'bg-[#0a2318]/60 text-slate-300 border-emerald-500/20 hover:border-emerald-500/40 hover:text-white'
                     }`}
                   >
-                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'whatsapp' ? 'bg-emerald-400 text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
-                      <MessageSquare className="w-3.5 h-3.5" />
+                    <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-lg flex items-center justify-center shrink-0 ${sendMethod === 'whatsapp' ? 'bg-emerald-400 text-[#020a06]' : 'bg-white/5 text-slate-400'}`}>
+                      <MessageSquare className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </div>
                     <div className="text-start leading-tight min-w-0">
-                      <div className="text-[11px] sm:text-xs font-black truncate">
+                      <div className="text-[10.5px] sm:text-xs font-black truncate">
                         {language === 'ar' ? 'عبر الواتساب المباشر' : 'Via Direct WhatsApp'}
                       </div>
-                      <div className="text-[9px] text-slate-400 font-mono truncate">
+                      <div className="text-[8.5px] sm:text-[9px] text-slate-400 font-mono truncate">
                         +966 56 511 4955
                       </div>
                     </div>
@@ -738,7 +738,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
 
               {/* Brief field with Quick Suggestions */}
               <div>
-                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-1 flex items-center justify-between">
+                <label className="w-full text-[11px] sm:text-xs font-bold text-slate-200 mb-0.5 sm:mb-1 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="w-3.5 h-3.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 flex items-center justify-center">
                       <FileText className="w-2 h-2 text-[#a6ff2e]" />
@@ -755,7 +755,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, brief: e.target.value })}
                   placeholder={t('formDetailsPlaceholder')}
                   style={{ fontSize: '16px' }}
-                  className="w-full px-3 py-1.5 rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all resize-none shadow-inner"
+                  className="w-full px-3 py-1 sm:py-1.5 rounded-xl bg-[#0a2318]/70 border border-emerald-500/25 hover:border-emerald-500/45 text-white placeholder:text-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#a6ff2e] focus:ring-1 focus:ring-[#a6ff2e]/30 transition-all resize-none shadow-inner h-11 sm:h-16"
                 />
 
                 {/* Quick Suggestion Chips */}

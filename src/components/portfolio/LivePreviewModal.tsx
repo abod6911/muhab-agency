@@ -119,7 +119,7 @@ export const LivePreviewModal: React.FC<LivePreviewModalProps> = ({
                 />
                 
                 {/* Live simulation watermark badge */}
-                <div className="absolute top-3 inset-inline-end-3 bg-[#041a12]/85 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/30 text-[11px] font-bold text-[#a6ff2e] flex items-center gap-1.5 shadow-lg">
+                <div className="absolute top-3 end-3 bg-[#041a12]/85 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-500/30 text-[11px] font-bold text-[#a6ff2e] flex items-center gap-1.5 shadow-lg">
                   <span className="w-2 h-2 rounded-full bg-[#a6ff2e] animate-ping" />
                   <span>MUHAB Bespoke Engine 100/100</span>
                 </div>

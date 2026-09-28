@@ -51,7 +51,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = React.memo(({
         <div className="absolute inset-0 bg-gradient-to-t from-[#020a06] via-[#020a06]/25 to-black/35 opacity-90 group-hover:opacity-70 transition-opacity duration-300 pointer-events-none" />
 
         {/* Category Pill Tag */}
-        <div className="absolute top-3.5 inset-inline-start-3.5 z-10 pointer-events-none">
+        <div className="absolute top-3.5 start-3.5 z-10 pointer-events-none">
           <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-[#020a06]/85 backdrop-blur-md border border-emerald-500/30 text-emerald-300 shadow-lg">
             <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse" />
             {language === 'ar' ? project.categoryLabelAr : project.categoryLabelEn}
@@ -59,7 +59,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = React.memo(({
         </div>
 
         {/* Metric Pill Tag */}
-        <div className="absolute bottom-3.5 inset-inline-start-3.5 z-10 pointer-events-none">
+        <div className="absolute bottom-3.5 start-3.5 z-10 pointer-events-none">
           <span className="text-[11px] sm:text-xs font-bold px-3 py-1 rounded-xl bg-[#020a06]/90 backdrop-blur-md border border-[#a6ff2e]/40 text-[#a6ff2e] shadow-lg flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 text-[#a6ff2e]" />
             {language === 'ar' ? project.metricsAr : project.metricsEn}

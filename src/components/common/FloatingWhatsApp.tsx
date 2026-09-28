@@ -35,7 +35,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
 
   return (
     <div
-      className={`fixed bottom-24 start-4 sm:start-6 lg:bottom-8 lg:start-8 z-40 select-none ${className}`}
+      className={`hidden lg:flex fixed lg:bottom-8 lg:start-8 z-40 select-none ${className}`}
       onMouseEnter={() => {
         setIsHovered(true);
         audioSynth.playHoverBlip();

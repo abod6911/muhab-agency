@@ -47,11 +47,11 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
         />
 
         {/* Filter Tabs Bar with Animated Sliding Pill */}
-        <div className="flex items-center justify-center mb-10 sm:mb-14 overflow-x-auto py-2 px-2 no-scrollbar max-w-full">
+        <div className="flex items-center justify-start sm:justify-center mb-8 sm:mb-12 overflow-x-auto py-2 px-3 sm:px-4 no-scrollbar max-w-full scroll-smooth">
           <div
             role="tablist"
             aria-label={language === 'ar' ? 'تصنيفات المشاريع' : 'Portfolio Categories'}
-            className="inline-flex items-center p-1.5 rounded-full bg-[#061811]/90 backdrop-blur-2xl border border-emerald-500/25 shadow-[0_10px_35px_rgba(0,0,0,0.5)] gap-1 shrink-0"
+            className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-[#061811]/90 backdrop-blur-2xl border border-emerald-500/25 shadow-[0_10px_35px_rgba(0,0,0,0.5)] gap-1 shrink-0 mx-auto sm:mx-0"
           >
             {filterTabs.map((tab) => {
               const isActive = activeCategory === tab.id;
@@ -66,7 +66,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                       setActiveCategory(tab.id as any);
                     }
                   }}
-                  className={`relative z-10 px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-bold transition-colors duration-200 cursor-pointer select-none whitespace-nowrap focus:outline-none ${
+                  className={`relative z-10 px-3.5 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-colors duration-200 cursor-pointer select-none whitespace-nowrap focus:outline-none ${
                     isActive
                       ? 'text-[#020a06]'
                       : 'text-slate-300 hover:text-white'

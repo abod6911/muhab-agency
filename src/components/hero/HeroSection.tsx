@@ -180,17 +180,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               className="w-full sm:w-auto"
             >
-              <a href="#portfolio" className="block w-full sm:w-auto">
-                <button
-                  className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-200 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl shadow-sm text-sm sm:text-base font-semibold"
-                >
-                  <div className="p-1 rounded-full bg-[#051a11] text-[#a6ff2e]">
-                    <Layers className="w-4 h-4 text-[#a6ff2e]" />
-                  </div>
-                  <span>
-                    {language === 'ar' ? 'استكشف أعمالنا الحية' : 'Explore Live Works'}
-                  </span>
-                </button>
+              <a
+                href="#portfolio"
+                className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:px-7 sm:py-4 rounded-full bg-[#071d15]/90 hover:bg-[#0c2a1e] text-slate-200 hover:text-white border border-[#1f4836] hover:border-[#a6ff2e]/70 transition-all duration-300 cursor-pointer overflow-hidden backdrop-blur-xl shadow-sm text-sm sm:text-base font-semibold select-none"
+              >
+                <div className="p-1 rounded-full bg-[#051a11] text-[#a6ff2e]">
+                  <Layers className="w-4 h-4 text-[#a6ff2e]" />
+                </div>
+                <span>
+                  {language === 'ar' ? 'استكشف أعمالنا الحية' : 'Explore Live Works'}
+                </span>
               </a>
             </motion.div>
           </div>
