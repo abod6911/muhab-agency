@@ -4,7 +4,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import { 
   MessageSquare, 
   Phone, 
-  Clock, 
   Star, 
   ArrowUpRight,
   Flame 
@@ -91,47 +90,77 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
             {/* Left Wing (lg:col-span-7): Headline, Guarantees & Primary Action */}
             <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-start">
               
-              {/* Executive Availability Status Bar */}
-              <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 p-1.5 px-3.5 rounded-full bg-[#03150d]/90 border border-emerald-500/30 backdrop-blur-xl mb-6 shadow-inner text-xs">
-                <div className="flex items-center gap-2 text-[#a6ff2e] font-semibold">
+              {/* Executive Availability & Priority Status Bar */}
+              <div className="inline-flex items-center justify-center lg:justify-start gap-2.5 px-4 py-1.5 rounded-full bg-[#041a12]/90 border border-emerald-500/35 backdrop-blur-xl mb-6 shadow-inner text-xs select-none">
+                <div className="flex items-center gap-2 text-[#a6ff2e] font-bold">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a6ff2e] opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]" />
                   </span>
-                  <span>{language === 'ar' ? 'حجوزات الاستوديو مفتوحة' : 'Studio Intake Active'}</span>
+                  <span>{language === 'ar' ? 'حجوزات الاستوديو مفتوحة' : 'Studio Bookings Open'}</span>
                 </div>
-                <span className="text-emerald-500/40 hidden sm:inline">•</span>
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold">
+                <span className="text-emerald-500/40">•</span>
+                <div className="flex items-center gap-1.5 text-amber-300 font-bold text-[11px]">
                   <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{language === 'ar' ? 'متبقي مشروعين فقط هذا الشهر' : '2 Priority Slots Left'}</span>
-                </div>
-                <span className="text-emerald-500/40 hidden md:inline">•</span>
-                <div className="hidden md:flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
-                  <Clock className="w-3.5 h-3.5 text-[#a6ff2e]" />
-                  <span>{language === 'ar' ? 'رد سريع < 15 دقيقة' : '< 15m Fast Response'}</span>
+                  <span>{language === 'ar' ? 'متبقي مشروعين فقط هذا الشهر' : 'Only 2 Project Slots Left This Month'}</span>
                 </div>
               </div>
 
               {/* Main Cinematic Heading */}
               <h3 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-black text-white leading-[1.2] tracking-tight mb-5">
-                <span>{language === 'ar' ? 'جاهز لنقل علامتك التجارية إلى' : 'Ready to elevate your brand to an'}</span>{' '}
+                <span>{language === 'ar' ? 'جاهز لنقل علامتك التجارية إلى' : 'Ready to elevate your brand to'}</span>{' '}
                 <span className="block mt-1.5 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#a6ff2e] to-emerald-300 drop-shadow-[0_0_35px_rgba(166,255,46,0.35)]">
-                  {language === 'ar' ? 'القمة الرقمية الاستثنائية؟' : 'exceptional digital echelon?'}
+                  {language === 'ar' ? 'القمة الرقمية الاستثنائية؟' : 'the next level of digital excellence?'}
                 </span>
               </h3>
 
               {/* Persuasive Subtitle */}
-              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed mb-7 font-normal">
+              <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed mb-6 font-normal">
                 {language === 'ar' 
                   ? 'تواصل مباشرة مع استوديو مهاب، ودعنا نبتكر ونهندس منصتك الرقمية القادمة بأرقى معايير التقنية العالمية، بهندسة معمارية تضمن مضاعفة معدلات التحويل وترسيخ هيبة ومكانة علامتك.' 
                   : 'Connect directly with MUHAB Studio. Let us engineer your upcoming bespoke flagship digital platform with cutting-edge tech that maximizes conversion and brand prestige.'}
               </p>
 
-              {/* 3 Executive Trust Pillars with Prominent 3D Icons */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-8 w-full">
+              {/* Top Priority Action Hub: High Impact WhatsApp CTA + Direct Call */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 w-full sm:w-auto mb-3.5">
+                <button
+                  onClick={handlePrimaryClick}
+                  onMouseEnter={handleHoverSound}
+                  className="relative group/btn flex-1 sm:flex-initial inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:px-9 sm:py-4 rounded-2xl font-black text-sm text-[#041a12] bg-gradient-to-r from-[#a6ff2e] via-[#b8ff4f] to-[#a6ff2e] hover:brightness-105 shadow-[0_0_35px_rgba(166,255,46,0.45),0_10px_25px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(166,255,46,0.7)] active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
+                >
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
+                  <MessageSquare className="w-5 h-5 text-[#041a12] fill-[#041a12]" />
+                  <span>{t('consultationCta')}</span>
+                </button>
+
+                <a
+                  href="tel:+966565114955"
+                  onMouseEnter={handleHoverSound}
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 sm:py-4 rounded-2xl font-bold text-xs text-slate-200 hover:text-white bg-[#051a11] hover:bg-[#0c261b] border border-emerald-500/30 hover:border-[#a6ff2e]/60 active:scale-95 transition-all shadow-md"
+                >
+                  <Phone className="w-4 h-4 text-[#a6ff2e]" />
+                  <span dir="ltr" className="font-mono tracking-wider font-bold">+966 56 511 4955</span>
+                </a>
+              </div>
+
+              {/* Micro Status Hint */}
+              <div className="mb-6 flex items-center justify-center lg:justify-start gap-2.5 text-xs text-slate-300">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a6ff2e] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]" />
+                </span>
+                <span className="font-medium text-slate-300 text-[11px] sm:text-xs">
+                  {language === 'ar' 
+                    ? 'فريق مهاب متصل الآن • جاهزون لبدء مناقشة فكرة مشروعك وتقديم الرؤية الهندسية فورياً' 
+                    : 'MUHAB engineering team online now • Ready to consult on your project'}
+                </span>
+              </div>
+
+              {/* 3 Executive Trust Pillars supporting the decision */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
                 {/* Pillar 1 */}
-                <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
-                  <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
+                <div className="group/pillar relative flex items-center gap-3.5 p-3 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
+                  <div className="relative w-11 h-11 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
                       src={getAssetUrl('assets/icons/saudi-shield.jpg')} 
                       alt="Official SLA" 
@@ -150,8 +179,8 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 </div>
 
                 {/* Pillar 2 */}
-                <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
-                  <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-[#a6ff2e]/50 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
+                <div className="group/pillar relative flex items-center gap-3.5 p-3 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
+                  <div className="relative w-11 h-11 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-[#a6ff2e]/50 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
                       src={getAssetUrl('assets/icons/speed-crystal.jpg')} 
                       alt="Sub-second Speed" 
@@ -170,8 +199,8 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 </div>
 
                 {/* Pillar 3 */}
-                <div className="group/pillar relative flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
-                  <div className="relative w-12 h-12 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
+                <div className="group/pillar relative flex items-center gap-3.5 p-3 rounded-2xl bg-gradient-to-b from-[#072418]/90 via-[#03150e]/90 to-[#010905] border border-emerald-500/25 hover:border-[#a6ff2e]/60 transition-all duration-300 shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_25px_rgba(166,255,46,0.2)] overflow-hidden">
+                  <div className="relative w-11 h-11 rounded-xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover/pillar:border-[#a6ff2e] shrink-0 overflow-hidden shadow-md">
                     <img 
                       src={getAssetUrl('assets/icons/seo-growth.jpg')} 
                       alt="Free Strategy" 
@@ -188,41 +217,6 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                     </span>
                   </div>
                 </div>
-              </div>
-
-              {/* Action Hub: High Impact WhatsApp CTA + Direct Call */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
-                <button
-                  onClick={handlePrimaryClick}
-                  onMouseEnter={handleHoverSound}
-                  className="relative group/btn flex-1 sm:flex-initial inline-flex items-center justify-center gap-3 px-9 py-4 rounded-2xl font-black text-sm text-[#041a12] bg-gradient-to-r from-[#a6ff2e] via-[#b8ff4f] to-[#a6ff2e] hover:brightness-105 shadow-[0_0_35px_rgba(166,255,46,0.45),0_10px_25px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(166,255,46,0.7)] active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
-                >
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
-                  <MessageSquare className="w-5 h-5 text-[#041a12] fill-[#041a12]" />
-                  <span>{t('consultationCta')}</span>
-                </button>
-
-                <a
-                  href="tel:+966565114955"
-                  onMouseEnter={handleHoverSound}
-                  className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl font-bold text-xs text-slate-200 hover:text-white bg-[#051a11] hover:bg-[#0c261b] border border-emerald-500/30 hover:border-[#a6ff2e]/60 active:scale-95 transition-all shadow-md"
-                >
-                  <Phone className="w-4 h-4 text-[#a6ff2e]" />
-                  <span dir="ltr" className="font-mono tracking-wider font-bold">+966 56 511 4955</span>
-                </a>
-              </div>
-
-              {/* Micro Status Hint */}
-              <div className="mt-4 flex items-center justify-center lg:justify-start gap-2.5 text-xs text-slate-300">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a6ff2e] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]" />
-                </span>
-                <span className="font-medium text-slate-300">
-                  {language === 'ar' 
-                    ? 'فريق مهاب متصل الآن • جاهزون لبدء مناقشة فكرة مشروعك وتقديم الرؤية الهندسية فورياً' 
-                    : 'MUHAB engineering team online now • Ready to consult on your project'}
-                </span>
               </div>
             </div>
 

@@ -830,7 +830,7 @@ export const translations = {
     budget1: '10,000 - 25,000 SAR',
     budget2: '25,000 - 50,000 SAR',
     budget3: '50,000 - 100,000+ SAR',
-    consultationTitle: 'Ready to elevate your brand to the next echelon?',
+    consultationTitle: 'Ready to elevate your brand to the next level of digital excellence?',
     consultationSubtitle: 'Connect directly with MUHAB Studio and let us architect your upcoming bespoke website.',
     consultationCta: 'Chat Directly on WhatsApp',
 
