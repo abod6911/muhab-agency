@@ -164,7 +164,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
                 {isActive && (
                   <motion.div
                     layoutId="activeSegmentIndicator"
-                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#84cc16] to-[#a6ff2e] shadow-[0_0_18px_rgba(166,255,46,0.65)]"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#84cc16] to-[#a6ff2e] shadow-[0_2px_8px_rgba(166,255,46,0.25)]"
                     transition={{ type: 'spring', damping: 24, stiffness: 350 }}
                   />
                 )}
@@ -176,11 +176,11 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
         </div>
       </div>
 
-      {/* Ambient background glow behind the phone */}
+      {/* Ambient background glow behind the phone (Soft luxury) */}
       <div 
-        className="absolute -inset-4 sm:-inset-8 rounded-[60px] opacity-40 blur-3xl pointer-events-none transition-colors duration-700"
+        className="absolute -inset-4 sm:-inset-8 rounded-[60px] opacity-30 blur-2xl pointer-events-none transition-colors duration-700"
         style={{
-          background: `radial-gradient(circle, #a6ff2e33 0%, rgba(15, 40, 20, 0.4) 50%, transparent 80%)`,
+          background: `radial-gradient(circle, rgba(166,255,46,0.06) 0%, rgba(15, 40, 20, 0.15) 50%, transparent 80%)`,
         }}
       />
 
@@ -188,7 +188,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
       <motion.div
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="hidden lg:flex absolute top-10 -end-6 xl:-end-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-[#a6ff2e]/40 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(166,255,46,0.25)] select-none hover:scale-105 transition-transform"
+        className="hidden lg:flex absolute top-10 -end-6 xl:-end-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-[#a6ff2e]/30 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.6)] select-none hover:scale-105 transition-transform"
       >
         <div className="w-7 h-7 rounded-xl bg-[#a6ff2e]/15 border border-[#a6ff2e]/35 flex items-center justify-center text-[#a6ff2e] shadow-sm">
           <Zap className="w-3.5 h-3.5 fill-[#a6ff2e]" />
@@ -208,7 +208,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
       <motion.div
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-        className="hidden lg:flex absolute bottom-24 -start-6 xl:-start-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-emerald-500/35 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.8),0_0_20px_rgba(16,185,129,0.2)] select-none hover:scale-105 transition-transform"
+        className="hidden lg:flex absolute bottom-24 -start-6 xl:-start-12 z-40 items-center gap-2.5 p-2.5 rounded-2xl bg-[#041a12]/95 border border-emerald-500/35 backdrop-blur-md shadow-[0_12px_28px_rgba(0,0,0,0.6)] select-none hover:scale-105 transition-transform"
       >
         <div className="w-7 h-7 rounded-xl bg-emerald-500/15 border border-emerald-500/35 flex items-center justify-center text-emerald-400 shadow-sm">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
@@ -228,7 +228,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({ onSelectProject }) => 
           Clean, borderless, zero fake status bar, no double-phone clipping
       ========================================================================== */}
       <div className="block lg:hidden w-full relative z-20">
-        <div className="relative rounded-3xl bg-gradient-to-b from-[#051c12]/95 via-[#03130c]/98 to-[#020a06] border border-emerald-500/35 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_25px_rgba(166,255,46,0.12)] backdrop-blur-2xl">
+        <div className="relative rounded-3xl bg-gradient-to-b from-[#051c12]/95 via-[#03130c]/98 to-[#020a06] border border-emerald-500/35 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.7)] backdrop-blur-lg">
           <AnimatePresence mode="wait">
             <motion.div
               key={current.id + '-mobile'}

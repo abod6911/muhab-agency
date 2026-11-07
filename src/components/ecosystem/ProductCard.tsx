@@ -132,7 +132,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderProduc
               <div className="absolute inset-0 bg-gradient-to-t from-[#020a06]/95 via-[#020a06]/35 to-transparent pointer-events-none" />
               
               {/* NFC Sensor Pulse Tag */}
-              <div className="absolute top-2.5 inset-inline-start-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-[#a6ff2e]/40 text-[10px] font-mono text-[#a6ff2e] shadow-[0_0_12px_rgba(166,255,46,0.3)] z-10">
+              <div className="absolute top-2.5 inset-inline-start-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-emerald-500/40 text-[10px] font-mono text-[#a6ff2e] shadow-sm z-10">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a6ff2e] opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#a6ff2e]"></span>
@@ -328,7 +328,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOrderProduc
           size="md"
           onClick={() => onOrderProduct(language === 'ar' ? product.nameAr : product.nameEn)}
           icon={<ArrowUpRight className={`w-4 h-4 ${isRTL ? 'rotate-[-90deg]' : ''}`} />}
-          className="w-full justify-center shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(166,255,46,0.35)] transition-all font-bold"
+          className="w-full justify-center shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_6px_20px_rgba(166,255,46,0.2)] transition-all font-bold"
         >
           {language === 'ar' ? product.ctaAr : product.ctaEn}
         </Button>

@@ -48,8 +48,18 @@ export function AppContent() {
     }
     return 'classic';
   });
-  const [introExiting, setIntroExiting] = useState(false);
-  const [introFinished, setIntroFinished] = useState(false);
+  const [introExiting, setIntroExiting] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('muhab_intro_seen')) {
+      return true;
+    }
+    return false;
+  });
+  const [introFinished, setIntroFinished] = useState(() => {
+    if (typeof window !== 'undefined' && window.sessionStorage.getItem('muhab_intro_seen')) {
+      return true;
+    }
+    return false;
+  });
   const [curvedNavOpen, setCurvedNavOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState('');
@@ -62,33 +72,34 @@ export function AppContent() {
   const { scrollYProgress, scrollY } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 350, damping: 30 });
 
-  // Initialize Global Lenis 120 FPS Inertial Smooth Scroll synchronized with GSAP
+  // Initialize Global Lenis smooth scroll for Desktop; on mobile touchscreens keep 100% native 120Hz momentum
   useEffect(() => {
     if (isNotFound) return;
     const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
-    const lenis = new Lenis({
-      duration: isTouch ? 0.85 : 1.05,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.0,
-      syncTouch: false, // Preserves buttery-smooth 120Hz native momentum on mobile touchscreens
-    });
+    let lenis: Lenis | null = null;
+    let tickerCb: ((time: number) => void) | null = null;
 
-    (window as unknown as { __lenis: Lenis }).__lenis = lenis;
+    if (!isTouch) {
+      lenis = new Lenis({
+        duration: 0.95,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+      });
 
-    // Connect Lenis with GSAP ScrollTrigger so they never get desynchronized
-    lenis.on('scroll', ScrollTrigger.update);
+      (window as unknown as { __lenis: Lenis }).__lenis = lenis;
+      lenis.on('scroll', ScrollTrigger.update);
 
-    const tickerCb = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+      tickerCb = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
 
-    gsap.ticker.add(tickerCb);
-    gsap.ticker.lagSmoothing(0);
+      gsap.ticker.add(tickerCb);
+      gsap.ticker.lagSmoothing(500, 33);
+    }
 
     // Efficient IntersectionObserver for bottom consultation zone (zero layout thrashing)
     const consultationEl = document.querySelector('#consultation');
@@ -121,13 +132,17 @@ export function AppContent() {
     });
 
     return () => {
-      gsap.ticker.remove(tickerCb);
+      if (tickerCb) {
+        gsap.ticker.remove(tickerCb);
+      }
       unsub();
       if (consultationObserver) {
         consultationObserver.disconnect();
       }
-      lenis.destroy();
-      delete (window as unknown as { __lenis?: Lenis }).__lenis;
+      if (lenis) {
+        lenis.destroy();
+        delete (window as unknown as { __lenis?: Lenis }).__lenis;
+      }
     };
   }, [scrollY, isNotFound]);
 
@@ -190,10 +205,10 @@ export function AppContent() {
   }
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e] ambient-glow-bg">
-      {/* 120 FPS Global Neon Scroll Progress Indicator */}
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-emerald-500/25 selection:text-emerald-300 ambient-glow-bg">
+      {/* Refined Minimal Top Progress Indicator */}
       <motion.div
-        className="fixed top-0 inset-x-0 z-[70] h-[2.5px] bg-gradient-to-r from-emerald-500 via-[#a6ff2e] to-emerald-400 origin-left rtl:origin-right shadow-[0_0_12px_#a6ff2e,0_0_20px_rgba(166,255,46,0.6)] pointer-events-none"
+        className="fixed top-0 inset-x-0 z-[70] h-[2px] bg-gradient-to-r from-emerald-600 via-[#a6ff2e] to-emerald-500 origin-left rtl:origin-right shadow-[0_1px_4px_rgba(166,255,46,0.25)] pointer-events-none"
         style={{ scaleX: smoothProgress }}
       />
 
@@ -204,10 +219,10 @@ export function AppContent() {
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            whileHover={{ scale: 1.1, y: -2 }}
+            whileHover={{ scale: 1.08, y: -2 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToTop}
-            className="hidden lg:flex fixed bottom-6 end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/35 hover:border-[#a6ff2e] text-[#a6ff2e] shadow-[0_10px_30px_rgba(0,0,0,0.6),0_0_20px_rgba(166,255,46,0.25)] backdrop-blur-xl transition-all cursor-pointer group"
+            className="hidden lg:flex fixed bottom-6 end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/25 hover:border-emerald-500/50 text-[#a6ff2e] shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all cursor-pointer group"
             aria-label="Scroll to top"
           >
             <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
@@ -223,10 +238,12 @@ export function AppContent() {
       </AnimatePresence>
 
       {/* Luxury Cinematic Awwwards Entry Splash Screen */}
-      <IntroSplashScreen 
-        onStartExit={() => setIntroExiting(true)} 
-        onComplete={() => setIntroFinished(true)}
-      />
+      {!introFinished && (
+        <IntroSplashScreen 
+          onStartExit={() => setIntroExiting(true)} 
+          onComplete={() => setIntroFinished(true)}
+        />
+      )}
 
       {/* Sticky Global Navigation */}
       <Navbar 

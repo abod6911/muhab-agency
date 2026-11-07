@@ -67,23 +67,23 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
         transformStyle: 'preserve-3d',
       }}
       whileHover={{ y: -6 }}
-      className="relative rounded-3xl bg-gradient-to-b from-[#0b2419]/90 via-[#05170f]/95 to-[#020a06] border border-emerald-500/25 hover:border-[#a6ff2e]/80 p-6 sm:p-7 shadow-[0_15px_40px_rgba(0,0,0,0.6)] hover:shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9),0_0_40px_rgba(166,255,46,0.2)] transition-all duration-500 group flex flex-col justify-between overflow-hidden cursor-pointer"
+      className="relative rounded-3xl bg-gradient-to-b from-[#0b2419]/90 via-[#05170f]/95 to-[#020a06] border border-emerald-500/25 hover:border-emerald-500/50 p-6 sm:p-7 shadow-[0_12px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.85)] transition-all duration-500 group flex flex-col justify-between overflow-hidden cursor-pointer"
     >
       {/* Top Shimmer Specular Light Streak */}
-      <div className="absolute inset-x-0 top-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent rounded-t-3xl opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_15px_#a6ff2e] transition-all duration-500 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent rounded-t-3xl opacity-40 group-hover:opacity-100 group-hover:shadow-[0_1px_4px_rgba(166,255,46,0.25)] transition-all duration-500 pointer-events-none" />
 
       {/* Dynamic Cursor-following Specular Glare */}
       <div 
         className="pointer-events-none absolute inset-0 rounded-3xl transition-opacity duration-300 z-10"
         style={{
-          background: `radial-gradient(circle 280px at ${glarePos.x}% ${glarePos.y}%, rgba(166, 255, 46, 0.18) 0%, transparent 80%)`,
+          background: `radial-gradient(circle 280px at ${glarePos.x}% ${glarePos.y}%, rgba(166, 255, 46, 0.08) 0%, transparent 80%)`,
           opacity: glarePos.opacity,
         }}
       />
 
       {/* Ambient Background Corner Radiance */}
       <div 
-        className="absolute -top-16 -end-16 w-44 h-44 rounded-full bg-[#a6ff2e]/10 blur-3xl pointer-events-none group-hover:bg-[#a6ff2e]/25 transition-all duration-500" 
+        className="absolute -top-16 -end-16 w-36 h-36 rounded-full bg-emerald-500/5 blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all duration-500" 
       />
 
       <div className="relative z-20" style={{ transform: 'translateZ(25px)' }}>
@@ -93,10 +93,10 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
           {/* Hyper-Realistic 3D Icon Badge Container */}
           <div className="relative group/icon flex items-center justify-center shrink-0">
             {/* Ambient Aura Halo behind the icon */}
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-emerald-500/40 via-[#a6ff2e]/30 to-emerald-500/40 blur-md opacity-30 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="absolute -inset-1 rounded-2xl bg-emerald-500/20 blur-sm opacity-20 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
             
             {/* Outer Physical Frame */}
-            <div className="relative w-15 h-15 sm:w-16 sm:h-16 p-1 rounded-2xl bg-gradient-to-b from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 group-hover:border-[#a6ff2e] shadow-[0_10px_25px_rgba(0,0,0,0.8),0_0_18px_rgba(166,255,46,0.18)] group-hover:shadow-[0_12px_35px_rgba(0,0,0,0.9),0_0_28px_rgba(166,255,46,0.45)] transition-all duration-500 overflow-hidden flex items-center justify-center">
+            <div className="relative w-15 h-15 sm:w-16 sm:h-16 p-1 rounded-2xl bg-gradient-to-b from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/30 group-hover:border-emerald-500/60 shadow-[0_8px_20px_rgba(0,0,0,0.7)] transition-all duration-500 overflow-hidden flex items-center justify-center">
               {item.image ? (
                 <img 
                   src={getAssetUrl(item.image)} 
@@ -116,7 +116,7 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
           </div>
 
           {/* Metric Status Badge */}
-          <span className="text-[10.5px] sm:text-[11px] font-mono font-bold px-3 py-1.5 rounded-full bg-[#051c12]/90 border border-emerald-500/30 text-[#a6ff2e] group-hover:bg-[#a6ff2e]/15 group-hover:border-[#a6ff2e]/50 shadow-[0_0_15px_rgba(0,0,0,0.5)] transition-all flex items-center gap-1.5 shrink-0">
+          <span className="text-[10.5px] sm:text-[11px] font-mono font-bold px-3 py-1.5 rounded-full bg-[#051c12]/90 border border-emerald-500/30 text-[#a6ff2e] group-hover:bg-[#a6ff2e]/10 group-hover:border-emerald-500/40 shadow-sm transition-all flex items-center gap-1.5 shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse" />
             <span>{badgeText}</span>
           </span>
@@ -138,7 +138,7 @@ const BentoTrustCard: React.FC<BentoTrustCardProps> = ({ item, index }) => {
       <div className="relative z-20 mt-6 pt-4 border-t border-emerald-500/15 flex items-center justify-between text-[10.5px] font-mono text-emerald-400/70">
         <span className="tracking-wider">0{index + 1} // BESPOKE SYSTEM</span>
         <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all shadow-[0_0_8px_#a6ff2e]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] opacity-40 group-hover:opacity-100 group-hover:scale-125 transition-all shadow-sm" />
           <span className="text-[9px] text-slate-400 group-hover:text-[#a6ff2e] transition-colors uppercase">MUHAB</span>
         </div>
       </div>

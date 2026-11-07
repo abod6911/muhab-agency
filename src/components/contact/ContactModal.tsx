@@ -339,11 +339,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             className="relative w-full max-w-lg bg-gradient-to-b from-[#09281b]/98 via-[#04170f]/98 to-[#010905] border border-emerald-500/35 hover:border-[#a6ff2e]/45 rounded-2xl sm:rounded-3xl shadow-[0_20px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(166,255,46,0.12)] z-10 px-3.5 pt-4 pb-3.5 sm:px-6 sm:pt-6 sm:pb-5 my-auto max-h-[92vh] overflow-y-auto transition-colors duration-300 [&::-webkit-scrollbar]:hidden"
           >
             {/* Top Luminous Beam */}
-            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e]" />
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent shadow-[0_1px_4px_rgba(166,255,46,0.25)]" />
 
             {/* Ambient Corner Lighting */}
-            <div className="absolute -top-24 -left-24 w-52 h-52 bg-[#a6ff2e]/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -right-24 w-52 h-52 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -left-24 w-40 h-40 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-40 h-40 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
 
             {/* Premium Animated Close (X) Button */}
             <motion.button
@@ -352,10 +352,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({
               whileTap={{ scale: 0.9 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               onClick={() => {
-                audioSynth.playHoverBlip();
                 handleCloseModal();
               }}
-              className="absolute top-3 sm:top-4 rtl:left-3 rtl:sm:left-4 rtl:right-auto ltr:right-3 ltr:sm:right-4 ltr:left-auto w-7.5 h-7.5 rounded-full bg-white/5 hover:bg-[#a6ff2e]/20 text-slate-400 hover:text-[#a6ff2e] border border-white/10 hover:border-[#a6ff2e]/50 flex items-center justify-center transition-colors cursor-pointer z-20 shadow-[0_3px_12px_rgba(0,0,0,0.4)]"
+              className="absolute top-3 sm:top-4 rtl:left-3 rtl:sm:left-4 rtl:right-auto ltr:right-3 ltr:sm:right-4 ltr:left-auto w-7.5 h-7.5 rounded-full bg-white/5 hover:bg-[#a6ff2e]/20 text-slate-400 hover:text-[#a6ff2e] border border-white/10 hover:border-[#a6ff2e]/50 flex items-center justify-center transition-colors cursor-pointer z-20 shadow-sm"
               aria-label="Close modal"
             >
               <X className="w-3.5 h-3.5" />
@@ -365,7 +364,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           {!createdOrder && (
             <div className="mb-2 sm:mb-3 relative z-10 pe-7 rtl:pe-0 rtl:ps-0">
               <div className="flex items-center gap-1.5 mb-1">
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-[0_0_10px_rgba(166,255,46,0.12)]">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-[10px] font-bold shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-ping" />
                   <Sparkles className="w-2.5 h-2.5 text-[#a6ff2e]" />
                   <span>{language === 'ar' ? 'استشارة VIP مباشرة • متاح الآن' : 'VIP DIRECT LINE • ONLINE'}</span>
@@ -390,10 +389,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
             >
               {/* Glowing Success Ring */}
               <div className="relative">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#a6ff2e]/15 border-2 border-[#a6ff2e] flex items-center justify-center text-[#a6ff2e] shadow-[0_0_30px_rgba(166,255,46,0.45)]">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#a6ff2e]/15 border-2 border-[#a6ff2e] flex items-center justify-center text-[#a6ff2e] shadow-[0_4px_16px_rgba(166,255,46,0.2)]">
                   <CheckCircle2 className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
-                <div className="absolute -inset-1 bg-[#a6ff2e]/20 rounded-full blur-md -z-10 animate-pulse" />
+                <div className="absolute -inset-1 bg-[#a6ff2e]/10 rounded-full blur-md -z-10" />
               </div>
 
               {/* Title & Email Dispatch Notification */}
@@ -406,7 +405,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     ? 'تم إرسال كافة تفاصيل ومواصفات طلبك رسمياً إلى بريد الشركة:'
                     : 'All order specifications sent officially to the agency email:'}
                 </p>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] font-mono text-[11px] sm:text-xs font-bold mt-1 shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] font-mono text-[11px] sm:text-xs font-bold mt-1 shadow-sm">
                   <Mail className="w-3 h-3" />
                   <span>{COMPANY_EMAIL}</span>
                 </div>
@@ -420,7 +419,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 </div>
 
                 <div className="flex items-center justify-center gap-2.5 my-1">
-                  <span className="text-lg sm:text-xl font-black font-mono text-[#a6ff2e] tracking-widest drop-shadow-[0_0_12px_rgba(166,255,46,0.6)]">
+                  <span className="text-lg sm:text-xl font-black font-mono text-[#a6ff2e] tracking-widest drop-shadow-[0_1px_3px_rgba(166,255,46,0.25)]">
                     {createdOrder.orderId}
                   </span>
 
@@ -462,7 +461,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleOpenMailApp}
-                  className="w-full group py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.4)] hover:shadow-[0_0_35px_rgba(166,255,46,0.65)] transition-all cursor-pointer"
+                  className="w-full group py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_4px_16px_rgba(166,255,46,0.22)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.32)] transition-all cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-[#020a06]" />
@@ -800,7 +799,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       disabled={isSubmitting}
                       whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
                       whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
+                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_4px_16px_rgba(166,255,46,0.22)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.32)] transition-all cursor-pointer disabled:opacity-80"
                     >
                       {isSubmitting ? (
                         <div className="w-full flex items-center justify-center gap-2 py-0.5">
@@ -840,7 +839,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                       disabled={isSubmitting}
                       whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
                       whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_35px_rgba(166,255,46,0.55)] transition-all cursor-pointer disabled:opacity-80"
+                      className="w-full group relative overflow-hidden py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#a6ff2e] via-[#b8ff52] to-[#a6ff2e] text-[#020a06] font-black text-xs sm:text-sm flex items-center justify-between shadow-[0_4px_16px_rgba(166,255,46,0.22)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.32)] transition-all cursor-pointer disabled:opacity-80"
                     >
                       {isSubmitting ? (
                         <div className="w-full flex items-center justify-center gap-2 py-0.5">

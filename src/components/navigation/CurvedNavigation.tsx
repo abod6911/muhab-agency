@@ -296,7 +296,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               }`}
             >
               {/* Top Luminous Neon Beam */}
-              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e]" />
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent shadow-[0_1px_4px_rgba(166,255,46,0.25)]" />
 
               {/* Dynamic SVG Curve attached to the drawer leading edge (Desktop / Tablet only) */}
               <div className="hidden md:block pointer-events-none">
@@ -307,7 +307,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
               <div className="flex items-center justify-between border-b border-[#1b4d3b]/40 pb-3 shrink-0 gap-3">
                 {/* Official Logo Brand */}
                 <div className="flex items-center gap-2 sm:gap-2.5">
-                  <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_15px_rgba(166,255,46,0.25)] shrink-0">
+                  <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-sm shrink-0">
                     <div className="w-full h-full bg-[#020a06] rounded-[7px] flex items-center justify-center p-0.5 overflow-hidden">
                       <MuhabEmblemImage size={20} />
                     </div>
@@ -432,7 +432,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                       onClick={() => {
                         try { audioSynth.playHarmonicSuccess(); } catch {}
                       }}
-                      className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#a6ff2e] to-[#84cc16] text-[#020a06] text-xs font-black flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(166,255,46,0.3)] hover:shadow-[0_0_25px_rgba(166,255,46,0.5)] transition-all cursor-pointer"
+                      className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#a6ff2e] to-[#84cc16] text-[#020a06] text-xs font-black flex items-center justify-center gap-2 shadow-sm hover:shadow-[0_4px_14px_rgba(166,255,46,0.25)] transition-all cursor-pointer"
                     >
                       <span>{language === 'ar' ? 'تواصل مع المهندس الآن' : 'Chat With Lead Architect'}</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -488,7 +488,7 @@ export const CurvedNavigation: React.FC<CurvedNavigationProps> = ({
                       handleClose();
                       if (onOpenContact) onOpenContact();
                     }}
-                    className="w-full sm:w-auto py-2.5 px-5 rounded-full bg-[#a6ff2e] hover:bg-[#b6ff4d] text-[#09110d] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(166,255,46,0.35)] active:scale-95 transition-all cursor-pointer touch-manipulation min-h-[40px]"
+                    className="w-full sm:w-auto py-2.5 px-5 rounded-full bg-[#a6ff2e] hover:bg-[#b6ff4d] text-[#09110d] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(166,255,46,0.25)] active:scale-95 transition-all cursor-pointer touch-manipulation min-h-[40px]"
                   >
                     <span>{t('ctaStartProject')}</span>
                     <ArrowUpRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-[-90deg]' : ''}`} />

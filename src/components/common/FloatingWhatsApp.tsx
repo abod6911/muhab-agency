@@ -49,17 +49,17 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
           onClick={handleClick}
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
-          className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#041a10] via-[#092e1e] to-[#041a10] border border-[#a6ff2e]/50 hover:border-[#a6ff2e] flex items-center justify-center text-[#a6ff2e] shadow-[0_10px_30px_rgba(0,0,0,0.8),0_0_25px_rgba(166,255,46,0.35)] cursor-pointer group"
+          className="relative w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#041a10] via-[#092e1e] to-[#041a10] border border-emerald-500/50 hover:border-[#a6ff2e]/80 flex items-center justify-center text-[#a6ff2e] shadow-[0_8px_24px_rgba(0,0,0,0.6)] cursor-pointer group"
           aria-label={isAr ? 'محادثة مباشرة عبر واتساب' : 'Direct WhatsApp Chat'}
         >
           {/* Radar Ping Beacon Ring */}
-          <span className="absolute -inset-1 rounded-full bg-[#a6ff2e]/20 animate-ping pointer-events-none" />
+          <span className="absolute -inset-1 rounded-full bg-emerald-500/15 animate-ping pointer-events-none" />
 
           {/* Glowing Green Core */}
-          <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_10px_rgba(166,255,46,0.7)]" />
+          <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_1px_3px_rgba(166,255,46,0.3)]" />
 
           {/* Active Online Indicator Dot */}
-          <span className="absolute top-1 end-1 w-3.5 h-3.5 rounded-full bg-[#a6ff2e] border-2 border-[#020a06] shadow-[0_0_8px_#a6ff2e]" />
+          <span className="absolute top-1 end-1 w-3.5 h-3.5 rounded-full bg-[#a6ff2e] border-2 border-[#020a06] shadow-sm" />
         </motion.button>
 
         {/* Floating Tooltip Pill (Desktop & on hover or subtle beacon) */}
@@ -70,7 +70,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: isAr ? 10 : -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#041d13]/95 border border-[#a6ff2e]/40 shadow-[0_8px_25px_rgba(0,0,0,0.7),0_0_15px_rgba(166,255,46,0.2)] backdrop-blur-md pointer-events-none"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#041d13]/95 border border-emerald-500/40 shadow-[0_8px_20px_rgba(0,0,0,0.6)] backdrop-blur-md pointer-events-none"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e]" />
               <div className="flex flex-col text-start">

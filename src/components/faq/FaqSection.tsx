@@ -100,7 +100,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenContact }) => {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-xs font-bold uppercase tracking-wider mb-4 shadow-[0_0_15px_rgba(166,255,46,0.15)]"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-xs font-bold uppercase tracking-wider mb-4 shadow-sm"
           >
             <HelpCircle className="w-3.5 h-3.5" />
             <span>{isAr ? 'إجابات واضحة وشفافة' : 'Transparent Answers'}</span>
@@ -172,7 +172,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenContact }) => {
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                         isOpen
-                          ? 'bg-[#a6ff2e] text-[#020a06] shadow-[0_0_15px_rgba(166,255,46,0.4)]'
+                          ? 'bg-[#a6ff2e] text-[#020a06] shadow-sm'
                           : 'bg-[#a6ff2e]/10 text-[#a6ff2e] border border-[#a6ff2e]/25'
                       }`}
                     >

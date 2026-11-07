@@ -43,9 +43,9 @@ export const MobileQuickActionBar: React.FC<MobileQuickActionBarProps> = ({
       className="fixed inset-x-3 z-40 lg:hidden pointer-events-auto"
       style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom, 0.75rem))' }}
     >
-      <div className="relative w-full max-w-sm mx-auto rounded-full bg-[#03140e]/95 backdrop-blur-2xl border border-emerald-500/40 p-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(166,255,46,0.22)] flex items-center justify-between gap-2">
+      <div className="relative w-full max-w-sm mx-auto rounded-full bg-[#03140e]/95 backdrop-blur-xl border border-emerald-500/35 p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.85)] flex items-center justify-between gap-2">
         {/* Top luminous border line */}
-        <div className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-[#a6ff2e]/60 to-transparent" />
+        <div className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-[#a6ff2e]/40 to-transparent" />
 
         {/* 1. Direct WhatsApp Instant Line */}
         <button
@@ -65,7 +65,7 @@ export const MobileQuickActionBar: React.FC<MobileQuickActionBarProps> = ({
         {/* 2. Primary Consultation Modal Trigger */}
         <button
           onClick={handleConsultClick}
-          className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-full bg-[#a6ff2e] hover:bg-[#8ee622] text-[#020b06] text-xs font-black transition-all active:scale-95 cursor-pointer shadow-[0_0_18px_rgba(166,255,46,0.35)] group"
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-full bg-[#a6ff2e] hover:bg-[#8ee622] text-[#020b06] text-xs font-black transition-all active:scale-95 cursor-pointer shadow-[0_2px_10px_rgba(166,255,46,0.22)] group"
           aria-label={language === 'ar' ? 'طلب استشارة VIP' : 'Book VIP Call'}
         >
           <Sparkles className="w-3.5 h-3.5 text-[#020b06]" />

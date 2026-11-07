@@ -19,28 +19,28 @@ export const TrustBadges: React.FC<TrustBadgesProps> = ({
       title: language === 'ar' ? 'توثيق رسمي معتمد' : 'Saudi Business Center',
       subtitle: language === 'ar' ? 'المركز السعودي للأعمال' : 'Officially Registered Entity',
       badge: language === 'ar' ? 'معتمد' : 'Verified',
-      glow: 'rgba(166,255,46,0.35)',
+      glow: 'rgba(166,255,46,0.12)',
     },
     {
       icon: ShieldCheck,
       title: language === 'ar' ? 'سجل تجاري نظامي' : 'Official Commercial Reg.',
       subtitle: language === 'ar' ? 'موثق ومعتمد تجارياً' : 'Compliant & Verified CR',
       badge: language === 'ar' ? 'رسمي' : 'Official',
-      glow: 'rgba(16,185,129,0.35)',
+      glow: 'rgba(16,185,129,0.12)',
     },
     {
       icon: Lock,
       title: language === 'ar' ? 'تشفير 256-bit بنكي' : '256-Bit Bank Grade SSL',
       subtitle: language === 'ar' ? 'حماية بيانات ودفع مشفرة' : 'Encrypted & Secure Payments',
       badge: language === 'ar' ? 'مشفر' : 'Encrypted',
-      glow: 'rgba(52,211,153,0.35)',
+      glow: 'rgba(52,211,153,0.12)',
     },
     {
       icon: Zap,
       title: language === 'ar' ? 'ضمان أداء < 0.8s' : 'Ultra-Fast 0.8s SLA',
       subtitle: language === 'ar' ? 'استقرار سحابي 99.9%' : '99.9% Uptime Guarantee',
       badge: '99.9% SLA',
-      glow: 'rgba(166,255,46,0.4)',
+      glow: 'rgba(166,255,46,0.12)',
     },
   ];
 
@@ -83,7 +83,7 @@ export const TrustBadges: React.FC<TrustBadgesProps> = ({
               className="group relative p-3.5 sm:p-4 rounded-2xl bg-gradient-to-b from-[#061d13]/90 to-[#020b07] border border-emerald-500/25 hover:border-[#a6ff2e]/50 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_30px_rgba(166,255,46,0.12)] flex items-center gap-3.5"
             >
               {/* Glowing icon badge */}
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#a6ff2e]/20 to-emerald-950/60 border border-[#a6ff2e]/30 flex items-center justify-center text-[#a6ff2e] shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-[0_0_15px_rgba(166,255,46,0.2)]">
+              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#a6ff2e]/15 to-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-[#a6ff2e] shrink-0 group-hover:scale-105 transition-transform duration-300 shadow-sm">
                 <Icon className="w-5 h-5" />
                 <div
                   className="absolute inset-0 rounded-xl blur-sm -z-10 opacity-0 group-hover:opacity-100 transition-opacity"

@@ -164,12 +164,12 @@ export const CurvedLoopSection: React.FC = () => {
       aria-label="Kinetic Studio Vision Ribbon"
     >
       {/* Ambient background glow orbs */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-80 h-80 bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-emerald-600/5 rounded-full blur-[80px] pointer-events-none -z-10" />
 
       {/* Kinetic Angled Ribbon Wrapper */}
       <div 
-        className="relative w-full overflow-hidden py-3 sm:py-4 -rotate-1 sm:-rotate-1.5 scale-105 origin-center border-y border-emerald-500/20 bg-[#020e08]/85 backdrop-blur-sm shadow-[0_0_35px_rgba(166,255,46,0.06)]"
+        className="relative w-full overflow-hidden py-3 sm:py-4 -rotate-1 sm:-rotate-1.5 scale-105 origin-center border-y border-emerald-500/20 bg-[#020e08]/90 backdrop-blur-sm shadow-sm"
         style={{ cursor: cursorStyle, touchAction: 'pan-y' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -186,10 +186,10 @@ export const CurvedLoopSection: React.FC = () => {
             <div key={setIndex} className="flex items-center shrink-0">
               {items.map((text, itemIndex) => (
                 <div key={itemIndex} className="flex items-center">
-                  <span className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-wider text-slate-100 hover:text-[#a6ff2e] transition-colors duration-200 px-3 sm:px-5 select-none drop-shadow-[0_2px_15px_rgba(0,0,0,0.8)]">
+                  <span className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-wider text-slate-100 hover:text-[#a6ff2e] transition-colors duration-200 px-3 sm:px-5 select-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                     {text}
                   </span>
-                  <span className="text-[#a6ff2e] text-base sm:text-2xl md:text-3xl px-2 sm:px-4 drop-shadow-[0_0_12px_rgba(166,255,46,0.8)] select-none">
+                  <span className="text-[#a6ff2e] text-base sm:text-2xl md:text-3xl px-2 sm:px-4 select-none">
                     ✦
                   </span>
                 </div>

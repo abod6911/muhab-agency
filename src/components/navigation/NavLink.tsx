@@ -146,7 +146,7 @@ export const NavLink: React.FC<NavLinkProps> = ({
           {/* Leading Section: Index Badge + Typography */}
           <div className="flex items-center gap-2 sm:gap-3 z-10">
             {/* Cyber Architectural Index Capsule */}
-            <div className="flex items-center justify-center px-1.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-[#a6ff2e]/25 text-[#a6ff2e] text-[9px] sm:text-[10px] font-mono font-bold tracking-wider shrink-0 shadow-[0_0_10px_rgba(166,255,46,0.12)] group-hover:bg-[#a6ff2e] group-hover:text-[#020a06] transition-all duration-200">
+            <div className="flex items-center justify-center px-1.5 py-0.5 rounded-lg bg-[#a6ff2e]/10 border border-emerald-500/25 text-[#a6ff2e] text-[9px] sm:text-[10px] font-mono font-bold tracking-wider shrink-0 shadow-sm group-hover:bg-[#a6ff2e] group-hover:text-[#020a06] transition-all duration-200">
               //{formattedIndex}
             </div>
 
@@ -158,8 +158,8 @@ export const NavLink: React.FC<NavLinkProps> = ({
                 } ${isActive ? 'text-[#a6ff2e]' : ''}`}
               >
                 {label}
-                {/* Active / Hover neon pulse dot */}
-                <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-[0_0_8px_#a6ff2e]" />
+                {/* Active / Hover pulse dot */}
+                <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-sm" />
               </span>
 
               {sublabel && (

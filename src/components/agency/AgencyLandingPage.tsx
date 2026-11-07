@@ -185,7 +185,7 @@ const BrandPill: React.FC<BrandPillProps> = ({ brand }) => {
       }}
       className={`group relative flex items-center justify-between gap-4 px-6 py-4 rounded-2xl border transition-all duration-300 cursor-pointer select-none ${
         isHovered
-          ? 'bg-[#18352a] border-[#a6ff2e] shadow-[0_0_25px_rgba(166,255,46,0.3)]'
+          ? 'bg-[#18352a] border-emerald-500/50 shadow-sm'
           : 'bg-[#0a2016]/70 border-emerald-500/20 hover:border-emerald-500/40'
       } backdrop-blur-md`}
     >
@@ -444,7 +444,7 @@ export const AgencyLandingPage: React.FC<AgencyLandingPageProps> = ({
                 opacity: useTransform(heroScrollProgress, [0, 0.3], [1, 0]),
                 willChange: 'transform, opacity'
               }}
-              className="w-72 h-72 sm:w-80 sm:h-80 border-2 border-[#a6ff2e]/60 rotate-45 shadow-[0_0_50px_rgba(166,255,46,0.5)] pointer-events-none"
+              className="w-72 h-72 sm:w-80 sm:h-80 border-2 border-[#a6ff2e]/40 rotate-45 shadow-[0_4px_20px_rgba(166,255,46,0.2)] pointer-events-none"
             />
           </div>
 
@@ -577,7 +577,7 @@ export const AgencyLandingPage: React.FC<AgencyLandingPageProps> = ({
           {/* Central Graphical Badge Lockup */}
           <motion.div 
             whileHover={{ scale: 1.1 }}
-            className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#12261e] via-[#041a12] to-black border border-[#a6ff2e]/40 shadow-[0_0_30px_rgba(166,255,46,0.3)] flex flex-col items-center justify-center p-4 cursor-pointer"
+            className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#12261e] via-[#041a12] to-black border border-emerald-500/40 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex flex-col items-center justify-center p-4 cursor-pointer"
           >
             <Cpu className="w-8 h-8 text-[#a6ff2e] mb-1.5 animate-pulse" />
             <span className="text-[10px] font-mono font-black text-white tracking-widest uppercase">
@@ -673,7 +673,7 @@ export const AgencyLandingPage: React.FC<AgencyLandingPageProps> = ({
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             onClick={onOpenContact}
-            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#a6ff2e] text-[#041a12] font-black text-sm tracking-wide uppercase shadow-[0_0_30px_rgba(166,255,46,0.4)] hover:shadow-[0_0_50px_rgba(166,255,46,0.7)] transition-all cursor-pointer"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#a6ff2e] text-[#041a12] font-black text-sm tracking-wide uppercase shadow-[0_4px_16px_rgba(166,255,46,0.25)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.35)] transition-all cursor-pointer"
           >
             <span>{config.footer.ctaButton}</span>
             <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />

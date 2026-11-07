@@ -107,10 +107,10 @@ export const FlowingMenuSection: React.FC<FlowingMenuSectionProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-2xl sm:rounded-3xl border border-emerald-500/25 bg-[#031109]/90 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(166,255,46,0.06)] overflow-hidden h-[520px] sm:h-[580px] md:h-[640px] backdrop-blur-xl flex flex-col"
+          className="relative rounded-2xl sm:rounded-3xl border border-emerald-500/20 bg-[#031109]/90 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden h-[520px] sm:h-[580px] md:h-[640px] backdrop-blur-md flex flex-col"
         >
-          {/* Top Luminous Neon Beam */}
-          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent shadow-[0_0_15px_#a6ff2e] z-20 pointer-events-none" />
+          {/* Top Subtle Luminous Beam */}
+          <div className="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent shadow-[0_1px_4px_rgba(166,255,46,0.25)] z-20 pointer-events-none" />
 
           {/* React Bits FlowingMenu Component */}
           <div className="flex-1 min-h-0 w-full relative">

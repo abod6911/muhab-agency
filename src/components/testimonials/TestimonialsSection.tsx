@@ -86,7 +86,7 @@ export const TestimonialsSection: React.FC = () => {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-xs font-bold uppercase tracking-wider mb-4 shadow-[0_0_15px_rgba(166,255,46,0.15)]"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] text-xs font-bold uppercase tracking-wider mb-4 shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{isAr ? 'قصص النجاح والتحول' : 'Client Success Stories'}</span>
@@ -154,13 +154,13 @@ export const TestimonialsSection: React.FC = () => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className="w-4 h-4 fill-[#a6ff2e] text-[#a6ff2e] drop-shadow-[0_0_6px_rgba(166,255,46,0.6)]"
+                          className="w-4 h-4 fill-[#a6ff2e] text-[#a6ff2e] drop-shadow-[0_1px_2px_rgba(166,255,46,0.3)]"
                         />
                       ))}
                     </div>
 
                     {/* Highlight Metric Pill */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] font-mono text-xs font-bold shadow-[0_0_12px_rgba(166,255,46,0.15)]">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#a6ff2e]/10 border border-[#a6ff2e]/30 text-[#a6ff2e] font-mono text-xs font-bold shadow-sm">
                       <MetricIcon className="w-3.5 h-3.5" />
                       <span>{rev.metric}</span>
                     </div>
@@ -176,7 +176,7 @@ export const TestimonialsSection: React.FC = () => {
                 <div className="pt-5 border-t border-emerald-500/20 flex items-center justify-between gap-4 mt-auto">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${rev.avatarBg} border border-[#a6ff2e]/30 flex items-center justify-center text-[#a6ff2e] font-black text-base shadow-[0_0_12px_rgba(166,255,46,0.2)]`}
+                      className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${rev.avatarBg} border border-emerald-500/30 flex items-center justify-center text-[#a6ff2e] font-black text-base shadow-sm`}
                     >
                       {rev.author.charAt(0)}
                     </div>

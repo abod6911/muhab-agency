@@ -55,10 +55,10 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
       aria-label={isOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
       data-testid="floating-magnetic-menu"
       whileTap={{ scale: 0.92 }}
-      className={`relative z-[100] flex items-center gap-3 px-5 py-3 rounded-full backdrop-blur-xl border transition-colors duration-300 select-none cursor-pointer group shadow-[0_10px_30px_rgba(0,0,0,0.5)] ${
+      className={`relative z-[100] flex items-center gap-3 px-5 py-3 rounded-full backdrop-blur-md border transition-colors duration-300 select-none cursor-pointer group shadow-[0_10px_25px_rgba(0,0,0,0.5)] ${
         isOpen
-          ? 'bg-[#041a12]/95 border-[#a6ff2e]/60 text-white shadow-[0_0_25px_rgba(166,255,46,0.35)]'
-          : 'bg-[#12261e]/90 hover:bg-[#18352a] border-[#234939] hover:border-[#a6ff2e]/50 text-slate-100 hover:text-white'
+          ? 'bg-[#041a12]/95 border-emerald-500/60 text-white shadow-[0_4px_16px_rgba(166,255,46,0.2)]'
+          : 'bg-[#12261e]/90 hover:bg-[#18352a] border-[#234939] hover:border-[#a6ff2e]/40 text-slate-100 hover:text-white'
       }`}
     >
       {/* Morphing Hamburger / Close Icon */}
@@ -102,7 +102,7 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
 
       {/* Subtle pulsing status dot when closed */}
       {!isOpen && (
-        <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse shadow-[0_0_8px_#a6ff2e]" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse shadow-sm" />
       )}
     </motion.button>
   );

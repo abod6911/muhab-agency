@@ -28,8 +28,8 @@ export const TextLoopSection: React.FC = () => {
       aria-label="Kinetic Wave Vision Ribbon"
     >
       {/* Dynamic Ambient Glow Orbs */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-64 sm:w-96 h-64 sm:h-96 bg-[#a6ff2e]/8 rounded-full blur-[120px] pointer-events-none -z-10" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-64 sm:w-96 h-64 sm:h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-64 sm:w-80 h-64 sm:h-80 bg-emerald-500/4 rounded-full blur-[80px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-64 sm:w-80 h-64 sm:h-80 bg-emerald-600/4 rounded-full blur-[80px] pointer-events-none -z-10" />
 
       {/* Prestige Guidance Pill Header */}
       <div className="flex items-center justify-center mb-2 sm:mb-3 px-4">
@@ -49,7 +49,7 @@ export const TextLoopSection: React.FC = () => {
       </div>
 
       {/* Single Dynamic Wave Ribbon */}
-      <div className="relative w-full overflow-hidden flex items-center justify-center drop-shadow-[0_0_25px_rgba(166,255,46,0.15)]">
+      <div className="relative w-full overflow-hidden flex items-center justify-center">
         <TextLoop
           text={ribbonText}
           shape="wave"

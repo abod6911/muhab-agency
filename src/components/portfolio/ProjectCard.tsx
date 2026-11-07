@@ -70,7 +70,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = React.memo(({
         <div className="absolute inset-0 bg-[#020a06]/85 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center gap-2.5 p-5 z-20">
           <button
             onClick={() => onPreview(project)}
-            className="w-full max-w-[210px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#a6ff2e] hover:bg-[#84cc16] text-[#020a06] font-black text-xs shadow-[0_0_25px_rgba(166,255,46,0.35)] transition-all hover:scale-102 active:scale-98 cursor-pointer"
+            className="w-full max-w-[210px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#a6ff2e] hover:bg-[#84cc16] text-[#020a06] font-black text-xs shadow-[0_4px_16px_rgba(166,255,46,0.22)] transition-all hover:scale-102 active:scale-98 cursor-pointer"
           >
             <Eye className="w-4 h-4" />
             <span>{t('btnLivePreview')}</span>
@@ -133,7 +133,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = React.memo(({
           <div className="grid grid-cols-2 gap-2 pt-3 border-t border-emerald-500/15 lg:hidden">
             <button
               onClick={() => onPreview(project)}
-              className="min-h-[40px] py-2 px-3 rounded-xl bg-[#a6ff2e] hover:bg-[#84cc16] text-[#020a06] font-bold text-xs text-center flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-[0_0_15px_rgba(166,255,46,0.2)]"
+              className="min-h-[40px] py-2 px-3 rounded-xl bg-[#a6ff2e] hover:bg-[#84cc16] text-[#020a06] font-bold text-xs text-center flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-sm"
             >
               <Eye className="w-3.5 h-3.5 shrink-0" />
               <span className="truncate">{t('btnLivePreview')}</span>

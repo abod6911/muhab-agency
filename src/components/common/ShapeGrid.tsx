@@ -15,9 +15,9 @@ export interface ShapeGridProps {
 export const ShapeGrid: React.FC<ShapeGridProps> = ({
   direction = 'right',
   speed = 1,
-  borderColor = '#999',
+  borderColor = 'rgba(166, 255, 46, 0.08)',
   squareSize = 40,
-  hoverFillColor = '#222',
+  hoverFillColor = 'rgba(166, 255, 46, 0.1)',
   shape = 'square',
   hoverTrailAmount = 0,
   className = ''
@@ -37,20 +37,13 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let isVisible = false;
+    let isPageVisible = !document.hidden;
+
     const isHex = shape === 'hexagon';
     const isTri = shape === 'triangle';
     const hexHoriz = squareSize * 1.5;
     const hexVert = squareSize * Math.sqrt(3);
-
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
-      numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
-    };
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
 
     const drawHex = (cx: number, cy: number, size: number) => {
       ctx.beginPath();
@@ -209,40 +202,10 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
         Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
       );
       gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      gradient.addColorStop(1, 'rgba(2, 10, 6, 0.85)');
 
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-    };
-
-    const updateAnimation = () => {
-      const effectiveSpeed = Math.max(speed, 0.1);
-      const wrapX = isHex ? hexHoriz * 2 : squareSize;
-      const wrapY = isHex ? hexVert : isTri ? squareSize * 2 : squareSize;
-
-      switch (direction) {
-        case 'right':
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
-          break;
-        case 'left':
-          gridOffset.current.x = (gridOffset.current.x + effectiveSpeed + wrapX) % wrapX;
-          break;
-        case 'up':
-          gridOffset.current.y = (gridOffset.current.y + effectiveSpeed + wrapY) % wrapY;
-          break;
-        case 'down':
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
-          break;
-        case 'diagonal':
-          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
-          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
-          break;
-        default:
-          break;
-      }
-
-      updateCellOpacities();
-      drawGrid();
-      requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
     const updateCellOpacities = () => {
@@ -278,6 +241,53 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
         }
       }
     };
+
+    const updateAnimation = () => {
+      const effectiveSpeed = Math.max(speed, 0.1);
+      const wrapX = isHex ? hexHoriz * 2 : squareSize;
+      const wrapY = isHex ? hexVert : isTri ? squareSize * 2 : squareSize;
+
+      switch (direction) {
+        case 'right':
+          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
+          break;
+        case 'left':
+          gridOffset.current.x = (gridOffset.current.x + effectiveSpeed + wrapX) % wrapX;
+          break;
+        case 'up':
+          gridOffset.current.y = (gridOffset.current.y + effectiveSpeed + wrapY) % wrapY;
+          break;
+        case 'down':
+          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
+          break;
+        case 'diagonal':
+          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
+          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
+          break;
+        default:
+          break;
+      }
+
+      updateCellOpacities();
+      drawGrid();
+
+      if (isVisible && isPageVisible) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      } else {
+        requestRef.current = null;
+      }
+    };
+
+    const resizeCanvas = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
+      numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      drawGrid();
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     const handleMouseMove = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -381,11 +391,8 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
       hoveredSquare.current = null;
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
     canvas.addEventListener('mouseleave', handleMouseLeave);
-
-    let isVisible = false;
-    let isPageVisible = !document.hidden;
 
     const tryStart = () => {
       if (isVisible && isPageVisible && !requestRef.current) {
@@ -421,8 +428,6 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
       }
     };
     document.addEventListener('visibilitychange', onVisibility);
-
-    tryStart();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);

@@ -78,11 +78,11 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
           className="relative rounded-[28px] sm:rounded-[36px] bg-gradient-to-br from-[#08281b]/95 via-[#03150e]/95 to-[#010905]/98 border border-emerald-500/30 p-5 sm:p-10 lg:p-14 overflow-hidden shadow-[0_35px_100px_rgba(0,0,0,0.9),0_0_60px_rgba(16,185,129,0.15)]"
         >
           {/* Top Specular Shimmer Edge Beam */}
-          <div className="absolute inset-x-0 top-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent rounded-t-[36px] shadow-[0_0_20px_#a6ff2e]" />
+          <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent rounded-t-[36px] shadow-[0_1px_4px_rgba(166,255,46,0.25)]" />
           
           {/* Subtle Ambient Radial Blooms inside Card */}
-          <div className="absolute -top-24 -start-24 w-96 h-96 bg-[#a6ff2e]/15 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-24 -end-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute -top-24 -start-24 w-72 h-72 bg-emerald-500/5 rounded-full blur-[70px] pointer-events-none" />
+          <div className="absolute -bottom-24 -end-24 w-72 h-72 bg-emerald-600/5 rounded-full blur-[70px] pointer-events-none" />
 
           {/* Grid Layout: Main Message & Actions (7 Cols) + VIP Hologram Card (5 Cols) */}
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -109,7 +109,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
               {/* Main Cinematic Heading */}
               <h3 className="text-3xl sm:text-4xl lg:text-[44px] xl:text-[48px] font-black text-white leading-[1.2] tracking-tight mb-5">
                 <span>{language === 'ar' ? 'جاهز لنقل علامتك التجارية إلى' : 'Ready to elevate your brand to'}</span>{' '}
-                <span className="block mt-1.5 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#a6ff2e] to-emerald-300 drop-shadow-[0_0_35px_rgba(166,255,46,0.35)]">
+                <span className="block mt-1.5 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#a6ff2e] to-emerald-300 drop-shadow-[0_2px_10px_rgba(166,255,46,0.18)]">
                   {language === 'ar' ? 'القمة الرقمية الاستثنائية؟' : 'the next level of digital excellence?'}
                 </span>
               </h3>
@@ -125,8 +125,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3.5 w-full sm:w-auto mb-3.5">
                 <button
                   onClick={handlePrimaryClick}
-                  onMouseEnter={handleHoverSound}
-                  className="relative group/btn flex-1 sm:flex-initial inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:px-9 sm:py-4 rounded-2xl font-black text-sm text-[#041a12] bg-gradient-to-r from-[#a6ff2e] via-[#b8ff4f] to-[#a6ff2e] hover:brightness-105 shadow-[0_0_35px_rgba(166,255,46,0.45),0_10px_25px_rgba(0,0,0,0.5)] hover:shadow-[0_0_50px_rgba(166,255,46,0.7)] active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
+                  className="relative group/btn flex-1 sm:flex-initial inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:px-9 sm:py-4 rounded-2xl font-black text-sm text-[#041a12] bg-gradient-to-r from-[#a6ff2e] via-[#b8ff4f] to-[#a6ff2e] hover:brightness-105 shadow-[0_4px_16px_rgba(166,255,46,0.25),0_8px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.35)] active:scale-95 transition-all duration-200 cursor-pointer overflow-hidden"
                 >
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
                   <MessageSquare className="w-5 h-5 text-[#041a12] fill-[#041a12]" />
@@ -260,13 +259,13 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                     showPath={true}
                     pathClassName="stroke-[#a6ff2e]/25 stroke-[1px] stroke-dasharray-[3_3]"
                     text="✦ MUHAB STUDIO ✦ VIP ACCESS 2026 ✦ TIER-1 SLA ✦ BESPOKE WEB ARCHITECTURE ✦ PRIORITY INTAKE ✦ "
-                    textClassName="text-[7.2px] font-mono font-bold fill-[#a6ff2e] tracking-wider uppercase drop-shadow-[0_0_8px_rgba(166,255,46,0.8)]"
+                    textClassName="text-[7.2px] font-mono font-bold fill-[#a6ff2e] tracking-wider uppercase"
                     duration={18}
                     textAnchor="start"
                   />
 
                   {/* Live Authenticated HUD Tag in card corner */}
-                  <div className="absolute top-3 start-3 px-2.5 py-1 rounded-full bg-[#020a06]/85 backdrop-blur-md border border-[#a6ff2e]/40 flex items-center gap-1.5 shadow-lg z-30">
+                  <div className="absolute top-3 start-3 px-2.5 py-1 rounded-full bg-[#020a06]/85 backdrop-blur-md border border-emerald-500/40 flex items-center gap-1.5 shadow-sm z-30">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#a6ff2e] animate-pulse" />
                     <span className="text-[10px] font-mono font-bold text-[#a6ff2e] tracking-wider">
                       VIP ACCESS // 2026
@@ -309,7 +308,7 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
                 {/* Sovereign Direct Action Button */}
                 <button
                   onClick={handlePrimaryClick}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#143d2a] to-[#0a2318] hover:from-[#1b4d36] hover:to-[#0f3223] border border-emerald-500/40 hover:border-[#a6ff2e]/70 text-xs font-bold text-white flex items-center justify-center gap-2 shadow-md transition-all group-hover:shadow-[0_0_20px_rgba(166,255,46,0.25)] cursor-pointer"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#143d2a] to-[#0a2318] hover:from-[#1b4d36] hover:to-[#0f3223] border border-emerald-500/40 hover:border-[#a6ff2e]/60 text-xs font-bold text-white flex items-center justify-center gap-2 shadow-sm transition-all group-hover:shadow-[0_4px_16px_rgba(166,255,46,0.18)] cursor-pointer"
                   style={{ transform: 'translateZ(25px)' }}
                 >
                   <span>{language === 'ar' ? 'طلب استشارة فورية لعلامتك' : 'Request VIP Brand Consultation'}</span>

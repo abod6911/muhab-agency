@@ -32,12 +32,12 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles = {
     primary: `bg-[#a6ff2e] hover:bg-[#b6ff4d] text-[#09110d] font-black tracking-wide ${
-      glow ? 'shadow-[0_0_25px_rgba(166,255,46,0.45)] hover:shadow-[0_0_35px_rgba(166,255,46,0.65)]' : ''
-    } border border-[#a6ff2e]`,
-    secondary: 'bg-[#12261e] hover:bg-[#18352a] text-white border border-[#234939] hover:border-[#a6ff2e]/60 shadow-[0_4px_20px_rgba(0,0,0,0.3)]',
-    outline: 'bg-[#12261e]/70 hover:bg-[#12261e] text-slate-100 hover:text-white border border-[#234939] hover:border-[#a6ff2e]/60 shadow-[0_0_15px_rgba(166,255,46,0.05)] hover:shadow-[0_0_25px_rgba(166,255,46,0.25)]',
+      glow ? 'shadow-[0_4px_16px_rgba(166,255,46,0.22)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.32)]' : 'shadow-sm'
+    } border border-[#a6ff2e]/80`,
+    secondary: 'bg-[#12261e] hover:bg-[#18352a] text-white border border-[#234939] hover:border-[#a6ff2e]/40 shadow-[0_4px_16px_rgba(0,0,0,0.3)]',
+    outline: 'bg-[#12261e]/70 hover:bg-[#12261e] text-slate-100 hover:text-white border border-[#234939] hover:border-[#a6ff2e]/40 shadow-sm',
     gold: `bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 font-bold ${
-      glow ? 'shadow-[0_0_25px_rgba(245,158,11,0.35)] hover:shadow-[0_0_35px_rgba(245,158,11,0.55)]' : ''
+      glow ? 'shadow-[0_4px_16px_rgba(245,158,11,0.2)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.3)]' : 'shadow-sm'
     } border border-amber-300`,
     ghost: 'bg-transparent text-slate-300 hover:text-[#a6ff2e] hover:bg-white/5 border border-transparent',
   };
@@ -54,7 +54,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {/* Shimmer sweep effect on primary buttons */}
       {variant === 'primary' && (
-        <span className="absolute inset-0 -translate-x-full hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none transform -skew-x-12" />
+        <span className="absolute inset-0 -translate-x-full hover:translate-x-full duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none transform -skew-x-12" />
       )}
 
       {icon && iconPosition === 'start' && <span className="shrink-0">{icon}</span>}
@@ -63,4 +63,3 @@ export const Button: React.FC<ButtonProps> = ({
     </motion.button>
   );
 };
-

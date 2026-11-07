@@ -187,7 +187,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             audioSynth.playHarmonicSuccess();
             onRequestService(language === 'ar' ? service.titleAr : service.titleEn);
           }}
-          className="w-full relative group/btn overflow-hidden rounded-2xl py-3 px-4 bg-gradient-to-r from-[#072418] via-[#0b3323] to-[#072418] hover:from-[#a6ff2e] hover:via-[#baff54] hover:to-[#a6ff2e] border border-emerald-500/35 hover:border-[#a6ff2e] text-white hover:text-[#020a06] font-bold text-xs sm:text-sm flex items-center justify-between transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(166,255,46,0.35)] cursor-pointer"
+          className="w-full relative group/btn overflow-hidden rounded-2xl py-3 px-4 bg-gradient-to-r from-[#072418] via-[#0b3323] to-[#072418] hover:from-[#a6ff2e] hover:via-[#baff54] hover:to-[#a6ff2e] border border-emerald-500/35 hover:border-[#a6ff2e]/80 text-white hover:text-[#020a06] font-bold text-xs sm:text-sm flex items-center justify-between transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_16px_rgba(166,255,46,0.2)] cursor-pointer"
         >
           <div className="flex items-center gap-2 font-black">
             <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e] group-hover/btn:text-[#020a06] transition-colors" />

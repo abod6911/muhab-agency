@@ -128,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
             onClick={handleLogoClick}
             className="flex items-center gap-2.5 group focus:outline-none"
           >
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#a6ff2e] via-[#84cc16] to-[#041a12] p-0.5 shadow-[0_0_15px_rgba(166,255,46,0.25)] group-hover:shadow-[0_0_25px_rgba(166,255,46,0.4)] transition-all duration-300">
+            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#a6ff2e]/80 via-[#84cc16] to-[#041a12] p-0.5 shadow-sm group-hover:shadow-[0_2px_12px_rgba(166,255,46,0.18)] transition-all duration-300">
               <div className="w-full h-full bg-[#020a06] rounded-[9px] flex items-center justify-center p-0.5 overflow-hidden">
                 <MuhabEmblemImage size={22} />
               </div>
@@ -168,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
                         {isActive && (
                           <motion.div
                             layoutId="navbarActivePill"
-                            className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_0_20px_rgba(166,255,46,0.35)] -z-10"
+                            className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_2px_8px_rgba(166,255,46,0.2)] -z-10"
                             transition={{ type: 'spring', stiffness: 500, damping: 36 }}
                           />
                         )}
@@ -202,7 +202,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => 
               onClick={() => {
                 onOpenContact();
               }}
-              className="font-bold text-xs py-2 px-4 shadow-[0_0_15px_rgba(166,255,46,0.25)]"
+              className="font-bold text-xs py-2 px-4 shadow-[0_2px_10px_rgba(166,255,46,0.18)]"
             >
               {t('ctaStartProject')}
             </Button>

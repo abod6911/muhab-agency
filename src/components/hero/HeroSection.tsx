@@ -37,25 +37,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
       onMouseMove={handleMouseMove}
       className="relative w-full min-h-[92vh] lg:min-h-screen bg-[#020a06] text-slate-100 flex flex-col justify-between pt-28 sm:pt-32 pb-16 sm:pb-20 lg:pb-8 px-4 sm:px-8 lg:px-12 overflow-hidden selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e]"
     >
-      {/* Dynamic Cursor Spotlight Following Mouse */}
+      {/* Dynamic Cursor Spotlight Following Mouse (Subtle) */}
       <motion.div 
-        className="absolute inset-0 pointer-events-none z-0 opacity-50 transition-opacity duration-300"
+        className="absolute inset-0 pointer-events-none z-0 opacity-40 transition-opacity duration-300"
         style={{
           background: useTransform(
             [smoothMouseX, smoothMouseY],
-            ([x, y]) => `radial-gradient(750px circle at ${x}px ${y}px, rgba(166,255,46,0.06), transparent 75%)`
+            ([x, y]) => `radial-gradient(650px circle at ${x}px ${y}px, rgba(166,255,46,0.025), transparent 75%)`
           )
         }}
       />
 
-      {/* Ambient background glow orbs */}
-      <div className="absolute top-1/4 -start-32 w-96 h-96 bg-[#a6ff2e]/8 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -end-32 w-96 h-96 bg-[#84cc16]/8 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-emerald-950/15 rounded-full blur-[180px] pointer-events-none" />
+      {/* Ambient background glow orbs (Refined) */}
+      <div className="absolute top-1/4 -start-32 w-72 h-72 bg-emerald-500/4 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute bottom-1/4 -end-32 w-72 h-72 bg-emerald-600/4 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-950/10 rounded-full blur-[120px] pointer-events-none" />
 
       {/* Subtle background tech grid pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(to right, #a6ff2e 1px, transparent 1px), linear-gradient(to bottom, #a6ff2e 1px, transparent 1px)`,
           backgroundSize: '56px 56px'
@@ -79,9 +79,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
             transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
             className="mb-5 sm:mb-6"
           >
-            <div className="group relative inline-flex items-center gap-2.5 sm:gap-3 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#051a11]/90 border border-emerald-500/30 hover:border-[#a6ff2e]/60 text-xs sm:text-sm font-semibold tracking-wide text-slate-200 backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5),0_0_20px_rgba(166,255,46,0.12)] transition-all duration-300">
+            <div className="group relative inline-flex items-center gap-2.5 sm:gap-3 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full bg-[#051a11]/90 border border-emerald-500/25 hover:border-emerald-500/40 text-xs sm:text-sm font-semibold tracking-wide text-slate-200 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition-all duration-300">
               <div className="relative flex items-center justify-center shrink-0">
-                <MuhabEmblemImage size={22} className="drop-shadow-[0_0_8px_rgba(166,255,46,0.4)]" />
+                <MuhabEmblemImage size={22} />
               </div>
 
               <div className="flex items-center gap-2">

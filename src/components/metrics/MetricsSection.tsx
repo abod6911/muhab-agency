@@ -203,7 +203,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-baseline gap-3 mb-1.5">
                   <span 
                     dir="ltr"
-                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_0_25px_rgba(166,255,46,0.35)]"
+                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_2px_8px_rgba(166,255,46,0.18)]"
                   >
                     100%
                   </span>
@@ -233,12 +233,11 @@ export const MetricsSection: React.FC = () => {
                         key={tab}
                         type="button"
                         onClick={() => {
-                          audioSynth.playTelemetryTick();
                           setActiveDeviceTab(tab);
                         }}
                         className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center cursor-pointer flex items-center justify-center gap-1.5 ${
                           isActive 
-                            ? 'bg-gradient-to-r from-[#a6ff2e] to-[#8ee622] text-[#020b06] shadow-[0_0_15px_rgba(166,255,46,0.35)] font-black' 
+                            ? 'bg-gradient-to-r from-[#a6ff2e] to-[#8ee622] text-[#020b06] shadow-sm font-black' 
                             : 'text-slate-400 hover:text-white hover:bg-white/5'
                         }`}
                       >
@@ -361,13 +360,13 @@ export const MetricsSection: React.FC = () => {
               }}
             />
             {/* Top Specular Streak */}
-            <div className="absolute top-0 inset-x-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#a6ff2e] to-transparent z-10 shadow-[0_0_20px_#a6ff2e]" />
+            <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#a6ff2e]/80 to-transparent z-10 shadow-[0_1px_4px_rgba(166,255,46,0.25)]" />
 
             <div className="relative z-10">
               {/* Header */}
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-emerald-500/20">
                 <div className="flex items-center gap-3">
-                  <div className="relative group/icon w-12 h-12 rounded-2xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-[#a6ff2e]/60 shadow-[0_8px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(166,255,46,0.35)] transition-all duration-300 shrink-0 overflow-hidden flex items-center justify-center">
+                  <div className="relative group/icon w-12 h-12 rounded-2xl p-0.5 bg-gradient-to-br from-[#143d2a] via-[#082216] to-[#020b06] border border-emerald-500/40 shadow-md transition-all duration-300 shrink-0 overflow-hidden flex items-center justify-center">
                     <img 
                       src={getAssetUrl('assets/icons/speed-crystal.jpg')} 
                       alt="Sub-Second Speed Crystal"
@@ -380,7 +379,7 @@ export const MetricsSection: React.FC = () => {
                   </span>
                 </div>
 
-                <span className="text-[11px] font-bold px-3 py-1.5 rounded-full bg-[#a6ff2e]/20 border border-[#a6ff2e]/50 text-[#a6ff2e] flex items-center gap-1.5 shadow-[0_0_15px_rgba(166,255,46,0.25)]">
+                <span className="text-[11px] font-bold px-3 py-1.5 rounded-full bg-[#a6ff2e]/20 border border-[#a6ff2e]/50 text-[#a6ff2e] flex items-center gap-1.5 shadow-sm">
                   <Sparkles className="w-3.5 h-3.5 text-[#a6ff2e]" />
                   {language === 'ar' ? 'أسرع من البرق' : 'Sub-Second Speed'}
                 </span>
@@ -391,7 +390,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-baseline gap-3 mb-1.5">
                   <span 
                     dir="ltr"
-                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_0_30px_rgba(166,255,46,0.45)]"
+                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_2px_8px_rgba(166,255,46,0.18)]"
                   >
                     &lt; 0.8s
                   </span>
@@ -453,7 +452,7 @@ export const MetricsSection: React.FC = () => {
                             strokeDashoffset="0"
                             strokeLinecap="round"
                             fill="transparent"
-                            style={{ filter: 'drop-shadow(0 0 5px rgba(166,255,46,0.65))' }}
+                            style={{ filter: 'drop-shadow(0 1px 3px rgba(166,255,46,0.3))' }}
                           />
                         </svg>
                         <span className="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-mono font-black text-white group-hover/ring:text-[#a6ff2e] transition-colors">
@@ -578,7 +577,7 @@ export const MetricsSection: React.FC = () => {
                 <div className="flex items-baseline gap-3 mb-1.5">
                   <span 
                     dir="ltr"
-                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_0_25px_rgba(52,211,153,0.35)]"
+                    className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-[#a6ff2e] tracking-tight drop-shadow-[0_2px_8px_rgba(52,211,153,0.18)]"
                   >
                     24/7
                   </span>
@@ -698,9 +697,9 @@ export const MetricsSection: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             {/* Column 1: MUHAB Studio (Winner - Bespoke Architecture) */}
-            <div className="rounded-3xl bg-[#03130c] border-2 border-[#a6ff2e]/60 p-6 sm:p-8 shadow-[0_0_45px_rgba(166,255,46,0.15)] relative overflow-hidden group">
+            <div className="rounded-3xl bg-[#03130c] border border-emerald-500/40 p-6 sm:p-8 shadow-[0_12px_32px_rgba(0,0,0,0.6)] relative overflow-hidden group">
               {/* Corner ambient glow */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#a6ff2e]/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
 
               {/* Benchmark Header Badge */}
               <div className="flex items-center justify-between pb-4 border-b border-emerald-500/25 mb-6">

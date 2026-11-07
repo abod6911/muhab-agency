@@ -75,7 +75,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                   {isActive && (
                     <motion.div
                       layoutId="portfolioActiveTabPill"
-                      className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_0_25px_rgba(166,255,46,0.35)] -z-10"
+                      className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_2px_10px_rgba(166,255,46,0.22)] -z-10"
                       transition={{ type: 'spring', stiffness: 480, damping: 36 }}
                     />
                   )}

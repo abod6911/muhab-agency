@@ -101,7 +101,7 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#051a11] border border-[#a6ff2e]/30 text-[#a6ff2e] text-xs sm:text-sm font-semibold tracking-wide mb-6 shadow-[0_0_15px_rgba(166,255,46,0.15)]"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#051a11] border border-emerald-500/30 text-[#a6ff2e] text-xs sm:text-sm font-semibold tracking-wide mb-6 shadow-sm"
           >
             <Sparkles className="w-4 h-4 text-[#a6ff2e]" />
             <span>{isAr ? 'الهندسة المعمارية التفاعلية • BENTO ARCHITECTURE' : 'INTERACTIVE BENTO ARCHITECTURE'}</span>
@@ -176,8 +176,8 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
             enableTilt={true}
             enableMagnetism={true}
             clickEffect={true}
-            spotlightRadius={320}
-            particleCount={14}
+            spotlightRadius={220}
+            particleCount={6}
             glowColor="166, 255, 46"
           />
         </motion.div>
@@ -192,7 +192,7 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
         >
           <button
             onClick={() => onOpenContact?.(isAr ? 'استشارة معمارية تقنية' : 'Technical Architecture Consultation')}
-            className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 via-[#84cc16] to-[#a6ff2e] text-[#020a06] font-bold text-sm sm:text-base shadow-[0_0_25px_rgba(166,255,46,0.35)] hover:shadow-[0_0_40px_rgba(166,255,46,0.6)] hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer"
+            className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 via-[#84cc16] to-[#a6ff2e] text-[#020a06] font-bold text-sm sm:text-base shadow-[0_4px_16px_rgba(166,255,46,0.22)] hover:shadow-[0_6px_22px_rgba(166,255,46,0.32)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
           >
             <span>{isAr ? 'اطلب دراسة معمارية لمشروعك' : 'Request Architecture Consultation'}</span>
             <Zap className="w-4 h-4" />
