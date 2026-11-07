@@ -32,6 +32,10 @@ export const ShapeGrid: React.FC<ShapeGridProps> = ({
   const cellOpacities = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
+    // Skip on touch/mobile devices to preserve battery and guarantee 120 FPS native scrolling
+    const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+    if (isTouch) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');

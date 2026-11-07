@@ -48,10 +48,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenContact, onSelec
         }}
       />
 
-      {/* Ambient background glow orbs (Refined) */}
-      <div className="absolute top-1/4 -start-32 w-72 h-72 bg-emerald-500/4 rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -end-32 w-72 h-72 bg-emerald-600/4 rounded-full blur-[80px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-950/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient background glow orbs (Refined, GPU lightweight radial gradients) */}
+      <div className="absolute top-1/4 -start-32 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%)' }} />
+      <div className="absolute bottom-1/4 -end-32 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(5, 150, 105, 0.04) 0%, transparent 70%)' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(2, 44, 34, 0.12) 0%, transparent 70%)' }} />
 
       {/* Subtle background tech grid pattern */}
       <div 

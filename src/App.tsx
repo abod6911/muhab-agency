@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUp } from 'lucide-react';
@@ -25,7 +24,7 @@ import { ProcessSection } from './components/process';
 import { TestimonialsSection } from './components/testimonials';
 import { FaqSection } from './components/faq';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
-import { SocialPhysicsShowcase, IntroSplashScreen, MobileQuickActionBar, NotFoundPage, FloatingWhatsApp } from './components/common';
+import { SocialPhysicsShowcase, MobileQuickActionBar, NotFoundPage, FloatingWhatsApp } from './components/common';
 import { AgencyLandingPage } from './components/agency';
 import { Footer } from './components/layout/Footer';
 import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
@@ -48,18 +47,8 @@ export function AppContent() {
     }
     return 'classic';
   });
-  const [introExiting, setIntroExiting] = useState(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage.getItem('muhab_intro_seen')) {
-      return true;
-    }
-    return false;
-  });
-  const [introFinished, setIntroFinished] = useState(() => {
-    if (typeof window !== 'undefined' && window.sessionStorage.getItem('muhab_intro_seen')) {
-      return true;
-    }
-    return false;
-  });
+  const [introExiting] = useState(true);
+  const [introFinished] = useState(true);
   const [curvedNavOpen, setCurvedNavOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState('');
@@ -72,34 +61,9 @@ export function AppContent() {
   const { scrollYProgress, scrollY } = useScroll();
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 350, damping: 30 });
 
-  // Initialize Global Lenis smooth scroll for Desktop; on mobile touchscreens keep 100% native 120Hz momentum
+  // Pure Native High-Speed Scroll (144Hz Butter Smooth, 0 Virtual Lag)
   useEffect(() => {
     if (isNotFound) return;
-    const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
-
-    let lenis: Lenis | null = null;
-    let tickerCb: ((time: number) => void) | null = null;
-
-    if (!isTouch) {
-      lenis = new Lenis({
-        duration: 0.95,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1.0,
-      });
-
-      (window as unknown as { __lenis: Lenis }).__lenis = lenis;
-      lenis.on('scroll', ScrollTrigger.update);
-
-      tickerCb = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-
-      gsap.ticker.add(tickerCb);
-      gsap.ticker.lagSmoothing(500, 33);
-    }
 
     // Efficient IntersectionObserver for bottom consultation zone (zero layout thrashing)
     const consultationEl = document.querySelector('#consultation');
@@ -132,25 +96,15 @@ export function AppContent() {
     });
 
     return () => {
-      if (tickerCb) {
-        gsap.ticker.remove(tickerCb);
-      }
       unsub();
       if (consultationObserver) {
         consultationObserver.disconnect();
-      }
-      if (lenis) {
-        lenis.destroy();
-        delete (window as unknown as { __lenis?: Lenis }).__lenis;
       }
     };
   }, [scrollY, isNotFound]);
 
   const scrollToTop = () => {
-    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.2 });
-    } else {
+    if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -169,22 +123,18 @@ export function AppContent() {
     }
   };
 
-  // Prevent background scrolling and pause Lenis only when full modals are active
+  // Prevent background scrolling only when full modals are active
   useEffect(() => {
     const isLocked = contactModalOpen || previewProject !== null;
-    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
 
     if (isLocked) {
       document.body.style.overflow = 'hidden';
-      lenis?.stop();
     } else {
       document.body.style.overflow = '';
-      lenis?.start();
     }
 
     return () => {
       document.body.style.overflow = '';
-      lenis?.start();
     };
   }, [contactModalOpen, previewProject]);
 
@@ -237,13 +187,7 @@ export function AppContent() {
         )}
       </AnimatePresence>
 
-      {/* Luxury Cinematic Awwwards Entry Splash Screen */}
-      {!introFinished && (
-        <IntroSplashScreen 
-          onStartExit={() => setIntroExiting(true)} 
-          onComplete={() => setIntroFinished(true)}
-        />
-      )}
+
 
       {/* Sticky Global Navigation */}
       <Navbar 
@@ -266,17 +210,8 @@ export function AppContent() {
         <AgencyLandingPage onOpenContact={() => handleOpenContact()} />
       ) : (
         <>
-          {/* Main Content Sections with Seamless Cinematic Camera Zoom Landing (120 FPS GPU Hardware-Accelerated) */}
-          <motion.main 
-            animate={{
-              scale: introExiting ? 1 : 0.97,
-              opacity: introExiting ? 1 : 0.4,
-              y: introExiting ? 0 : 16,
-            }}
-            style={{ willChange: 'transform, opacity' }}
-            transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden pb-12 lg:pb-0"
-          >
+          {/* Main Content Sections (Native Instant 120 FPS Mount) */}
+          <main className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden pb-12 lg:pb-0">
             {/* Split Hero Section with iPhone 16 Pro Mockup Showcase */}
             <HeroSection
               onOpenContact={() => handleOpenContact()}
@@ -339,7 +274,7 @@ export function AppContent() {
 
             {/* Pre-Footer High-Converting Consultation Banner with Interactive Particle Wave Background */}
             <ConsultationBanner onOpenContact={() => handleOpenContact()} />
-          </motion.main>
+          </main>
 
           {/* Comprehensive Modern 4-Column Luxury Footer */}
           <Footer onOpenContact={() => handleOpenContact()} />

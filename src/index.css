@@ -20,20 +20,9 @@
 }
 
 @layer base {
-  html.lenis, html.lenis body {
+  html {
+    scroll-behavior: smooth;
     height: auto;
-  }
-
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-
-  .lenis.lenis-stopped {
-    overflow: clip;
   }
 
   :root {

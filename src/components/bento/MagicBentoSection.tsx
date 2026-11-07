@@ -90,8 +90,7 @@ export const MagicBentoSection: React.FC<MagicBentoSectionProps> = ({ onOpenCont
       className="relative py-12 sm:py-16 md:py-20 bg-[#020a06] overflow-hidden border-t border-emerald-500/15 scroll-mt-28"
     >
       {/* Background Ambience & Grid Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(166,255,46,0.06)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(166,255,46,0.04)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}

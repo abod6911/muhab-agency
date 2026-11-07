@@ -65,9 +65,9 @@ export const ConsultationBanner: React.FC<ConsultationBannerProps> = ({ onOpenCo
         repulsionRadius={160}
       />
 
-      {/* Ambient background neon beams */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#a6ff2e]/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-0 right-10 w-96 h-96 bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient background neon beams (GPU lightweight radial gradients) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(166, 255, 46, 0.04) 0%, transparent 70%)' }} />
+      <div className="absolute top-0 right-10 w-96 h-96 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.03) 0%, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div

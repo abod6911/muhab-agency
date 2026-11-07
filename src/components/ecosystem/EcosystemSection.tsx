@@ -15,7 +15,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onOrderProdu
   return (
     <section id="ecosystem" className="relative py-12 sm:py-16 md:py-20 overflow-hidden bg-[#020a06]">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-950/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(2, 44, 34, 0.15) 0%, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeader
