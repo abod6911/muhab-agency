@@ -1,237 +1,212 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useLanguage } from '../../context/LanguageContext';
-import { Button } from '../common/Button';
 import { MuhabEmblemImage } from '../common/MuhabLogo';
-import { 
-  Menu, 
-  Globe
-} from 'lucide-react';
-import { audioSynth } from '../../utils/audioSynth';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 interface NavbarProps {
   onOpenContact: () => void;
-  onOpenMenu?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenContact, onOpenMenu }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenContact }) => {
   const { language, toggleLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeNav, setActiveNav] = useState<string>('#portfolio');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isAr = language === 'ar';
 
   useEffect(() => {
-    let lastScrolled = false;
     const handleScroll = () => {
-      const scrolled = window.scrollY > 20;
-      if (scrolled !== lastScrolled) {
-        lastScrolled = scrolled;
-        setIsScrolled(scrolled);
-      }
+      setIsScrolled(window.scrollY > 15);
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    {
-      label: language === 'ar' ? 'مشاريعنا' : 'Portfolio',
-      href: '#portfolio',
-    },
-    {
-      label: language === 'ar' ? 'المسارات التفاعلية' : 'Disciplines',
-      href: '#disciplines',
-    },
-    {
-      label: language === 'ar' ? 'خدماتنا' : 'Services',
-      href: '#services',
-    },
-    {
-      label: language === 'ar' ? 'النتائج والسرعة' : 'Metrics',
-      href: '#metrics',
-    },
-    {
-      label: language === 'ar' ? 'تواصل معنا' : 'Contact',
-      href: '#contact',
-    },
+  // Prevent background scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const navLinks = [
+    { label: t('navWork'), href: '#work' },
+    { label: t('navProducts'), href: '#products' },
+    { label: t('navServices'), href: '#services' },
+    { label: t('navFaq'), href: '#faq' },
   ];
 
-  useEffect(() => {
-    const sectionIds = ['portfolio', 'disciplines', 'services', 'metrics', 'contact'];
-    const handleScrollSpy = () => {
-      const scrollPos = window.scrollY + 140;
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const id = sectionIds[i];
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveNav(`#${id}`);
-          break;
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScrollSpy, { passive: true });
-    return () => window.removeEventListener('scroll', handleScrollSpy);
-  }, []);
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    try {
-      audioSynth.playHoverBlip();
-    } catch {}
-
-    const targetEl = document.querySelector(href) as HTMLElement | null;
-    if (targetEl) {
-      const headerOffset = 75;
-      const targetTop = Math.max(0, targetEl.getBoundingClientRect().top + window.pageYOffset - headerOffset);
-
-      window.scrollTo({ top: targetTop, behavior: 'smooth' });
-
-      const lenis = (window as unknown as { __lenis?: any }).__lenis;
-      if (lenis && typeof lenis.scrollTo === 'function') {
-        try {
-          lenis.scrollTo(targetTop, { duration: 0.8, force: true });
-        } catch {}
-      }
-
+    setMobileMenuOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      const topOffset = 80;
+      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - topOffset;
+      window.scrollTo({ top: Math.max(0, targetPosition), behavior: 'smooth' });
       try {
         window.history.pushState(null, '', href);
       } catch {}
     }
   };
 
-  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    try {
-      audioSynth.playHoverBlip();
-    } catch {}
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts: any) => void } }).__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.2 });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 inset-x-0 z-50 transition-colors duration-200 ${
           isScrolled
-            ? 'bg-[#041a12]/95 backdrop-blur-xl border-b border-[#1b4d3b]/40 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.6)]'
-            : 'bg-[#041a12]/50 backdrop-blur-md border-b border-[#1b4d3b]/20 py-4'
+            ? 'backdrop-blur-md bg-[#09090B]/85 border-b border-white/[0.06] py-3.5'
+            : 'bg-[#09090B]/60 backdrop-blur-sm border-b border-white/[0.04] py-4'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo Brand */}
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+          {/* Brand Logo (Right in RTL, Left in LTR) */}
           <a
             href="#hero"
-            onClick={handleLogoClick}
-            className="flex items-center gap-2.5 group focus:outline-none"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center gap-3 group focus:outline-none"
           >
-            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-[#a6ff2e]/80 via-[#84cc16] to-[#041a12] p-0.5 shadow-sm group-hover:shadow-[0_2px_12px_rgba(166,255,46,0.18)] transition-all duration-300">
-              <div className="w-full h-full bg-[#020a06] rounded-[9px] flex items-center justify-center p-0.5 overflow-hidden">
-                <MuhabEmblemImage size={22} />
-              </div>
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-[#a6ff2e] rounded-full ring-2 ring-[#020a06] animate-pulse" />
+            <div className="w-8 h-8 rounded-lg bg-[#111214] border border-white/10 flex items-center justify-center p-1 transition-colors group-hover:border-white/20">
+              <MuhabEmblemImage size={20} />
             </div>
-
             <div className="flex flex-col">
-              <span className="font-black text-white text-sm sm:text-base tracking-wider leading-tight flex items-center gap-1.5">
-                MUHAB <span className="text-[#a6ff2e] font-semibold text-[9px] tracking-widest px-1.5 py-0.5 rounded bg-[#a6ff2e]/10 border border-[#a6ff2e]/30">STUDIO</span>
-              </span>
-              <span className="text-[9px] sm:text-[10px] text-[#a6ff2e]/80 font-medium tracking-wider">
-                {language === 'ar' ? 'صُنّاع المواقع السعودية' : 'Saudi Webmakers'}
+              <span className="text-sm font-semibold text-[#F4F4F5] tracking-tight flex items-center gap-1.5">
+                MUHAB <span className="text-xs font-normal text-[#71717A]">STUDIO</span>
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation Links with Animated Pill Navigation */}
-          <div className="hidden lg:flex items-center bg-[#071d14]/85 border border-emerald-500/25 p-1 rounded-full backdrop-blur-xl shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
-            <nav role="navigation" aria-label="Main Navigation">
-              <ul className="flex items-center gap-0.5 m-0 p-0 list-none">
-                {navItems.map((item) => {
-                  const isActive = activeNav === item.href;
-                  return (
-                    <li key={item.href} className="relative">
-                      <a
-                        href={item.href}
-                        onClick={(e) => {
-                          handleNavClick(e, item.href);
-                          setActiveNav(item.href);
-                        }}
-                        className={`relative z-10 inline-flex items-center justify-center px-3.5 py-1.5 text-xs font-bold transition-colors duration-200 select-none whitespace-nowrap rounded-full cursor-pointer focus:outline-none ${
-                          isActive
-                            ? 'text-[#020a06]'
-                            : 'text-slate-300 hover:text-white'
-                        }`}
-                      >
-                        {isActive && (
-                          <motion.div
-                            layoutId="navbarActivePill"
-                            className="absolute inset-0 bg-[#a6ff2e] rounded-full shadow-[0_2px_8px_rgba(166,255,46,0.2)] -z-10"
-                            transition={{ type: 'spring', stiffness: 500, damping: 36 }}
-                          />
-                        )}
-                        <span>{item.label}</span>
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-          </div>
+          {/* Desktop Navigation (Center: 4 Clean Links) */}
+          <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="text-xs font-medium text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center gap-2.5">
-            {/* Language Switcher Pill (ع / EN) */}
+          {/* Desktop Actions (Left in RTL, Right in LTR) */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* Minimal Language Toggle */}
             <button
-              onClick={() => {
-                toggleLanguage();
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-[#12261e] hover:bg-[#18352a] border border-[#234939] text-slate-200 hover:text-[#a6ff2e] transition-all duration-200 shadow-sm cursor-pointer active:scale-95"
-              title="Switch Language (AR / EN)"
+              type="button"
+              onClick={toggleLanguage}
+              className="text-xs font-medium text-[#71717A] hover:text-[#F4F4F5] transition-colors px-2 py-1 cursor-pointer focus:outline-none"
+              aria-label="Toggle language"
             >
-              <Globe className="w-3 h-3 text-[#a6ff2e]" />
-              <span className="tracking-wider">{language === 'ar' ? 'ع / EN' : 'AR / EN'}</span>
+              {isAr ? 'EN' : 'عربي'}
             </button>
 
-            {/* High-visibility Primary CTA Button */}
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                onOpenContact();
-              }}
-              className="font-bold text-xs py-2 px-4 shadow-[0_2px_10px_rgba(166,255,46,0.18)]"
+            {/* Primary Solid Lime CTA Button */}
+            <button
+              type="button"
+              onClick={onOpenContact}
+              className="h-9 px-4 rounded-md bg-[#A6FF2E] hover:bg-[#b8ff52] text-[#09090B] text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 active:scale-[0.98]"
             >
-              {t('ctaStartProject')}
-            </Button>
+              <span>{t('ctaStartProject')}</span>
+            </button>
           </div>
 
-          {/* Mobile & Tablet Menu Button - Instant Click Response */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Actions: Language + Menu Burger */}
+          <div className="flex md:hidden items-center gap-3">
             <button
-              onClick={() => {
-                toggleLanguage();
-              }}
-              className="min-h-[36px] px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#12261e] hover:bg-[#18352a] border border-[#234939] text-[#a6ff2e] active:scale-95 transition-all cursor-pointer shadow-sm"
-              aria-label="Switch Language"
+              type="button"
+              onClick={toggleLanguage}
+              className="text-xs font-medium text-[#A1A1AA] hover:text-[#F4F4F5] px-2 py-1"
             >
-              {language === 'ar' ? 'ع / EN' : 'AR / EN'}
+              {isAr ? 'EN' : 'عربي'}
             </button>
+
             <button
-              onClick={() => {
-                onOpenMenu?.();
-              }}
-              className="w-9 h-9 rounded-full bg-[#12261e] hover:bg-[#18352a] border border-[#234939] text-slate-200 hover:text-[#a6ff2e] focus:outline-none flex items-center justify-center active:scale-95 transition-all cursor-pointer shadow-sm"
-              aria-label="Open Navigation Menu"
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="w-9 h-9 rounded-md bg-[#111214] border border-white/10 flex items-center justify-center text-[#F4F4F5] hover:border-white/20 transition-colors"
+              aria-label="Open mobile menu"
             >
-              <Menu className="w-4 h-4 text-[#a6ff2e]" />
+              <Menu className="w-4 h-4" />
             </button>
           </div>
         </div>
       </header>
+
+      {/* Clean Slide-Over Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] flex flex-col md:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Drawer Content */}
+          <div className="relative w-full max-w-xs ms-auto h-full bg-[#09090B] border-s border-white/[0.08] p-6 flex flex-col justify-between shadow-2xl">
+            <div>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-6 border-b border-white/[0.08] mb-6">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-md bg-[#111214] border border-white/10 flex items-center justify-center p-1">
+                    <MuhabEmblemImage size={18} />
+                  </div>
+                  <span className="text-sm font-semibold text-[#F4F4F5]">MUHAB STUDIO</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-8 h-8 rounded-md bg-[#111214] border border-white/10 flex items-center justify-center text-[#A1A1AA] hover:text-[#F4F4F5]"
+                  aria-label="Close menu"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="flex flex-col gap-4">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
+                    className="text-sm font-medium text-[#A1A1AA] hover:text-[#F4F4F5] py-2 transition-colors flex items-center justify-between"
+                  >
+                    <span>{link.label}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-[#71717A]" />
+                  </a>
+                ))}
+              </nav>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 border-t border-white/[0.08] flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenContact();
+                }}
+                className="w-full h-10 rounded-md bg-[#A6FF2E] hover:bg-[#b8ff52] text-[#09090B] text-xs font-semibold transition-colors flex items-center justify-center"
+              >
+                {t('ctaStartProject')}
+              </button>
+              <div className="text-[11px] text-[#71717A] text-center">
+                {isAr ? 'جدة، المملكة العربية السعودية' : 'Jeddah, Saudi Arabia'}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
-

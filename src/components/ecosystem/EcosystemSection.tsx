@@ -1,9 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { ecosystemProducts } from '../../data/portfolioData';
-import { SectionHeader } from '../common/SectionHeader';
 import { ProductCard } from './ProductCard';
-import { Layers } from 'lucide-react';
 
 interface EcosystemSectionProps {
   onOrderProduct: (productName: string) => void;
@@ -13,33 +11,31 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ onOrderProdu
   const { t } = useLanguage();
 
   return (
-    <section id="ecosystem" className="relative py-12 sm:py-16 md:py-20 overflow-hidden bg-[#020a06]">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(2, 44, 34, 0.15) 0%, transparent 70%)' }} />
+    <section id="products" className="py-24 sm:py-32 bg-[#09090B] border-b border-white/[0.06] scroll-mt-20">
+      <div className="max-w-6xl mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="max-w-2xl mb-12">
+          <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#F4F4F5] mb-3">
+            {t('productsTitle')}
+          </h2>
+          <p className="text-sm text-[#A1A1AA] leading-relaxed">
+            {t('productsSubtitle')}
+          </p>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionHeader
-          badgeText={t('ecosystemBadge')}
-          badgeVariant="mint"
-          badgeIcon={<Layers className="w-3.5 h-3.5 text-[#a6ff2e]" />}
-          title={t('ecosystemTitle')}
-          subtitle={t('ecosystemSubtitle')}
-          className="mb-8 sm:mb-12"
-        />
-
-        {/* 3-Card Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {ecosystemProducts.map((product, idx) => (
+        {/* 3-Column Architectural Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {ecosystemProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
               onOrderProduct={onOrderProduct}
-              index={idx}
             />
           ))}
         </div>
+
       </div>
     </section>
   );
 };
-

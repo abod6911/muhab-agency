@@ -1,113 +1,25 @@
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowUp } from 'lucide-react';
 import { LanguageProvider } from './context/LanguageContext';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 import { Navbar } from './components/layout/Navbar';
-import { CurvedNavigation } from './components/navigation';
 import { HeroSection } from './components/hero/HeroSection';
-import { TrustRibbon } from './components/trust/TrustRibbon';
-import { EcosystemSection } from './components/ecosystem/EcosystemSection';
 import { PortfolioSection } from './components/portfolio/PortfolioSection';
-import { ServicesSection } from './components/services/ServicesSection';
-import { FlowingMenuSection, ManifestoSection, CurvedLoopSection, TextLoopSection } from './components/showcase';
-
-import { MetricsSection } from './components/metrics/MetricsSection';
-import { MagicBentoSection } from './components/bento';
-import { ProcessSection } from './components/process';
-import { TestimonialsSection } from './components/testimonials';
-import { FaqSection } from './components/faq';
+import { EcosystemSection } from './components/ecosystem/EcosystemSection';
+import { CapabilitiesSection } from './components/services/CapabilitiesSection';
+import { FaqSection } from './components/faq/FaqSection';
 import { ConsultationBanner } from './components/contact/ConsultationBanner';
-import { SocialPhysicsShowcase, MobileQuickActionBar, NotFoundPage, FloatingWhatsApp } from './components/common';
-import { AgencyLandingPage } from './components/agency';
 import { Footer } from './components/layout/Footer';
+
 import { LivePreviewModal } from './components/portfolio/LivePreviewModal';
 import { ContactModal } from './components/contact/ContactModal';
+import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
 import { projects } from './data/portfolioData';
 import type { Project } from './types';
 
 export function AppContent() {
-  const [isNotFound] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false;
-    const normalized = window.location.pathname
-      .replace(/\/+$/, '')
-      .replace(/^\/muhab-agency(?:\/|$)/i, '')
-      .replace(/^\/index\.html$/i, '');
-    return normalized !== '' && normalized !== '/';
-  });
-  const [activeView] = useState<'classic' | 'agency'>(() => {
-    if (typeof window !== 'undefined' && window.location.search.includes('view=agency')) {
-      return 'agency';
-    }
-    return 'classic';
-  });
-  const [introExiting] = useState(true);
-  const [introFinished] = useState(true);
-  const [curvedNavOpen, setCurvedNavOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState('');
   const [previewProject, setPreviewProject] = useState<Project | null>(null);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const [showQuickActionBar, setShowQuickActionBar] = useState(false);
-  const [isInBottomZone, setIsInBottomZone] = useState(false);
-
-  // Global scroll tracking for top neon beam
-  const { scrollYProgress, scrollY } = useScroll();
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 350, damping: 30 });
-
-  // Pure Native High-Speed Scroll (144Hz Butter Smooth, 0 Virtual Lag)
-  useEffect(() => {
-    if (isNotFound) return;
-
-    // Efficient IntersectionObserver for bottom consultation zone (zero layout thrashing)
-    const consultationEl = document.querySelector('#consultation');
-    let consultationObserver: IntersectionObserver | null = null;
-    if (consultationEl) {
-      consultationObserver = new IntersectionObserver(
-        ([entry]) => {
-          setIsInBottomZone(entry.isIntersecting);
-        },
-        { rootMargin: '0px 0px -80px 0px' }
-      );
-      consultationObserver.observe(consultationEl);
-    }
-
-    // State change guards to prevent unnecessary re-renders during high-speed scrolling
-    let lastBackToTop = false;
-    let lastQuickAction = false;
-
-    const unsub = scrollY.on('change', (latest) => {
-      const nextBackToTop = latest > 900;
-      const nextQuickAction = latest > 850;
-      if (nextBackToTop !== lastBackToTop) {
-        lastBackToTop = nextBackToTop;
-        setShowBackToTop(nextBackToTop);
-      }
-      if (nextQuickAction !== lastQuickAction) {
-        lastQuickAction = nextQuickAction;
-        setShowQuickActionBar(nextQuickAction);
-      }
-    });
-
-    return () => {
-      unsub();
-      if (consultationObserver) {
-        consultationObserver.disconnect();
-      }
-    };
-  }, [scrollY, isNotFound]);
-
-  const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
 
   const handleOpenContact = (serviceTitle?: string) => {
     if (serviceTitle) {
@@ -123,167 +35,61 @@ export function AppContent() {
     }
   };
 
-  // Prevent background scrolling only when full modals are active
+  // Prevent background scrolling only when modals are active
   useEffect(() => {
     const isLocked = contactModalOpen || previewProject !== null;
-
     if (isLocked) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-
     return () => {
       document.body.style.overflow = '';
     };
   }, [contactModalOpen, previewProject]);
 
-  if (isNotFound) {
-    return (
-      <div className="min-h-screen w-full bg-[#020a06] text-slate-100 flex flex-col selection:bg-[#a6ff2e]/30 selection:text-[#a6ff2e]">
-        <NotFoundPage onOpenContact={() => handleOpenContact()} />
-        <ContactModal
-          isOpen={contactModalOpen}
-          onClose={() => {
-            setContactModalOpen(false);
-            setPreselectedService('');
-          }}
-          preselectedService={preselectedService}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#020a06] text-slate-100 flex flex-col selection:bg-emerald-500/25 selection:text-emerald-300 ambient-glow-bg">
-      {/* Refined Minimal Top Progress Indicator */}
-      <motion.div
-        className="fixed top-0 inset-x-0 z-[70] h-[2px] bg-gradient-to-r from-emerald-600 via-[#a6ff2e] to-emerald-500 origin-left rtl:origin-right shadow-[0_1px_4px_rgba(166,255,46,0.25)] pointer-events-none"
-        style={{ scaleX: smoothProgress }}
-      />
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#09090B] text-[#F4F4F5] flex flex-col selection:bg-[#A6FF2E]/20 selection:text-[#A6FF2E]">
+      
+      {/* 1. Minimal Sticky Navbar */}
+      <Navbar onOpenContact={() => handleOpenContact()} />
 
-      {/* Floating Back-to-Top Quick Glide Capsule (Desktop & Large Screens) */}
-      <AnimatePresence>
-        {showBackToTop && !contactModalOpen && !previewProject && !curvedNavOpen && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            whileHover={{ scale: 1.08, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={scrollToTop}
-            className="hidden lg:flex fixed bottom-6 end-6 z-40 p-3 rounded-full bg-[#051a11]/90 hover:bg-[#0c261b] border border-emerald-500/25 hover:border-emerald-500/50 text-[#a6ff2e] shadow-[0_8px_24px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all cursor-pointer group"
-            aria-label="Scroll to top"
-          >
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <main className="flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
+        {/* 2. Focused Editorial Split Hero */}
+        <HeroSection
+          onOpenContact={() => handleOpenContact()}
+          onSelectProject={handleSelectProjectId}
+        />
 
-      {/* Mobile High-Converting Floating Quick Action Bar (Revealed after scrolling past Hero, auto-hides in Consultation & Footer zone) */}
-      <AnimatePresence>
-        {showQuickActionBar && !isInBottomZone && (introFinished || introExiting) && !contactModalOpen && !previewProject && !curvedNavOpen && (
-          <MobileQuickActionBar onOpenContact={() => handleOpenContact()} />
-        )}
-      </AnimatePresence>
+        {/* 3. Selected Work / Portfolio Showcase (Moved UP right after Hero) */}
+        <PortfolioSection
+          onPreviewProject={(project) => setPreviewProject(project)}
+          onRequestSimilar={(title) => handleOpenContact(title)}
+        />
 
+        {/* 4. Ready-to-Deploy Digital Products (المنظومة الرقمية) */}
+        <EcosystemSection
+          onOrderProduct={(productName) => handleOpenContact(productName)}
+        />
 
+        {/* 5. Core Capabilities & Process (Merged, Ultra-Clean) */}
+        <CapabilitiesSection
+          onRequestService={(serviceTitle) => handleOpenContact(serviceTitle)}
+        />
 
-      {/* Sticky Global Navigation */}
-      <Navbar 
-        onOpenContact={() => handleOpenContact()} 
-        onOpenMenu={() => setCurvedNavOpen(true)}
-      />
+        {/* 6. Direct FAQ (Accordion — 5 Essential Questions Only) */}
+        <FaqSection />
 
-      {/* Modern Curved SVG Path Wipe Navigation Drawer */}
-      <CurvedNavigation
-        isOpen={curvedNavOpen}
-        onClose={() => setCurvedNavOpen(false)}
-        onOpen={() => setCurvedNavOpen(true)}
-        onToggle={() => setCurvedNavOpen((prev) => !prev)}
-        onOpenContact={() => handleOpenContact()}
-        isIntroActive={!introFinished}
-        isModalOpen={contactModalOpen || previewProject !== null}
-      />
+        {/* 7. Quiet Luxury CTA Block */}
+        <ConsultationBanner onOpenContact={() => handleOpenContact()} />
+      </main>
 
-      {activeView === 'agency' ? (
-        <AgencyLandingPage onOpenContact={() => handleOpenContact()} />
-      ) : (
-        <>
-          {/* Main Content Sections (Native Instant 120 FPS Mount) */}
-          <main className="flex-1 flex flex-col origin-center w-full max-w-full overflow-x-hidden pb-12 lg:pb-0">
-            {/* Split Hero Section with iPhone 16 Pro Mockup Showcase */}
-            <HeroSection
-              onOpenContact={() => handleOpenContact()}
-              onSelectProject={handleSelectProjectId}
-            />
+      {/* Clean Minimal Architectural Footer */}
+      <Footer />
 
-            {/* 4-Card Trust & Core Differentiators Ribbon */}
-            <TrustRibbon />
-
-            {/* Awwwards Interactive Draggable Curved Loop Vision Ribbon from React Bits */}
-            <CurvedLoopSection />
-
-            {/* Digital Ecosystem & SaaS Products ("لا نبني مجرد مواقع، بل نبتكر منتجات متكاملة") */}
-            <EcosystemSection
-              onOrderProduct={(productName) => handleOpenContact(productName)}
-            />
-
-            {/* React Bits Interactive Wave TextLoop Showcase */}
-            <TextLoopSection />
-
-            {/* Filterable Portfolio & Live Showcases Grid */}
-            <PortfolioSection
-              onPreviewProject={(project) => setPreviewProject(project)}
-              onRequestSimilar={(title) => handleOpenContact(title)}
-            />
-
-            {/* Awwwards Scroll-Driven Typography Reveal Manifesto from React Bits */}
-            <ManifestoSection onOpenContact={(title) => handleOpenContact(title)} />
-
-            {/* 6-Card Services Grid Matrix */}
-            <ServicesSection
-              onRequestService={(serviceTitle) => handleOpenContact(serviceTitle)}
-            />
-
-            {/* 4-Step Engineering Methodology & SLA Roadmap */}
-            <ProcessSection onRequestConsultation={() => handleOpenContact()} />
-
-            {/* Awwwards-Grade Interactive Flowing Menu Showcase from React Bits */}
-            <FlowingMenuSection
-              onOpenContact={(serviceTitle) => handleOpenContact(serviceTitle)}
-              onSelectProject={handleSelectProjectId}
-            />
-
-            {/* Metrics, Proof & Engineering Comparison Section */}
-            <MetricsSection />
-
-            {/* React Bits Interactive 3D MagicBento Architecture Section */}
-            <MagicBentoSection onOpenContact={(title) => handleOpenContact(title)} />
-
-            {/* Real Client Success Stories & Social Proof */}
-            <TestimonialsSection />
-
-            {/* Transparent B2B FAQ Accordion */}
-            <FaqSection onOpenContact={() => handleOpenContact()} />
-
-            {/* Awwwards Physics-Driven Interactive Social Showcase */}
-            <section id="social-showcase" className="relative pt-10 sm:pt-12 pb-6 sm:pb-8 bg-[#020a06] px-4 sm:px-6 lg:px-8 scroll-mt-24">
-              <SocialPhysicsShowcase />
-            </section>
-
-            {/* Pre-Footer High-Converting Consultation Banner with Interactive Particle Wave Background */}
-            <ConsultationBanner onOpenContact={() => handleOpenContact()} />
-          </main>
-
-          {/* Comprehensive Modern 4-Column Luxury Footer */}
-          <Footer onOpenContact={() => handleOpenContact()} />
-        </>
-      )}
-
-      {/* Floating High-Converting Smart WhatsApp Action Button (Active Presence & Radar Beacon) */}
+      {/* Subtle, Clean Floating WhatsApp Button */}
       <FloatingWhatsApp
-        isModalOpen={contactModalOpen || previewProject !== null || curvedNavOpen}
+        isModalOpen={contactModalOpen || previewProject !== null}
       />
 
       {/* Live Interactive Project Device Modal */}
@@ -293,7 +99,7 @@ export function AppContent() {
         onRequestSimilar={(title) => handleOpenContact(title)}
       />
 
-      {/* Instant WhatsApp Project Inquiry Modal */}
+      {/* Interactive Contact & Order Modal */}
       <ContactModal
         isOpen={contactModalOpen}
         onClose={() => {
@@ -313,4 +119,3 @@ export default function App() {
     </LanguageProvider>
   );
 }
-
