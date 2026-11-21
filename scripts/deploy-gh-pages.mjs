@@ -30,6 +30,13 @@ if (!fs.existsSync(noJekyllPath)) {
   console.log('✓ Created .nojekyll');
 }
 
+// 2b. Ensure CNAME exists for custom domain muhab.org
+const cnamePath = path.join(distDir, 'CNAME');
+if (!fs.existsSync(cnamePath)) {
+  fs.writeFileSync(cnamePath, 'muhab.org\n');
+  console.log('✓ Created CNAME for muhab.org');
+}
+
 // 3. Ensure 404.html exists for SPA routing
 const notFoundPath = path.join(distDir, '404.html');
 if (!fs.existsSync(notFoundPath)) {
